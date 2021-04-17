@@ -1,0 +1,35 @@
+{
+  "name": "courseuni",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hocoi1998/Courseuni.git"
+  },
+  "keywords": [
+    "Courseuni",
+    "course",
+    "free",
+    "graduation",
+    "project",
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "Dinh Toan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hocoi1998/Courseuni/issues"
+  },
+  "homepage": "https://github.com/hocoi1998/Courseuni#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
