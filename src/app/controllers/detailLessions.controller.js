@@ -1,24 +1,19 @@
-const DetailLession = require('../models/DetailLession');
 const Lession = require('../models/Lession');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 const { mongooseToObject } = require('../../util/mongoose');
 
 class DetailLessionsController {
-    // [GET] /:slug/:slug
-    showLessions(req, res, next) {
+    // [GET] /:courseSlug/:lessionSlug
+    show(req, res, next) {
         Lession.find({ courseSlug: req.params.courseSlug })
             .then((lessions) => {
-                res.render('detailLession', {
-                    lessions: multipleMongooseToObject(lessions),
-                });
-            })
-            .catch(next);
-    }
-    showVideo(req, res, next) {
-        Lession.findOne({ slug: req.params.slug })
-            .then((lession) => {
-                res.render('detailLession', {
-                    lession: mongooseToObject(lession),
+                lessions.map((lession) => {
+                    if (lession.slug === req.params.lessionSlug) {
+                        res.render('detailLession', {
+                            lession: mongooseToObject(lession),
+                            lessions: multipleMongooseToObject(lessions),
+                        });
+                    }
                 });
             })
             .catch(next);

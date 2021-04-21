@@ -1,0 +1,13 @@
+<ul>
+   
+    <li> {{ exercise.name }}</li>
+    <li> {{ exercise.question }}</li>
+
+</ul>
+<ol type="A">
+    {{#each exercise.answer}}
+    <li>
+        {{ this }}
+    </li>
+    {{/each}}
+</ol>
