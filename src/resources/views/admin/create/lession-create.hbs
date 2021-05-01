@@ -1,6 +1,6 @@
 <div class="mt-4">
     <h3>Thêm bài học</h3>
-    <form method="POST" action="/courses/{{ slug }}/store">
+    <form method="POST" action="/admin/courses/{{ courseSlug }}/store">
         <div class="form-group">
             <label for="name">Tên bài học</label>
             <input type="text" class="form-control" id="name" name="name">
@@ -10,7 +10,7 @@
             <input type="text" class="form-control" id="videoId" name="videoId">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="courseSlug" name="courseSlug" value="{{ slug }}" hidden>
+            <input type="text" class="form-control" id="courseSlug" name="courseSlug" value="{{ courseSlug }}" hidden>
         </div>
     
         <button type="submit" class="btn btn-primary">Thêm bài học</button>

@@ -15,22 +15,6 @@ class ExercisesController {
             })
             .catch(next);
     }
-    // [GET] /courses/:slug/create
-    create(req, res, next) {
-        res.render('admin/create/exercise-create', {
-            lessionSlug: req.params.lessionSlug,
-        });
-    }
-    // [POST] /courses/:slug/store
-    store(req, res, next) {
-        const exercise = new Exercise(req.body);
-        exercise
-            .save()
-            .then(() => {
-                res.redirect('/courses');
-            })
-            .catch((error) => {});
-    }
 }
 
 module.exports = new ExercisesController();
