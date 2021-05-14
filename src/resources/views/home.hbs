@@ -1,1 +1,91 @@
-HOME PAGE
+<section class="banner d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-10">
+                <h6 class="py-2 text-white">Chia sẻ để biết nhiều hơn</h3>
+                    <h1 class="text-uppercase text-white">học lập trình miễn phí với <br> Courseuni</h1>
+            </div>
+            <div class="col-lg-8 mt-4">
+                <a class="btn btn-primary rounded-pill px-4 py-2" href="/register">Đăng ký học</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <section class="short-feature">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 py-5">
+                <img class="short-feature__icon d-block mx-auto" src="/img/1.png" alt="">
+                <h6 class="text-center mt-2 short-feature__title">Trên {{ students }} học viên</h6>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 py-5">
+                <img class="short-feature__icon d-block mx-auto" src="/img/2.png" alt="">
+                <h6 class="text-center mt-2 short-feature__title">{{ count }}+ khoá học dành cho bạn</h6>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 py-5">
+                <img class="short-feature__icon d-block mx-auto" src="/img/3.png" alt="">
+                <h6 class="text-center mt-2 short-feature__title">Học bất cứ lúc nào, bất cứ nơi đâu</h6>
+            </div>
+        </div>
+    </section>
+    <section class="feature-courses">
+        <div class="row">
+            <h2 class="col-lg-12 text-center font-weight-bold feature-courses__title">
+                Khoá học nổi bật
+            </h2>
+            <p class="col-lg-12 py-2 text-center">
+                Những khóa học có số lượng học viên theo học nhiều nhất
+            </p>
+        </div>
+        <div class="row">
+            {{#each courses}}
+            <div class="col-lg-4 col-md-6 col-sm-12 py-5">
+                <div class="card feature-courses__card">
+                    <a href="/courses/{{ this.slug }}">
+                        <img src="{{ this.image }}" class="card-img-top feature-courses__img" alt="...">
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title font-weight-bold">{{ this.name }}</h6>
+                        <p class="card-text">{{ this.description }}</p>
+                        <p class="card-text d-flex align-items-center justify-content-between">
+                            <span class="feature-courses__author">
+                                <i class="fas fa-user-edit"></i>
+                                {{ this.author }}
+                            </span>
+                            <span class="feature-courses__totalStudent">
+                                <i class="fas fa-users"></i>
+                                {{ this.totalStudent }}
+                            </span>
+                            <a href="/courses/{{ this.slug }}" class="btn btn-primary rounded-pill">
+                                Học ngay
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="row">
+            <div class="feature-courses__more mx-auto mt-4">
+                <a href="/courses" class="btn btn-primary rounded-pill text-uppercase font-weight-bold px-4 py-2">
+                    Tất cả khoá học
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+<section class="call px-2">
+    <div class="container">
+        <div class="row align-items-center justify-content-center flex-column">
+            <h2 class="font-weight-bold text-center">
+                {{ learning }}+ người khác đã học. Còn bạn?
+            </h2>
+            <p class="mt-2 mb-4">"Ai cũng nên học lập trình" - Steve Jobs</p>
+            <a href="/courses" class="btn btn-danger rounded-pill text-uppercase font-weight-bold px-4 py-2">
+                Học ngay
+            </a>
+        </div>
+    </div>
+</section>

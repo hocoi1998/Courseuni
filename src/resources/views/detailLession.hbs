@@ -1,28 +1,36 @@
 <div class="container">
   <div class="row">
     <div class="col-8">
-      <iframe width="560" height="315" 
-        src="https://www.youtube.com/embed/{{ lession.videoId }}" 
-        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ lession.videoId }}"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
       </iframe>
+      <div class="row">
+        Bài tập
+         {{#each exercises}}
+          <a href="{{ this.lessionSlug }}/{{ this.slug }}">{{ this.name }}</a>
+         {{/each}}
+      </div>
     </div>
     <div class="col-4">
       <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each lessions}}
-            <tr>
-              <th scope="row">{{ this.videoId }}</th>
-              <td><a href="{{ this.slug }}">{{ this.name }}</a></td>
-            </tr>
-            {{/each}}
-          </tbody>
-        </table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lessions}}
+          <tr>
+            <th scope="row">{{ this.videoId }}</th>
+            <td><a href="{{ this.slug }}">{{ this.name }}</a></td>
+          </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -3,8 +3,11 @@ const express = require('express');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const handlebars = require('express-handlebars');
+const paginateHelper = require('express-handlebars-paginate');
+const cookieParser = require('cookie-parser');
 
 const SortMiddleware = require('./app/middlewares/SortMiddleware');
+const InfoMiddleware = require('./app/middlewares/InfoMiddleware');
 
 const app = express();
 const port = 3000;
@@ -24,9 +27,11 @@ app.use(
 );
 app.use(express.json());
 app.use(methodOverride('_method'));
+app.use(cookieParser('ddtoanK61HUMG'));
 
 // Custom middlewares
 app.use(SortMiddleware);
+app.use(InfoMiddleware);
 
 // HTTP logger
 // app.use(morgan('combined'));
@@ -38,7 +43,8 @@ app.engine(
         extname: '.hbs',
         helpers: {
             sum: (a, b) => a + b,
-            cat: (a) => (a === 'Frontend' ? 'Backend' : 'Frontend'),
+            // cat: (a) => (a === 'Frontend' ? 'Backend' : 'Frontend'),
+            gender: (a) => (a === 'male' ? 'female' : 'male'),
             sortable: (field, sort) => {
                 const sortType = field === sort.column ? sort.type : 'default';
 
@@ -62,6 +68,7 @@ app.engine(
                     </a>
                 `;
             },
+            paginateHelper: paginateHelper.createPagination,
         },
     }),
 );

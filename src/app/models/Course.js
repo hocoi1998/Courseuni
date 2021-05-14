@@ -13,6 +13,7 @@ const Course = new Schema(
         category: { type: String },
         author: { type: String },
         slug: { type: String, slug: 'name', unique: true },
+        totalStudent: { type: Number, default: 0 },
     },
     {
         timestamps: true,

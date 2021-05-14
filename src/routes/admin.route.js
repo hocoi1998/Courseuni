@@ -1,12 +1,15 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
+
+const upload = multer({ dest: 'src/public/uploads/' });
 
 const coursesController = require('../app/controllers/admin.controllers/courses.controller');
 const lessionsController = require('../app/controllers/admin.controllers/lessions.controller');
 const exercisesController = require('../app/controllers/admin.controllers/exercises.controller');
 
 router.get('/courses/create', coursesController.create);
-router.post('/courses/store', coursesController.store);
+router.post('/courses/store', upload.single('image'), coursesController.store);
 router.get('/courses/:courseSlug/edit', coursesController.edit);
 router.put('/courses/:courseSlug/update', coursesController.update);
 router.delete('/courses/:courseSlug/delete', coursesController.delete);

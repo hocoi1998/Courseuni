@@ -1,6 +1,7 @@
 const Course = require('../../models/Course');
 const Lession = require('../../models/Lession');
 const Exercise = require('../../models/Exercise');
+const Category = require('../../models/Category');
 const { mongooseToObject } = require('../../../util/mongoose');
 const { multipleMongooseToObject } = require('../../../util/mongoose');
 
@@ -8,7 +9,12 @@ class coursesController {
     // COURSES
     // [GET] /admin/courses
     show(req, res, next) {
-        let courseQuery = Course.find({});
+        let currentPage = parseInt(req.query.page) || 1;
+        let perPage = 10;
+
+        let skip = (currentPage - 1) * perPage;
+
+        let courseQuery = Course.find({}).skip(skip).limit(perPage);
 
         if (req.query.hasOwnProperty('_sort')) {
             courseQuery = courseQuery.sort({
@@ -16,9 +22,18 @@ class coursesController {
             });
         }
 
-        Promise.all([courseQuery, Course.countDocumentsDeleted()])
-            .then(([courses, deletedCount]) =>
+        Promise.all([
+            courseQuery,
+            Course.countDocumentsDeleted(),
+            Course.countDocuments(),
+        ])
+            .then(([courses, deletedCount, count]) =>
                 res.render('admin/list/courses-list', {
+                    pagination: {
+                        page: currentPage,
+                        limit: perPage,
+                        totalRows: count,
+                    },
                     deletedCount,
                     courses: multipleMongooseToObject(courses),
                 }),
@@ -27,10 +42,15 @@ class coursesController {
     }
     // [GET] /admin/courses/create
     create(req, res, next) {
-        res.render('admin/create/course-create');
+        Category.find({}).then((categories) =>
+            res.render('admin/create/course-create', {
+                categories: multipleMongooseToObject(categories),
+            }),
+        );
     }
     // [POST] /admin/courses/store
     store(req, res, next) {
+        req.body.image = req.file.path.split('\\').slice(2).join('/');
         const course = new Course(req.body);
         course
             .save()
@@ -41,11 +61,16 @@ class coursesController {
     }
 
     // [GET] /admin/courses/:courseSlug/edit
+
     edit(req, res, next) {
-        Course.findOne({ slug: req.params.courseSlug })
-            .then((course) =>
+        Promise.all([
+            Course.findOne({ slug: req.params.courseSlug }),
+            Category.find({}),
+        ])
+            .then(([course, categories]) =>
                 res.render('admin/edit/course-edit', {
                     course: mongooseToObject(course),
+                    categories: multipleMongooseToObject(categories),
                 }),
             )
             .catch(next);
