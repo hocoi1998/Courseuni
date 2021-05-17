@@ -3,7 +3,7 @@ const Category = require('../models/Category');
 const { mongooseToObject } = require('../../util/mongoose');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
-class SiteController {
+class CategoryController {
     // [GET] /categories
     show(req, res, next) {
         const title = 'Danh mục khoá học ';
@@ -39,20 +39,6 @@ class SiteController {
                 .catch(next);
         });
     }
-
-    // [GET] /search
-    search(req, res) {
-        const title = 'Tìm kiếm';
-        res.render('search', {
-            title,
-        });
-    }
-
-    // [GET] /logout
-    logout(req, res) {
-        res.clearCookie('userId');
-        res.redirect('/');
-    }
 }
 
-module.exports = new SiteController();
+module.exports = new CategoryController();
