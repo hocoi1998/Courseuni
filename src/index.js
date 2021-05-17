@@ -14,6 +14,7 @@ const port = 3000;
 
 const route = require('./routes/index.route');
 const db = require('./config/db');
+const moment = require('moment');
 
 // Connect to DB
 db.connect();
@@ -44,7 +45,7 @@ app.engine(
         helpers: {
             sum: (a, b) => a + b,
             // cat: (a) => (a === 'Frontend' ? 'Backend' : 'Frontend'),
-            gender: (a) => (a === 'male' ? 'female' : 'male'),
+            gender: (a) => (a === 'Nam' ? 'Nữ' : 'Nam'),
             sortable: (field, sort) => {
                 const sortType = field === sort.column ? sort.type : 'default';
 
@@ -69,6 +70,7 @@ app.engine(
                 `;
             },
             paginateHelper: paginateHelper.createPagination,
+            moment: (a) => moment(a).format('MM/DD/YYYY'),
         },
     }),
 );

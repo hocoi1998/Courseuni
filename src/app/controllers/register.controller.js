@@ -1,8 +1,6 @@
 const User = require('../models/User');
 const { mongooseToObject } = require('../../util/mongoose');
 
-const expressValidator = require('express-validator');
-
 const md5 = require('md5');
 
 class RegisterController {
@@ -21,38 +19,48 @@ class RegisterController {
         let password = req.body.password;
         let rePassword = req.body.rePassword;
 
-        User.findOne({ email: email }).then((u) => {
-            let user = mongooseToObject(u);
+        let errors = {};
 
-            if (user) {
-                res.render('auth/register', {
-                    title: 'Đăng ký tài khoản',
-                    layout: 'auth',
-                    emailValidation: 'Tài khoản đã tồn tại',
-                    values: req.body,
-                });
-                return;
-            }
+        if (email) {
+            User.findOne({ email: email }).then((u) => {
+                let user = mongooseToObject(u);
+                if (user) {
+                    errors.emailMsg = 'Email đã được sử dụng';
+                }
+                if (password.length < 6) {
+                    errors.passMsg = 'Mật khẩu phải chứa ít nhất 6 ký tự';
+                }
 
-            if (password === rePassword) {
-                const userr = new User({
-                    name,
-                    email,
-                    password: md5(password),
-                });
-                userr
-                    .save()
-                    .then(() => {
-                        res.redirect('login');
+                if (password !== rePassword) {
+                    errors.rePassMsg = 'Mật khẩu không trùng khớp';
+                }
+
+                if (errors.emailMsg || errors.passMsg || errors.rePassMsg) {
+                    res.render('auth/register', {
+                        title: 'Đăng ký tài khoản',
+                        layout: 'auth',
+                        errors: errors,
+                        values: req.body,
+                    });
+                } else {
+                    User({
+                        name,
+                        email,
+                        password: md5(password),
                     })
-                    .catch(next);
-            }
-
-            res.render('auth/register', {
-                errors: ['Mật khẩu không trùng khớp'],
-                values: req.body,
+                        .save()
+                        .then(() => {
+                            res.render('auth/register', {
+                                title: 'Đăng ký tài khoản',
+                                layout: 'auth',
+                                values: req.body,
+                                successfully: true,
+                            });
+                        })
+                        .catch(next);
+                }
             });
-        });
+        }
     }
 }
 

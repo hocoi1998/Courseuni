@@ -7,7 +7,7 @@ h2 {
   font-size: 36px;
 }
 
-.signup {
+.signup, .signin {
   background: #f8f8f8;
   min-height: 100vh;
   display: flex;
@@ -15,7 +15,7 @@ h2 {
   font-family: OpenSans, sans-serif;
 }
 
-.signup-content {
+.signup-content, .signin-content {
   display: flex;
   max-width: 900px;
   padding: 60px 0;
@@ -24,18 +24,32 @@ h2 {
   background-color: #fff;
   justify-content: space-between;
   box-shadow: 0px 15px 16.83px 0.17px rgb(0 0 0 / 5%);
+  min-height: 90vh;
+
 }
-.signup-form {
+.signup-form,
+.signin-form {
   min-width: 50%;
   padding-left: 109px;
   padding-right: 34px;
 }
 
-.signup-image {
+.signin-form {
+  padding-left: 80px;
+  padding-right: 90px;
+}
+
+.signup-image,
+.signin-image {
   min-width: 50%;
-  
   padding: 45px 55px 0 55px;
-} 
+}
+
+.signin-image {
+  padding-left: 110px;
+  padding-right: 20px;
+  padding-top: 10px;
+}
 
 .form-title {
   margin-bottom: 33px;
@@ -45,7 +59,6 @@ h2 {
   position: relative;
   margin-bottom: 25px;
 }
-
 
 label {
   position: absolute;
@@ -58,15 +71,14 @@ label {
 
 input {
   width: 100%;
-    display: block;
-    border: none;
-    border-bottom: 1px solid #999;
-    padding: 6px 30px;
-    font-family: OpenSans, sans-serif;
-    box-sizing: border-box;
-    outline: none;
-    font-size: 14px;
-
+  display: block;
+  border: none;
+  border-bottom: 1px solid #999;
+  padding: 6px 30px;
+  font-family: OpenSans, sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 14px;
 }
 
 .agree-term-form {
@@ -82,17 +94,19 @@ input {
 }
 
 .label-agree-term {
-  padding: 6px 20px 6px 30px
+  padding: 6px 20px 6px 30px;
 }
 
-.signup-image-link {
+.signup-image-link,
+.signin-image-link {
   font-size: 14px;
   color: #222;
   display: block;
   text-align: center;
 }
 
-.signup-image-link {
+.signup-image-link,
+.signin-image-link {
   text-decoration: underline;
 }
 

@@ -7,26 +7,30 @@
         <form method="POST" class="register-form" id="register-form">
           <div class="form-group">
             <label for="name"><i class="fas fa-user"></i></label>
-            <input type="text" name="name" id="name" placeholder="Họ tên" value="{{ values.name }}" />
-            
+            <input type="text" name="name" id="name" placeholder="Họ tên" value="{{ values.name }}" required />
+
           </div>
           <div class="form-group">
             <label for="email"><i class="fas fa-envelope"></i></label>
-            <input type="email" name="email" id="email" placeholder="Email" value="{{ values.email }}" />
-            <p class="text-danger msg">{{ emailValidation }}</p>
+            <input type="email" name="email" id="email" placeholder="Email" value="{{ values.email }}" required />
+            <p class="text-danger msg">{{ errors.emailMsg }}</p>
           </div>
           <div class="form-group">
             <label for="pass"><i class="fas fa-lock"></i></label>
-            <input type="password" name="password" id="pass" placeholder="Mật khẩu" value="{{ values.password }}" />
+            <input type="password" name="password" id="pass" placeholder="Mật khẩu" value="{{ values.password }}"
+              required />
+            <p class="text-danger msg">{{ errors.passMsg }}</p>
           </div>
           <div class="form-group">
             <label for="re-pass"><i class="fas fa-lock"></i></label>
-            <input type="password" name="rePassword" id="re_pass" placeholder="Nhập lại mật khẩu" value="{{ values.rePassword }}" />
+            <input type="password" name="rePassword" id="re_pass" placeholder="Nhập lại mật khẩu"
+              value="{{ values.rePassword }}" required />
+            <p class="text-danger msg">{{ errors.rePassMsg }}</p>
           </div>
           <div class="form-group agree-term-form">
-            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-            <label for="agree-term" class="label-agree-term">Tôi đồng ý với tất cả <a
-                href="#" class="term-service">Điều khoản dịch vụ</a></label>
+            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required />
+            <label for="agree-term" class="label-agree-term">Tôi đồng ý với tất cả <a href="#" class="term-service">Điều
+                khoản dịch vụ</a></label>
           </div>
           <div class="form-group form-button">
             <input type="submit" name="signup" id="signup" class="form-submit btn btn-primary" value="Đăng ký" />
@@ -35,42 +39,42 @@
       </div>
       <div class="signup-image">
         <figure><img src="/img/signup-image.jpg" alt="sing up image"></figure>
-        <a href="#" class="signup-image-link">Tôi đã là thành viên</a>
+        <a href="/login" class="signup-image-link">Bạn đã có tài khoản?</a>
       </div>
     </div>
   </div>
 </section>
 
+{{#if successfully }}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" id="btnLaunch" data-toggle="modal" data-target="#exampleModal" hidden>
+  Launch modal
+</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Đăng ký thành công</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Đăng nhập ngay để tham gia các khoá học miễn phí!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        <a href="/login" class="btn btn-primary">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-{{!-- <form action="" method="POST" class="mt-4">
-  {{ errors }}
-  <div class="form-group row">
-    <label for="email" class="col-sm-2 col-form-label">Họ tên</label>
-    <div class="col-sm-10">
-      <input name="name" type="text" class="form-control" id="name" value="{{ values.name }}">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="email" class="col-sm-2 col-form-label">Email</label>
-    <div class="col-sm-10">
-      <input name="email" type="email" class="form-control" id="email" value="{{ values.email }}">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="password" class="col-sm-2 col-form-label">Mật khẩu</label>
-    <div class="col-sm-10">
-      <input name="password" type="password" class="form-control" id="password" value="{{ values.password }}">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="rePassword" class="col-sm-2 col-form-label">Nhập lại mật khẩu</label>
-    <div class="col-sm-10">
-      <input name="rePassword" type="password" class="form-control" id="rePassword" value="{{ values.rePassword }}">
-    </div>
-  </div>
-  <div class="col-sm-10">
-    <button type="submit" class="btn btn-primary">Đăng Ký</button>
-  </div>
-</form>
---}}
+<script>
+  window.onload = function () {
+    document.getElementById('btnLaunch').click()
+  }
+</script>
+{{/if}}

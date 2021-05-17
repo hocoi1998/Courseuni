@@ -8,36 +8,39 @@
       data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
       aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav w-100 header__menu-list"> 
+      <ul class="navbar-nav w-100 header__menu-list">
         <li class="nav-item header__menu-item">
           <a class="nav-link header__menu-link" href="/courses">KHOÁ HỌC</a>
-          </li>
+        </li>
         <li class="nav-item header__menu-item">
-          <a class="nav-link header__menu-link" href="https://facebook.com/" target="_blank">CỘNG ĐỒNG</a>
-          </li>
+          <a class="nav-link header__menu-link" href="https://www.facebook.com/groups/376618380391184/" target="_blank">CỘNG ĐỒNG</a>
+        </li>
         <li class="nav-item ml-auto header__menu-item">
           <form method="GET" action="search" class="form-inline">
-            <input name="q" class="form-control rounded-pill" type="search" placeholder="Nhập từ khoá..." aria-label="Search">
+            <input name="q" class="form-control rounded-pill" type="search" placeholder="Nhập từ khoá..."
+              aria-label="Search">
           </form>
         </li>
         {{#if user }}
         <li class="nav-item header__menu-item header__menu-info">
           <a href="/profile/avatar">
             {{#if user.avatar}}
-              <img src="/{{ user.avatar }}" class="header__menu-avt">
+            <img src="/{{ user.avatar }}" class="header__menu-avt">
             {{else}}
-              <img src="/img/avt_default.png" class="header__menu-avt">
+            <img src="/img/avt_default.png" class="header__menu-avt">
             {{/if}}
           </a>
         </li>
         <li class="nav-item header__menu-item dropdown">
-          <a class="nav-link header__menu-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-           {{ user.name }}
+          <a class="nav-link header__menu-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.name }}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            {{#if user.isAdmin}}
             <a class="dropdown-item" href="/admin/courses">Quản lý khoá học</a>
             <div class="dropdown-divider"></div>
+            {{/if}}
             <a class="dropdown-item" href="/profile">Thông tin tài khoản</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/profile/security">Thay đổi mật khẩu</a>

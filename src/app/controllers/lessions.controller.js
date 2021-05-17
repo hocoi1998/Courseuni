@@ -28,7 +28,7 @@ class LessionsController {
                             }
                         },
                     );
-                    res.cookie('khoahoc', course.slug);
+                    // res.cookie('khoahoc', course.slug);
                 } else {
                     res.redirect('/');
                 }

@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
 const mongooseDelete = require('mongoose-delete');
-
-const Schema = mongoose.Schema;
 
 const Course = new Schema(
     {
@@ -10,7 +9,7 @@ const Course = new Schema(
         description: { type: String, maxLength: 600 },
         image: { type: String },
         slug: { type: String },
-        category: { type: String },
+        category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
         author: { type: String },
         slug: { type: String, slug: 'name', unique: true },
         totalStudent: { type: Number, default: 0 },

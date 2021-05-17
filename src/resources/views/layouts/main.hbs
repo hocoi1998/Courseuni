@@ -4,23 +4,27 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Courseuni</title>
+  <title>{{ title }}</title>
   <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="shortcut icon" href="/img/favicon.ico">
 </head>
 <body>
   <div class="app">
     {{> header }}
 
     
-    {{{ body }}}
+    <div style="min-height:50vh">
+      {{{ body }}}
+    </div>
     
 
     {{> footer }}
   </div>
 
   <script src="/jquery/dist/jquery.slim.min.js"></script>
+  <script src="/jquery-validation/dist/jquery.validate.min.js"></script>
   <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/script/navbar-scroll.js"></script>
 </body>

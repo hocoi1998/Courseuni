@@ -1,17 +1,53 @@
+<!-- Sing in  Form -->
+<section class="signin">
+  <div class="container">
+    <div class="row signin-content">
+      <div class="signin-image">
+        <figure><img src="/img/signin-image.jpg" alt="sing up image"></figure>
+        <a href="/register" class="signin-image-link">Bạn chưa có tài khoản?</a>
+      </div>
+      <div class="signin-form">
+        <h2 class="form-title">Đăng nhập</h2>
+        <form method="POST" class="login-form" id="login-form">
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i></label>
+            <input type="email" name="email" id="email" placeholder="Email" value="{{ values.email }}" required />
+            <p class="text-danger msg">{{ emailMsg }}</p>
+          </div>
+          <div class="form-group">
+            <label for="pass"><i class="fas fa-lock"></i></label>
+            <input type="password" name="password" id="pass" placeholder="Mật khẩu" value="{{ values.password }}"
+              required />
+            <p class="text-danger msg">{{ passMsg }}</p>
+          </div>
 
-<div class="row">
+          <div class="form-group agree-term-form">
+            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+            <label for="agree-term" class="label-agree-term">Nhớ mật khẩu</label>
+          </div>
+          <div class="form-group form-button">
+            <input type="submit" name="signin" id="signin" class="form-submit btn btn-primary" value="Đăng nhập" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{{!-- <div class="row">
   <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
     <div class="card card-signin my-5">
       <div class="card-body">
         <h5 class="card-title text-center">Đăng Nhập</h5>
         <form action="" method="POST" class="form-signin">
           <div class="form-label-group">
-            <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" value="{{ values.email }}" required autofocus>
+            <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address"
+              value="{{ values.email }}" required autofocus>
             <label for="inputEmail">Email address</label>
           </div>
 
           <div class="form-label-group">
-            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" value="{{ values.password }}" required>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password"
+              value="{{ values.password }}" required>
             <label for="inputPassword">Password</label>
           </div>
 
@@ -29,4 +65,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> --}}

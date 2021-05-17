@@ -57,7 +57,9 @@
                                 <i class="fas fa-users"></i>
                                 {{ this.totalStudent }}
                             </span>
-                            <a href="/courses/{{ this.slug }}" class="btn btn-primary rounded-pill">
+
+                            <a href="/courses/{{ this.slug }}" class="btn btn-primary rounded-pill learned">
+                                <span class="get-slug" style="display: none;">{{this.slug}}</span>
                                 Học ngay
                             </a>
                         </p>
@@ -89,3 +91,16 @@
         </div>
     </div>
 </section>
+
+<script>
+    var learning = '{{user.learning}}';
+    var getSlug = document.querySelectorAll('.get-slug');
+    var learned = document.querySelectorAll('.learned');
+    for ( var i = 0; i < learned.length; i++ ){
+        if (learning.includes(getSlug[i].innerHTML)){
+            learned[i].innerHTML = 'Học tiếp';
+            learned[i].classList.remove('btn-primary');
+            learned[i].classList.add('btn-danger');
+        }
+    }
+</script>

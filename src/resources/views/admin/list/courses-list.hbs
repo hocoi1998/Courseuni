@@ -45,7 +45,7 @@
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.author}}</td>
-                <td>{{this.category}}</td>
+                <td>{{this.category.[0].name}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
                     <a href="/admin/courses/{{ this.slug }}/edit" class="btn btn-success">Sửa</a>

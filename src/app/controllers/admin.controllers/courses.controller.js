@@ -14,7 +14,11 @@ class coursesController {
 
         let skip = (currentPage - 1) * perPage;
 
-        let courseQuery = Course.find({}).skip(skip).limit(perPage);
+        let courseQuery = Course.find({})
+            .populate('course')
+            .populate('category')
+            .skip(skip)
+            .limit(perPage);
 
         if (req.query.hasOwnProperty('_sort')) {
             courseQuery = courseQuery.sort({
