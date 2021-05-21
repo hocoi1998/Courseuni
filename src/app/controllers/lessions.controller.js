@@ -1,7 +1,8 @@
 const Lession = require('../models/Lession');
-const { multipleMongooseToObject } = require('../../util/mongoose');
 const Course = require('../models/Course');
 const User = require('../models/User');
+const { mongooseToObject } = require('../../util/mongoose');
+const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class LessionsController {
     // [GET] /:slug
@@ -33,7 +34,9 @@ class LessionsController {
                     res.redirect('/');
                 }
                 res.render('lessions', {
+                    title: mongooseToObject(course).name,
                     lessions: multipleMongooseToObject(lessions),
+                    course: mongooseToObject(course),
                 });
             })
             .catch(next);

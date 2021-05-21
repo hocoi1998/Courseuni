@@ -1,4 +1,5 @@
-<div class="mt-4">
+<div class="container">
+    <div class="mt-4">
     <div class="row">
         <h3 class="col-6">Sửa khoá học</h3>
         <h3 class="col-6">
@@ -21,9 +22,9 @@
         <div class="form-group">
             <label for="category">Danh mục</label>
             <select class="form-control" name="category" id="category">
-                <option value="{{ course.category }}"> {{course.category}}</option>
+                <option value="{{ course.category._id }}"> {{course.category.name}}</option>
                 {{#each categories}}
-                <option value="{{ this.name }}"> {{this.name}}</option>
+                <option value="{{ this._id }}"> {{this.name}}</option>
                 {{/each}}
             </select>
         </div>
@@ -34,4 +35,5 @@
 
         <button type="submit" class="btn btn-primary">Lưu lại</button>
     </form>
+</div>
 </div>

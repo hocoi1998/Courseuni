@@ -68,7 +68,9 @@ class coursesController {
 
     edit(req, res, next) {
         Promise.all([
-            Course.findOne({ slug: req.params.courseSlug }),
+            Course.findOne({ slug: req.params.courseSlug }).populate(
+                'category',
+            ),
             Category.find({}),
         ])
             .then(([course, categories]) =>

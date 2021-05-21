@@ -1,36 +1,54 @@
 <div class="container">
   <div class="row">
-    <div class="col-8">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ lession.videoId }}"
+    <div class="col-lg-8 col-md-12 col-sm-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/courses">Khoá học</a></li>
+          <li class="breadcrumb-item">
+            <a href="/courses/{{ course.slug }}">
+              {{ course.name }}
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">{{ lession.name }}</li>
+        </ol>
+      </nav>
+      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{ lession.videoId }}"
         title="YouTube video player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
-      <div class="row">
-        Bài tập
-         {{#each exercises}}
-          <a href="{{ this.lessionSlug }}/{{ this.slug }}">{{ this.name }}</a>
-         {{/each}}
-      </div>
-    </div>
-    <div class="col-4">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each lessions}}
-          <tr>
-            <th scope="row">{{ this.videoId }}</th>
-            <td><a href="{{ this.slug }}">{{ this.name }}</a></td>
-          </tr>
-          {{/each}}
+      
+      <div class="my-4">
+      {{#each exercises}}
+      <a href="{{ this.lessionSlug }}/{{ this.slug }}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">{{ this.name }}</a>
+      {{/each}}
 
-        </tbody>
-      </table>
+      </div>
+
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2" style="height: 80vh">
+      <div class="lession__title">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">STT</th>
+              <th scope="col">Danh sách bài học</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="lession__list" style="height: 65vh">
+        <table class="table">
+          <tbody>
+            {{#each lessions}}
+            <tr class="lession__item">
+              <th scope="row">{{sum @index 1}}</th>
+              <td><a href="{{ this.slug }}" class="lession__link">{{ this.name }}</a></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

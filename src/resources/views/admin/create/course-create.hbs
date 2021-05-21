@@ -1,4 +1,5 @@
-<div class="mt-4">
+<div class="container">
+    <div class="mt-4">
     <h3>Đăng khoá học</h3>
     <form method="POST" action="/admin/courses/store" enctype="multipart/form-data">
         <div class="form-group">
@@ -17,7 +18,7 @@
             <label for="category">Danh mục</label>
             <select class="form-control" name="category" id="category">
                 {{#each categories}}
-                <option value="{{ this.name }}"> {{this.name}}</option>
+                <option value="{{ this._id }}"> {{this.name}}</option>
                 {{/each}}
             </select>
         </div>
@@ -31,4 +32,5 @@
 
         <button type="submit" class="btn btn-primary">Thêm khoá học</button>
     </form>
+</div>
 </div>

@@ -1,26 +1,53 @@
 <div class="container">
   <div class="row">
-  <div class="col-8">
-    gioi thieu
-  </div>
-  <div class="col-4">
+    <div class="col-lg-8 col-md-12 col-sm-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/courses">Khoá học</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ course.name }}</li>
+          <span class="ml-auto">
+            <i class="fas fa-user-edit mr-3" title="Tác giả"></i>{{ course.author }}
+          </span>
+        </ol>
+      </nav>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each lessions}}
-        <tr>
-          <th scope="row">{{ this.videoId }}</th>
-          <td><a href="{{ this.courseSlug }}/{{ this.slug }}">{{ this.name }}</a></td>
-        </tr>
+      <div class="course-image">
+        <img src="/{{ course.image }}">
+      </div>
+      <h1 class="h2 mt-4">{{ course.name }}</h1>
+      <div class="py-3">{{ course.description }}</div>
+      <h5 class="font-weight-bold mt-4">Bạn sẽ học được gì?</h5>
+      <ul class="course-detail__list my-4">
+        {{#each course.obtain }}
+        <li class="course-detail__item mb-2">
+          <i class="fas fa-check icon-check"></i>{{ this }}
+        </li>
         {{/each}}
-      </tbody>
-    </table>
+      </ul>
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
+      <div class="lession__title">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">STT</th>
+              <th scope="col">Nội dung khoá học</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="lession__list">
+        <table class="table">
+          <tbody>
+            {{#each lessions}}
+            <tr class="lession__item">
+              <th scope="row">{{sum @index 1}}</th>
+              <td><a href="{{ this.courseSlug }}/{{ this.slug }}" class="lession__link">{{ this.name }}</a></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
 </div>

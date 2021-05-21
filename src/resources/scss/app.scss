@@ -47,9 +47,9 @@ label.error {
     transform: translateY(40px);
     transition: transform 0.3s;
 }
-.active {
-    color: $primary-color !important;
-}
+// .active {
+//     color: $primary-color !important;
+// }
 
 .header__menu {
     &-nav {
@@ -161,19 +161,91 @@ label.error {
     }
 }
 
-// .pagination {
-//         display: flex;
-//         align-items: center;
-//         justify-content: center;
-//         li {
-//             margin: 0 10px;
-//             a {
-//                 padding: 10px;
-//             }
-//         }
-//     }
+.breadcrumb {
+    margin-top: 10px;
+    font-weight: bold;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+    a {
+        color: $primary-color;
+    }
+}
+.course {
+    &-detail {
+        &__list {
+            list-style: none;
+            background-color: #fff;
+            padding-inline-start: 0;
+        }
+    }
+    &-image {
+        img {
+            width: 100%;
+            border: 1px solid #000;
+        }
+    }
+    &-bg {
+        height: 600px;
+        background-repeat: no-repeat;
+        border: 1px solid #000;
+        background-size: cover;
+    }
+}
 
-// Tablet
+.icon-check {
+    color: $primary-color;
+    margin-right: 1rem;
+}
+
+.lession {
+    border: 1px solid #c3c3c3;
+    height: 95vh;
+    &__title {
+        table {
+            th {
+                border-top: 0;
+                &:first-child {
+                    width: 55px;
+                }
+            }
+        }
+    }
+    &__list {
+        height: 84vh;
+        overflow-y: auto;
+        background-color: #fff;
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    }
+    &__item {
+        &:hover {
+            background-color: #f1f1f1;
+            transition: linear 0.2s;
+        }
+    }
+    &__link {
+        color: #000;
+        display: block;
+        &:hover {
+            color: #000;
+            text-decoration: none;
+        }
+    }
+    iframe {
+        border: 1px solid #000;
+    }
+}
 @media screen and (max-width: 1023px) {
     // .header {
     //     &__menu {

@@ -40,9 +40,6 @@ label.error {
   transform: translateY(40px);
   transition: transform 0.3s; }
 
-.active {
-  color: #0c4da2 !important; }
-
 .header__menu-nav {
   background-color: #000; }
 
@@ -123,3 +120,62 @@ label.error {
     padding-left: 0; }
   .footer__link {
     color: #b8b7b7; }
+
+.breadcrumb {
+  margin-top: 10px;
+  font-weight: bold;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: transparent; }
+  .breadcrumb a {
+    color: #0c4da2; }
+
+.course-detail__list {
+  list-style: none;
+  background-color: #fff;
+  padding-inline-start: 0; }
+
+.course-image img {
+  width: 100%;
+  border: 1px solid #000; }
+
+.course-bg {
+  height: 600px;
+  background-repeat: no-repeat;
+  border: 1px solid #000;
+  background-size: cover; }
+
+.icon-check {
+  color: #0c4da2;
+  margin-right: 1rem; }
+
+.lession {
+  border: 1px solid #c3c3c3;
+  height: 95vh; }
+  .lession__title table th {
+    border-top: 0; }
+    .lession__title table th:first-child {
+      width: 55px; }
+  .lession__list {
+    height: 84vh;
+    overflow-y: auto;
+    background-color: #fff; }
+    .lession__list::-webkit-scrollbar {
+      width: 3px; }
+    .lession__list::-webkit-scrollbar-track {
+      background: #f1f1f1; }
+    .lession__list::-webkit-scrollbar-thumb {
+      background: #888; }
+    .lession__list::-webkit-scrollbar-thumb:hover {
+      background: #555; }
+  .lession__item:hover {
+    background-color: #f1f1f1;
+    transition: linear 0.2s; }
+  .lession__link {
+    color: #000;
+    display: block; }
+    .lession__link:hover {
+      color: #000;
+      text-decoration: none; }
+  .lession iframe {
+    border: 1px solid #000; }
