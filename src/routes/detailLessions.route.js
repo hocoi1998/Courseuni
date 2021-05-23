@@ -4,5 +4,10 @@ const router = express.Router();
 const detailLessionsController = require('../app/controllers/detailLessions.controller');
 
 router.get('/:courseSlug/:lessionSlug', detailLessionsController.show);
+router.post(
+    '/:courseSlug/:lessionSlug/comment',
+    detailLessionsController.comment,
+);
+router.put('/:courseSlug/:lessionSlug/reply', detailLessionsController.reply);
 
 module.exports = router;

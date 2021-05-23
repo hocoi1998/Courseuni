@@ -17,16 +17,75 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
       </iframe>
-      
-      <div class="my-4">
-      {{#each exercises}}
-      <a href="{{ this.lessionSlug }}/{{ this.slug }}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">{{ this.name }}</a>
-      {{/each}}
 
+      <div class="mt-4">
+        {{#each exercises}}
+        <a href="{{ this.lessionSlug }}/{{ this.slug }}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">{{
+          this.name }}</a>
+        {{/each}}
       </div>
 
+      <div class="my-4">
+        <form method="POST" action="{{lession.slug}}/comment" class="comment-form">
+          <div class="form-group">
+            <input type="text" class="form-control comment" id="content" name="content"
+              placeholder="Bạn có thắc mắc gì về bài học này?" required>
+            <input type="text" name="lessionSlug" value={{lession.slug}} hidden>
+            <input type="text" name="commentBy" value={{user._id}} hidden>
+          </div>
+          <button type="submit" class="btn btn-primary comment__btn">Bình luận</button>
+        </form>
+      </div>
+      {{#each comments }}
+      <div class="mt-4 d-flex">
+        <img class="comment__avt" src="/{{ this.commentBy.avatar }}">
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+            {{ this.commentBy.name }}
+          </span>
+          <div class="comment__content mt-1">{{ this.content }}</div>
+          <div class="comment__options">
+            sửa
+          </div>
+        </div>
+      </div>
+      <div class="comment__action">
+            <span class="comment__action--reply">Trả lời</span>
+            <span class="comment__action--time">19:20 - 22/05/2020</span>
+            <form method="POST" action="{{lessionSlug}}/reply?_method=PUT" class="reply-form">
+          <div class="form-group">
+            <input type="text" class="form-control comment" id="content" name="content"
+              placeholder="Trả lời bình luận này" required>
+            <input type="text" class="cmtBy" name="cmtId" value={{this._id}} hidden>
+            <input type="text" class="replyBy" name="replyBy" hidden>
+          </div>
+          <button type="submit" class="btn btn-primary comment__btn">Trả lời</button>
+        </form>
+      </div>
+      {{#each this.reply}}
+
+      <div class="mt-4 ml-5 d-flex">
+        <img class="comment__avt" src="/{{this.replyBy.avatar}}">
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+             {{this.replyBy.name}}
+          </span>
+          <div class="comment__content mt-1">{{ this.content }}</div>
+
+          <div class="comment__options">
+            sửa
+          </div>
+
+        </div>
+      </div>
+       <div class="comment__action ml-5">
+            <span class="comment__action--time ml-5">19:20 - 22/05/2020</span>
+      </div>
+
+      {{/each}}
+      {{/each}}
     </div>
-    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2" style="height: 80vh">
+    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
       <div class="lession__title">
         <table class="table">
           <thead>
@@ -52,3 +111,41 @@
     </div>
   </div>
 </div>
+<script>
+  let item = document.querySelectorAll('.lession__item')
+  let lession = document.querySelectorAll('.lession__link')
+  for (let i = 0; i < lession.length; i++) {
+    if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
+      item[i].classList.add('btn-primary');
+      lession[i].classList.add('text-white')
+    }
+  }
+
+  let rep = document.querySelectorAll('.replyBy');
+  for (let i = 0; i < rep.length; i++) {
+    rep[i].value = '{{user._id}}'
+  }
+
+  let reply = document.querySelectorAll('.reply-form');
+  let btnReply = document.querySelectorAll('.comment__action--reply');
+  for (let i = 0; i < reply.length; i++) {
+    btnReply[i].onclick = function () {
+      reply[i].style.display = 'block'
+    }
+  }
+ 
+  /*
+    let options = document.querySelector('.comment__options');
+    let content = document.querySelector('.comment__content');
+  
+    options.addEventListener("click", edit);
+  
+    function edit() {
+      content.innerHTML = `
+        <input type="text" class="form-control comment__edit" id="content" name="content" value="${content.innerHTML}" required>
+      `
+    }
+  */
+  
+
+</script>
