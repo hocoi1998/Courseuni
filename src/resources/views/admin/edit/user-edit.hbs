@@ -1,0 +1,126 @@
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Thông tin tài khoản</strong> {{ account.name }}
+                    </div>
+                    <form method="POST" action="update?_method=PUT" class="form-horizontal">
+                        <div class="card-body card-block">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Họ và tên</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ account.name }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Địa chỉ Email</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ account.email }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Điện thoại</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ account.phone }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Ngày sinh</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ momentD account.dateOfBirth }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Giới tính</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ account.gender }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Địa chỉ</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ account.address }}</p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class="form-control-label">Loại tài khoản</label>
+                                </div>
+                                <div class="col col-md-9">
+                                    <div class="form-check-inline form-check">
+                                        <label for="inline-radio1" class="form-check-label ">
+                                            <input type="radio" id="inline-radio1" name="isAdmin" value="false"
+                                                class="form-check-input" checked>Học viên
+                                        </label>
+                                        <label for="inline-radio2" class="ml-3 form-check-label ">
+                                            <input type="radio" id="inline-radio2" name="isAdmin" value="true"
+                                                class="form-check-input" {{#if account.isAdmin}}checked{{/if}}>Quản trị
+                                            viên
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class="form-control-label">Cấm bình luận</label>
+                                </div>
+                                <div class="col col-md-9">
+                                    <div class="form-check-inline form-check">
+                                        <label for="inline-radio3" class="form-check-label ">
+                                            <input type="radio" id="inline-radio3" name="banned" value="false"
+                                                class="form-check-input" checked>Không
+                                        </label>
+                                        <label for="inline-radio4" class="ml-3 form-check-label ">
+                                            <input type="radio" id="inline-radio4" name="banned" value="true"
+                                                class="form-check-input" {{#if account.banned}}checked{{/if}}>Cấm
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Thời gian tạo</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ momentH account.createdAt }} / {{ momentD
+                                        account.createdAt }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label class=" form-control-label">Cập nhật gần nhất</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <p class="form-control-static">{{ momentH account.updatedAt }} / {{ momentD
+                                        account.updatedAt }}
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Lưu lại
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

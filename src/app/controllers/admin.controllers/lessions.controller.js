@@ -1,4 +1,5 @@
 const Lession = require('../../models/Lession');
+const Comment = require('../../models/Comment');
 const Exercise = require('../../models/Exercise');
 
 const { mongooseToObject } = require('../../../util/mongoose');
@@ -8,25 +9,32 @@ class lessionsController {
     // LESSION
     // [GET] /admin/courses/:courseSlug
     show(req, res, next) {
-        let lessionQuery = Lession.find({ courseSlug: req.params.courseSlug });
+        let currentPage = parseInt(req.query.page) || 1;
+        let perPage = 10;
+        let skip = (currentPage - 1) * perPage;
 
-        if (req.query.hasOwnProperty('_sort')) {
-            lessionQuery = lessionQuery.sort({
-                [req.query.column]: req.query.type,
-            });
-        }
-
+        let lessionQuery = Lession.find({ courseSlug: req.params.courseSlug })
+            .skip(skip)
+            .limit(perPage);
         Promise.all([
             lessionQuery,
             Lession.countDocumentsDeleted({
                 courseSlug: req.params.courseSlug,
             }),
+            Lession.countDocuments(),
         ])
-            .then(([lessions, deletedCount]) =>
+            .then(([lessions, deletedCount, count]) =>
                 res.render('admin/list/lessions-list', {
+                    layout: 'admin',
+                    title: 'Quản lý bài học',
                     deletedCount,
                     lessions: multipleMongooseToObject(lessions),
                     courseSlug: req.params.courseSlug,
+                    pagination: {
+                        page: currentPage,
+                        limit: perPage,
+                        totalRows: count,
+                    },
                 }),
             )
             .catch(next);
@@ -35,6 +43,8 @@ class lessionsController {
     // [GET] /admin/courses/:courseSlug/create
     create(req, res, next) {
         res.render('admin/create/lession-create', {
+            layout: 'admin',
+            title: 'Quản lý bài học',
             courseSlug: req.params.courseSlug,
         });
     }
@@ -54,6 +64,8 @@ class lessionsController {
         Lession.findOne({ slug: req.params.lessionSlug })
             .then((lession) =>
                 res.render('admin/edit/lession-edit', {
+                    layout: 'admin',
+                    title: 'Sửa bài học',
                     lession: mongooseToObject(lession),
                 }),
             )
@@ -70,6 +82,7 @@ class lessionsController {
     // [DELETE] /admin/courses/:courseSlug/:lessionSlug/delete
     delete(req, res, next) {
         Lession.delete({ slug: req.params.lessionSlug }).then();
+        Comment.delete({ lessionSlug: req.params.lessionSlug }).then();
         Exercise.delete({ lessionSlug: req.params.lessionSlug })
             .then(() => res.redirect('back'))
             .catch(next);
@@ -77,21 +90,33 @@ class lessionsController {
 
     // [GET] /admin/trash/courses/:courseSlug
     trash(req, res, next) {
+        let currentPage = parseInt(req.query.page) || 1;
+        let perPage = 10;
+        let skip = (currentPage - 1) * perPage;
+
         let lessionQuery = Lession.findDeleted({
             courseSlug: req.params.courseSlug,
-        });
+        })
+            .skip(skip)
+            .limit(perPage);
 
-        if (req.query.hasOwnProperty('_sort')) {
-            lessionQuery = lessionQuery.sort({
-                [req.query.column]: req.query.type,
-            });
-        }
-
-        lessionQuery
-            .then((lessions) =>
+        Promise.all([
+            lessionQuery,
+            Lession.countDocumentsDeleted({
+                courseSlug: req.params.courseSlug,
+            }),
+        ])
+            .then(([lessions, count]) =>
                 res.render('admin/trash/lessions-trash', {
+                    layout: 'admin',
+                    title: 'Bài học đã xoá',
                     lessions: multipleMongooseToObject(lessions),
                     courseSlug: req.params.courseSlug,
+                    pagination: {
+                        page: currentPage,
+                        limit: perPage,
+                        totalRows: count,
+                    },
                 }),
             )
             .catch(next);
@@ -100,6 +125,7 @@ class lessionsController {
     // [PATCH] /admin/trash/:courseSlug/:lessionSlug/restore
     restore(req, res, next) {
         Lession.restore({ slug: req.params.lessionSlug }).then();
+        Comment.restore({ lessionSlug: req.params.lessionSlug }).then();
         Exercise.restore({ lessionSlug: req.params.lessionSlug })
             .then(() => res.redirect('back'))
             .catch(next);
@@ -108,6 +134,7 @@ class lessionsController {
     // [PATCH] /admin/trash/:courseSlug/:lessionSlug/forceDelete
     forceDelete(req, res, next) {
         Lession.deleteOne({ slug: req.params.lessionSlug }).then();
+        Comment.deleteMany({ lessionSlug: req.params.lessionSlug }).then();
         Exercise.deleteMany({ lessionSlug: req.params.lessionSlug })
             .then(() => res.redirect('back'))
             .catch(next);
@@ -118,6 +145,9 @@ class lessionsController {
         switch (req.body.action) {
             case 'delete':
                 Lession.delete({ slug: { $in: req.body.checkSlugs } }).then();
+                Comment.delete({
+                    lessionSlug: { $in: req.body.checkSlugs },
+                }).then();
                 Exercise.delete({ lessionSlug: { $in: req.body.checkSlugs } })
                     .then(() => res.redirect('back'))
                     .catch(next);
@@ -125,6 +155,9 @@ class lessionsController {
             case 'forceDelete':
                 Lession.deleteMany({
                     slug: { $in: req.body.checkSlugs },
+                }).then();
+                Comment.deleteMany({
+                    lessionSlug: { $in: req.body.checkSlugs },
                 }).then();
                 Exercise.deleteMany({
                     lessionSlug: { $in: req.body.checkSlugs },
@@ -134,6 +167,9 @@ class lessionsController {
                 break;
             case 'restore':
                 Lession.restore({ slug: { $in: req.body.checkSlugs } }).then();
+                Comment.restore({
+                    lessionSlug: { $in: req.body.checkSlugs },
+                }).then();
                 Exercise.restore({ lessionSlug: { $in: req.body.checkSlugs } })
                     .then(() => res.redirect('back'))
                     .catch(next);

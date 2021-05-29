@@ -8,6 +8,10 @@ router.post(
     '/:courseSlug/:lessionSlug/comment',
     detailLessionsController.comment,
 );
+router.put(
+    '/:courseSlug/:lessionSlug/comment/update',
+    detailLessionsController.update,
+);
 router.put('/:courseSlug/:lessionSlug/reply', detailLessionsController.reply);
 
 module.exports = router;

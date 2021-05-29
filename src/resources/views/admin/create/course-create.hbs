@@ -1,36 +1,108 @@
-<div class="container">
-    <div class="mt-4">
-    <h3>Đăng khoá học</h3>
-    <form method="POST" action="/admin/courses/store" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="name">Tên khoá học</label>
-            <input type="text" class="form-control" id="name" name="name">
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>THÊM KHOÁ HỌC</strong>
+                    </div>
+                    <form action="/admin/courses/store" method="POST"  class="form-horizontal" id="needs-validation" enctype="multipart/form-data">
+                        <div class="card-body card-block">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="name" class=" form-control-label">Tên khoá học <sup
+                                            class="text-danger">*</sup></label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="name" name="name" placeholder="Nhập tên khoá học"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="description" class="form-control-label">Mô tả khoá học</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <textarea name="description" id="description" rows="4" placeholder="Nội dung..."
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="author" class="form-control-label">Tác giả</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="author" name="author" placeholder=""
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="category" class="form-control-label">Danh mục</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <select name="category" id="category" class="form-control">
+                                        {{#each categories}}
+                                        <option value="{{ this._id }}"> {{this.name}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="image" class=" form-control-label">Hình ảnh <sup
+                                            class="text-danger">*</sup></label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <div class="form-control">
+                                        <img id="imgPreview" src="" alt="" class="d-flex mx-auto" style="max-width:100%; max-height: 300px;object-fit:cover">
+                                    <input type="file" id="img" class="my-2 w-100 form-control-file" name="image">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="obtain" class="form-control-label">Kiến thức đạt được</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <textarea name="obtain" id="obtain" rows="9" placeholder="Thêm nhiều kiến thức bằng cách xuống dòng"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Thêm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description">Mô tả khoá học</label>
-            <input type="text" class="form-control" id="description" name="description">
-        </div>
-        <div class="form-group">
-            <label for="author">Tác giả</label>
-            <input type="text" class="form-control" id="author" name="author">
-        </div>
-        <div class="form-group">
-            <label for="category">Danh mục</label>
-            <select class="form-control" name="category" id="category">
-                {{#each categories}}
-                <option value="{{ this._id }}"> {{this.name}}</option>
-                {{/each}}
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="image">Hình ảnh</label>
-            <input type="file" class="form-control" id="image" name="image">
-        </div>
-
-
-
-        <button type="submit" class="btn btn-primary">Thêm khoá học</button>
-    </form>
+    </div>
 </div>
-</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $("#needs-validation").validate({
+            rules: {
+                name: 'required',
+            },
+            messages: {
+                name: 'Vui lòng điền tên khoá học!',
+            }
+        });
+        $('input[name^="image"]').rules('add', {
+            required: true,
+        })
+
+        img.onchange = evt => {
+        const [file] = img.files
+        if (file) {
+            imgPreview.src = URL.createObjectURL(file)
+        }
+    }
+    })
+
+</script>

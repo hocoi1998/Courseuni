@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
 
 const Lession = new Schema(
     {
-        name: { type: String, maxLength: 255 },
-        videoId: { type: String },
+        name: { type: String, required: true },
+        videoId: { type: String, required: true },
         courseSlug: { type: String },
         slug: { type: String, slug: 'name', unique: true },
     },

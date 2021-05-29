@@ -71,6 +71,9 @@ app.engine(
             },
             paginateHelper: paginateHelper.createPagination,
             moment: (a) => moment(a).format('MM/DD/YYYY'),
+            momentD: (a) => moment(a).format('DD-MM-YYYY'),
+            momentH: (a) => moment(a).format('HH:mm:ss'),
+            momentHM: (a) => moment(a).format('HH:mm - DD/MM/YYYY'),
         },
     }),
 );

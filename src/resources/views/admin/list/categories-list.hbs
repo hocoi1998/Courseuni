@@ -1,0 +1,193 @@
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <!-- DATA TABLE -->
+                <form method="POST" action="/admin/categories/handle-form-actions" name="container-form">
+                    <a href="/admin/categories" class="title-5">Quản lý danh mục</a>
+                    <table class="table table-data2">
+                        <tbody style="background-color: transparent">
+                            <tr>
+                                <td>
+                                    <label class="au-checkbox">
+                                        <input id="checkbox-all" type="checkbox">
+                                        <span class="au-checkmark"></span>
+                                    </label>
+                                </td>
+                                <td colspan="2">
+                                    <select name="action" id="select" class="form-control" name="action" required>
+                                        <option value="">-- Hành động --</option>
+                                        <option value="delete">Xoá</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="au-btn au-btn-icon au-btn--green au-btn--small check-all-submit-btn"
+                                        disabled>
+                                        Thực hiện
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="table-data-feature">
+                                        <a href="/admin/trash/categories" class="item position-relative"
+                                            data-toggle="tooltip" data-placement="top" title=""
+                                            data-original-title="Thùng rác ({{ deletedCount }})">
+                                            <i class="zmdi zmdi-delete text-danger" style="font-size:40px;"></i>
+                                            <span class="text-white position-absolute text-center"
+                                                style="width:23.36px;bottom:2px;right:3px;">{{ deletedCount }}</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-responsive table-responsive-data2">
+                        <table class="table table-data2">
+                            <thead>
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>Tên danh mục</th>
+                                    <th>Mô tả</th>
+                                    <th>Thời gian tạo</th>
+                                    <th>Cập nhật</th>
+                                    <th>
+                                        <a href="/admin/categories/create"
+                                            class="au-btn au-btn-icon au-btn--blue au-btn--small px-5">
+                                            Thêm
+                                        </a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each categories }}
+                                <tr class="tr-shadow">
+                                    <td>
+                                        <label class="au-checkbox">
+                                            <input type="checkbox" name="checkSlugs[]" value="{{ this.slug }}">
+                                            <span class="au-checkmark"></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <span class="block-email">{{ this.name }}</span>
+                                    </td>
+                                    <td class="desc">{{ this.description }}</td>
+                                    <td>{{ momentHM this.createdAt }}</td>
+                                    <td>{{ momentHM this.updatedAt }}</td>
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <a href="/admin/categories/{{this.slug}}/edit" class="item"
+                                                data-toggle="tooltip" data-placement="top" title="Sửa"
+                                                data-original-title="Sửa">
+                                                <i class="zmdi zmdi-edit text-info"></i>
+                                            </a>
+                                            <a href="" class="item" data-placement="top" title="Xoá"
+                                                data-original-title="Xoá" data-toggle="modal"
+                                                data-target="#delete-modal" data-slug="{{ this.slug }}">
+                                                <i class="zmdi zmdi-delete text-dark"></i>
+                                            </a>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
+                                {{/each}}
+                                <tr>
+                                    {{#if categories}}
+                                    <td colspan="6">
+                                        {{{ paginateHelper pagination paginationClass="pagination pagination-sm
+                                        justify-content-center" }}}
+                                    </td>
+                                    {{else}}
+                                    <td colspan="6" style="text-align: center">
+                                        Không có danh mục nào, <a href=" /admin/categories/create">Thêm ngay</a>
+                                    </td>
+                                    {{/if}}
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END DATA TABLE -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- Confirm delete --}}
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel"
+    data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Xoá danh mục</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Bạn chắc chắn muốn xoá danh mục này?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                <button id="btn-delete" type="button" class="btn btn-primary">Xoá bỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="delete-form" method="POST"></form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var slug;
+        var btnDelete = document.getElementById('btn-delete');
+        var containerForm = $['form[name="container-form"'];
+        var deleteForm = document.getElementById('delete-form');
+        var checkboxAll = $('#checkbox-all');
+        var itemCheckbox = $('input[name="checkSlugs[]"]');
+        var checkAllSubmitBtn = $('.check-all-submit-btn');
+
+        // When dialog confirm clicked
+        $('#delete-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            slug = button.data('slug')
+        });
+
+        // When delete button clicked
+        btnDelete.onclick = function () {
+            deleteForm.action = '/admin/categories/' + slug + '/delete?_method=DELETE';
+            deleteForm.submit();
+        }
+
+        // Checkbox all changed
+        checkboxAll.change(function () {
+            var isCheckedAll = $(this).prop('checked');
+            itemCheckbox.prop('checked', isCheckedAll);
+            renderCheckAllSubmitBtn();
+        });
+
+        // item checkbox changed
+        itemCheckbox.change(function () {
+            var isCheckedAll = itemCheckbox.length === $('input[name="checkSlugs[]"]:checked').length;
+            checkboxAll.prop('checked', isCheckedAll);
+            renderCheckAllSubmitBtn().click(function (e) {
+                e.preventDefault();
+            });
+        });
+
+        // Re-render check all submit button
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="checkSlugs[]"]:checked').length;
+            if (checkedCount) {
+                checkAllSubmitBtn.attr('disabled', false);
+            } else {
+                checkAllSubmitBtn.attr('disabled', true);
+            }
+        }
+
+    });
+
+
+</script>

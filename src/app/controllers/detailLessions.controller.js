@@ -1,3 +1,4 @@
+const User = require('../models/User');
 const Course = require('../models/Course');
 const Lession = require('../models/Lession');
 const Comment = require('../models/Comment');
@@ -15,12 +16,13 @@ class DetailLessionsController {
         let comments = Comment.find({ lessionSlug: req.params.lessionSlug })
             .populate('commentBy')
             .populate('reply.replyBy')
-            .sort([['updatedAt', 'descending']]);
+            .sort([['createdAt', 'descending']]);
         let course = Course.findOne({ slug: req.params.courseSlug });
+        let user = User.findOne({ _id: req.signedCookies.userId });
 
-        Promise.all([lessions, lession, exercises, comments, course])
+        Promise.all([lessions, lession, exercises, comments, course, user])
             .then(
-                ([lessions, lession, exercises, comments, course]) =>
+                ([lessions, lession, exercises, comments, course, user]) =>
                     res.render('detailLession', {
                         title: lession.name,
                         lessions: multipleMongooseToObject(lessions),
@@ -28,6 +30,7 @@ class DetailLessionsController {
                         exercises: multipleMongooseToObject(exercises),
                         comments: multipleMongooseToObject(comments),
                         course: mongooseToObject(course),
+                        user: mongooseToObject(user),
                     }),
                 // res.json(comments)
             )
@@ -41,6 +44,13 @@ class DetailLessionsController {
                 res.redirect('back');
             })
             .catch(next);
+    }
+    update(req, res, next) {
+        Comment.updateOne({ _id: req.body.cmtId }, req.body)
+            .then(() => res.redirect('back'))
+            .catch(next);
+
+        // res.json(req.body);
     }
 
     reply(req, res, next) {

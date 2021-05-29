@@ -3,86 +3,156 @@
     <div class="col-lg-8 col-md-12 col-sm-12">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/courses">Khoá học</a></li>
           <li class="breadcrumb-item">
-            <a href="/courses/{{ course.slug }}">
-              {{ course.name }}
+            <a href="/courses">
+              Khoá học
             </a>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">{{ lession.name }}</li>
+          <li class="breadcrumb-item">
+            <a href="/courses/{{course.slug}}">
+              {{course.name}}
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{lession.name}}
+          </li>
         </ol>
       </nav>
-      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{ lession.videoId }}"
-        title="YouTube video player" frameborder="0"
+      <iframe
+        width="100%"
+        height="460"
+        src="https://www.youtube.com/embed/{{lession.videoId}}"
+        title="YouTube video player"
+        frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-
+        allowfullscreen
+      ></iframe>
       <div class="mt-4">
         {{#each exercises}}
-        <a href="{{ this.lessionSlug }}/{{ this.slug }}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">{{
-          this.name }}</a>
+          <a
+            href="{{this.lessionSlug}}/{{this.slug}}"
+            class="btn btn-success rounded-pill mx-2 px-4 mb-2"
+          >
+            {{this.name}}
+          </a>
         {{/each}}
       </div>
-
       <div class="my-4">
-        <form method="POST" action="{{lession.slug}}/comment" class="comment-form">
+        {{#if user.banned}}
+        Bạn đã bị cấm bình luận do vi phạm <a href="/term">Điều khoản sử dụng</a>
+        {{else}}
+        <form
+          method="POST"
+          action="{{lession.slug}}/comment"
+          class="comment-form"
+        >
           <div class="form-group">
-            <input type="text" class="form-control comment" id="content" name="content"
-              placeholder="Bạn có thắc mắc gì về bài học này?" required>
-            <input type="text" name="lessionSlug" value={{lession.slug}} hidden>
-            <input type="text" name="commentBy" value={{user._id}} hidden>
+            <input
+              type="text"
+              class="form-control comment"
+              name="content"
+              placeholder="Bạn có thắc mắc gì về bài học này?"
+              required
+            />
+            <input
+              type="text"
+              name="lessionSlug"
+              value={{lession.slug}}
+              hidden
+            />
+            <input type="text" name="commentBy" value={{user._id}} hidden />
           </div>
-          <button type="submit" class="btn btn-primary comment__btn">Bình luận</button>
+          <button type="submit" class="btn btn-primary comment__btn">
+            Bình luận
+          </button>
         </form>
+        {{/if}}
       </div>
-      {{#each comments }}
-      <div class="mt-4 d-flex">
-        <img class="comment__avt" src="/{{ this.commentBy.avatar }}">
-        <div class="comment__inner">
-          <span class="comment__name font-weight-bold">
-            {{ this.commentBy.name }}
-          </span>
-          <div class="comment__content mt-1">{{ this.content }}</div>
-          <div class="comment__options">
-            sửa
+      {{#each comments}}
+        <div class="mt-4 d-flex">
+          <img class="comment__avt" src="/{{this.commentBy.avatar}}" />
+          <div class="comment__inner">
+            <span class="comment__name font-weight-bold">
+              {{this.commentBy.name}}
+            </span>
+            <span class="commentBy" style="display: none">{{this.commentBy._id}}</span>
+            <div class="comment__content edit-content mt-1">
+              {{#if this.commentBy.banned}}
+              Bình luận này bị ẩn do tài khoản vi phạm <a href="/term">chính sách cộng đồng</a>
+              {{else}}{{this.content}}{{/if}}</div>
+            <div class="comment__options">
+              <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+              <ul class="dropdown-menu comment__option--list">
+                  <li class="dropdown-item comment__option--item adOptions">
+                    <form class="banned" method="POST" action="">
+                      <input class="ipb" type="text" value="true" name="banned" hidden>
+                      Chặn bình luận
+                    </form>
+                  </li>
+                <li class="dropdown-item comment__option--item editCmt">
+                      <input class="ipb" type="text" value="true" name="content" hidden>
+                      Sửa bình luận
+                </li>
+                <li class="dropdown-item comment__option--item">
+                    Xoá bình luận
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="comment__action">
-            <span class="comment__action--reply">Trả lời</span>
-            <span class="comment__action--time">19:20 - 22/05/2020</span>
-            <form method="POST" action="{{lessionSlug}}/reply?_method=PUT" class="reply-form">
-          <div class="form-group">
-            <input type="text" class="form-control comment" id="content" name="content"
-              placeholder="Trả lời bình luận này" required>
-            <input type="text" class="cmtBy" name="cmtId" value={{this._id}} hidden>
-            <input type="text" class="replyBy" name="replyBy" hidden>
-          </div>
-          <button type="submit" class="btn btn-primary comment__btn">Trả lời</button>
-        </form>
-      </div>
-      {{#each this.reply}}
-
-      <div class="mt-4 ml-5 d-flex">
-        <img class="comment__avt" src="/{{this.replyBy.avatar}}">
-        <div class="comment__inner">
-          <span class="comment__name font-weight-bold">
-             {{this.replyBy.name}}
+        <div class="comment__action">
+          <span class="comment__action--reply">
+            Trả lời
           </span>
-          <div class="comment__content mt-1">{{ this.content }}</div>
-
-          <div class="comment__options">
-            sửa
-          </div>
-
+          <span class="local-datetime comment__action--time">
+            {{momentHM this.createdAt}}
+          </span>
+          <form
+            method="POST"
+            action="{{lessionSlug}}/reply?_method=PUT"
+            class="reply-form"
+          >
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control comment"
+                name="content"
+                placeholder="Trả lời bình luận này"
+                required
+              />
+              <input
+                type="text"
+                class="cmtBy"
+                name="cmtId"
+                value={{this._id}}
+                hidden
+              />
+              <input type="text" class="replyBy" name="replyBy" hidden />
+            </div>
+            <button type="submit" class="btn btn-primary comment__btn">
+              Trả lời
+            </button>
+          </form>
         </div>
-      </div>
-       <div class="comment__action ml-5">
-            <span class="comment__action--time ml-5">19:20 - 22/05/2020</span>
-      </div>
-
-      {{/each}}
+        {{#each this.reply}}
+          <div class="mt-4 ml-5 d-flex">
+            <img class="comment__avt" src="/{{this.replyBy.avatar}}" />
+            <div class="comment__inner">
+              <span class="comment__name font-weight-bold">
+                {{this.replyBy.name}}
+              </span>
+              <div class="comment__content mt-1">
+                {{this.content}}
+              </div>
+              
+            </div>
+          </div>
+          <div class="comment__action ml-5">
+            <span class="comment__action--time ml-5">
+              {{momentHM this.createdAt}}
+            </span>
+          </div>
+        {{/each}}
       {{/each}}
     </div>
     <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
@@ -90,20 +160,30 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">STT</th>
-              <th scope="col">Danh sách bài học</th>
+              <th scope="col">
+                STT
+              </th>
+              <th scope="col">
+                Danh sách bài học
+              </th>
             </tr>
           </thead>
         </table>
       </div>
-      <div class="lession__list" style="height: 65vh">
+      <div class="lession__list" style="height: 80vh">
         <table class="table">
           <tbody>
             {{#each lessions}}
-            <tr class="lession__item">
-              <th scope="row">{{sum @index 1}}</th>
-              <td><a href="{{ this.slug }}" class="lession__link">{{ this.name }}</a></td>
-            </tr>
+              <tr class="lession__item">
+                <th scope="row">
+                  {{sum @index 1}}
+                </th>
+                <td>
+                  <a href="{{this.slug}}" class="lession__link">
+                    {{this.name}}
+                  </a>
+                </td>
+              </tr>
             {{/each}}
           </tbody>
         </table>
@@ -112,10 +192,10 @@
   </div>
 </div>
 <script>
-  let item = document.querySelectorAll('.lession__item')
-  let lession = document.querySelectorAll('.lession__link')
-  for (let i = 0; i < lession.length; i++) {
-    if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
+let item = document.querySelectorAll('.lession__item')
+let lession = document.querySelectorAll('.lession__link')
+for (let i = 0; i < lession.length; i++) {
+	if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
       item[i].classList.add('btn-primary');
       lession[i].classList.add('text-white')
     }
@@ -133,19 +213,51 @@
       reply[i].style.display = 'block'
     }
   }
- 
-  /*
-    let options = document.querySelector('.comment__options');
-    let content = document.querySelector('.comment__content');
+
+  let adOptions = document.querySelectorAll('.adOptions');
+  for (let i = 0; i < adOptions.length; i++) {
+    if(!{{user.isAdmin}}) {
+      adOptions[i].style.display = 'none';
+    } 
+  }
+
+ let banned = document.querySelectorAll('.banned');
   
-    options.addEventListener("click", edit);
-  
-    function edit() {
-      content.innerHTML = `
-        <input type="text" class="form-control comment__edit" id="content" name="content" value="${content.innerHTML}" required>
-      `
+ for(let i = 0; i < banned.length; i++) {
+    banned[i].onclick = function(){
+    let commentBy = document.querySelectorAll('.commentBy');
+      let cmtBy = commentBy[i].textContent;
+      banned[i].action = `/admin/users/${cmtBy}/update?_method=PUT`;
+      banned[i].submit();
     }
-  */
+ }
+
+ let editCmt = document.querySelectorAll('.editCmt');
+    let content = document.querySelectorAll('.edit-content');
+
+ for (let i = 0; i < editCmt.length; i++) {
+   let commentBy = document.querySelectorAll('.commentBy');
+   let cmtBy = commentBy[i].textContent;
+   if(cmtBy !== '{{user._id}}') {
+     editCmt[i].style.display = 'none';
+   }
   
+  let cmtId = document.querySelectorAll('.cmtBy');
+  
+  editCmt[i].onclick = function() {
+    content[i].innerHTML = `
+    <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lession.slug}}/comment/update?_method=PUT">
+    <input type="text" class="form-control comment-edited" name="content" value="${content[i].textContent}" required>
+    <input type="text" name="cmtId" value=${cmtId[i].value} hidden/>
+    <button type="submit" class="btn btn-primary comment__btn mt-3 edit-cmt-btn">
+      Lưu lại
+    </button>
+    </form>
+    `
+  };
+ }
+
+
+ 
 
 </script>

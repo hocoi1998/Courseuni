@@ -1,20 +1,83 @@
-<div class="container">
-    <div class="mt-4">
-    <h3>Thêm bài học</h3>
-    <form method="POST" action="/admin/courses/{{ courseSlug }}/store">
-        <div class="form-group">
-            <label for="name">Tên bài học</label>
-            <input type="text" class="form-control" id="name" name="name">
+<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>THÊM BÀI HỌC</strong>
+                    </div>
+                    <form action="/admin/courses/{{ courseSlug }}/store" method="POST" class="form-horizontal"
+                        id="needs-validation">
+                        <div class="card-body card-block">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="name" class=" form-control-label">Tên bài học <sup
+                                            class="text-danger">*</sup></label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="name" name="name" placeholder="Nhập tên bài học"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="videoId" class=" form-control-label">Video ID<sup
+                                            class="text-danger">*</sup></label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="videoId" name="videoId" placeholder="Youtube video ID..."
+                                        class="form-control">
+                                    <input type="text" class="form-control" id="courseSlug" name="courseSlug"
+                                        value="{{ courseSlug }}" hidden>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    Preview
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <iframe id="vid" width="100%" height="300" class="form-control"
+                                        src="https://www.youtube.com/embed/"
+                                        title="YouTube video player" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Thêm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="videoId">Video ID</label>
-            <input type="text" class="form-control" id="videoId" name="videoId">
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" id="courseSlug" name="courseSlug" value="{{ courseSlug }}" hidden>
-        </div>
-    
-        <button type="submit" class="btn btn-primary">Thêm bài học</button>
-    </form>
+    </div>
 </div>
-</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $("#needs-validation").validate({
+            rules: {
+                name: 'required',
+                videoId: 'required',
+            },
+            messages: {
+                name: 'Vui lòng điền tên bài học!',
+                videoId: 'Vui lòng nhập chính xác ID video youtube'
+            }
+        });
+        $('input[name^="image"]').rules('add', {
+            required: true,
+        })
+
+        document.getElementById("videoId").addEventListener("input", function() {
+        let ads = document.getElementById('videoId').value;
+            document.getElementById('vid').setAttribute('src', `https://www.youtube.com/embed/${ads}`)
+        });
+    })
+
+</script>

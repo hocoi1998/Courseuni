@@ -22,7 +22,7 @@ class CoursesController {
                         limit: perPage,
                         totalRows: count,
                     },
-                    totalPage: count / perPage,
+                    // totalPage: count / perPage,
                     courses: multipleMongooseToObject(courses),
                     categories: multipleMongooseToObject(categories),
                 }),
