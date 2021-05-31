@@ -13,5 +13,9 @@ router.put(
     detailLessionsController.update,
 );
 router.put('/:courseSlug/:lessionSlug/reply', detailLessionsController.reply);
+router.put(
+    '/:courseSlug/:lessionSlug/reply/update',
+    detailLessionsController.updateReply,
+);
 
 module.exports = router;

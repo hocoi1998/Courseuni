@@ -41,25 +41,42 @@ class DetailLessionsController {
         comment
             .save()
             .then(() => {
-                res.redirect('back');
+                res.send(true);
             })
             .catch(next);
     }
     update(req, res, next) {
         Comment.updateOne({ _id: req.body.cmtId }, req.body)
-            .then(() => res.redirect('back'))
+            .then(() => res.send(true))
             .catch(next);
-
-        // res.json(req.body);
     }
 
     reply(req, res, next) {
         let cmtId = req.body.cmtId;
         Comment.updateOne({ _id: cmtId }, { $push: { reply: req.body } })
             .then(() => {
+                res.send(true);
+            })
+            .catch(next);
+        // res.json(req.body);
+    }
+
+    updateReply(req, res, next) {
+        let repId = req.body.repId;
+        // Đang lỗi để tạm, chỉ sửa được reply đứng 1 mình, nhiều reply sẽ bị mất
+        Comment.updateOne(
+            { 'reply._id': repId },
+            {
+                $set: {
+                    'reply.$.content': req.body.content,
+                },
+            },
+        )
+            .then(() => {
                 res.redirect('back');
             })
             .catch(next);
+        // res.json(req.body);
     }
 }
 

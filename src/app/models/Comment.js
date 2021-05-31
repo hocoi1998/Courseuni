@@ -13,6 +13,9 @@ const Comment = new Schema(
                 replyBy: { type: Schema.Types.ObjectId, ref: 'User' },
                 content: { type: String },
             },
+            {
+                timestamps: true,
+            },
         ],
     },
     {

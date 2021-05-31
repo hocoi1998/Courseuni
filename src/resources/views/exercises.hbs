@@ -1,15 +1,32 @@
 <div class="container">
     <ul>
-   
-    <li> {{ exercise.name }}</li>
-    <li> {{ exercise.question }}</li>
+        Bài tập 1:
+        <li> {{ exercise.question }}</li>
+    </ul>
 
-</ul>
-<ol type="A">
     {{#each exercise.answer}}
-    <li>
-        {{ this }}
-    </li>
+    <div class="form-check">
+        <input class="form-check-input answer" type="radio" name="answer" value="{{@index}}" checked>
+        <label class="form-check-label" for="exampleRadios1">
+            {{ this }}
+        </label>
+    </div>
     {{/each}}
-</ol>
+    <button id="submit" class="btn btn-primary">OK</button>
 </div>
+
+<script>
+    document.querySelector('#submit').onclick = function () {
+        let answer = document.querySelectorAll('.answer');
+        let lbl = document.querySelectorAll('.form-check-label');
+        for(let i = 0; i < answer.length; i++) {
+            answerVal = answer[i].value;
+            if(answerVal == '{{ exercise.correct }}') {
+                lbl[i].classList.add('text-success');
+            } else {
+                lbl[i].classList.add('text-danger');
+            }
+        }
+        
+    }
+</script>

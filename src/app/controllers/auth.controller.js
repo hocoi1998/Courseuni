@@ -43,7 +43,7 @@ class AuthController {
                     res.cookie('userId', user._id, {
                         signed: true,
                     });
-                    res.redirect('/admin/courses');
+                    res.redirect('/admin');
                 }
             })
             .catch(next);

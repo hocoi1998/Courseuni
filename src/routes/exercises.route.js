@@ -3,6 +3,6 @@ const router = express.Router();
 
 const exercisesRouter = require('../app/controllers/exercises.controller');
 
-router.get('/:lessionSlug/:slug', exercisesRouter.show);
+router.get('/:lessionSlug/:id', exercisesRouter.show);
 
 module.exports = router;

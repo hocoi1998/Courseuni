@@ -18,68 +18,206 @@
           </li>
         </ol>
       </nav>
-      <iframe
-        width="100%"
-        height="460"
-        src="https://www.youtube.com/embed/{{lession.videoId}}"
-        title="YouTube video player"
-        frameborder="0"
+      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{lession.videoId}}"
+        title="YouTube video player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+        allowfullscreen></iframe>
       <div class="mt-4">
         {{#each exercises}}
-          <a
-            href="{{this.lessionSlug}}/{{this.slug}}"
-            class="btn btn-success rounded-pill mx-2 px-4 mb-2"
-          >
-            {{this.name}}
-          </a>
+        <a href="{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
+          Bài tập {{sum @index 1}}
+        </a>
         {{/each}}
       </div>
       <div class="my-4">
         {{#if user.banned}}
         Bạn đã bị cấm bình luận do vi phạm <a href="/term">Điều khoản sử dụng</a>
         {{else}}
-        <form
-          method="POST"
-          action="{{lession.slug}}/comment"
-          class="comment-form"
-        >
-          <div class="form-group">
-            <input
-              type="text"
-              class="form-control comment"
-              name="content"
-              placeholder="Bạn có thắc mắc gì về bài học này?"
-              required
-            />
-            <input
-              type="text"
-              name="lessionSlug"
-              value={{lession.slug}}
-              hidden
-            />
-            <input type="text" name="commentBy" value={{user._id}} hidden />
-          </div>
-          <button type="submit" class="btn btn-primary comment__btn">
-            Bình luận
-          </button>
-        </form>
+        <div class="form-group">
+          <input type="text" class="form-control comment" contenteditable="true" name="content"
+            placeholder="Bạn có thắc mắc gì về bài học này?" required />
+        </div>
+        <input type="button" class="btn btn-primary comment__btn comment-btn" value="Bình luận">
         {{/if}}
       </div>
+      <div class="comments-box">
+        {{!-- New comment --}}
+      </div>
       {{#each comments}}
-        <div class="mt-4 d-flex">
-          <img class="comment__avt" src="/{{this.commentBy.avatar}}" />
+      <div class="mt-4 d-flex">
+        <img class="comment__avt" src="/{{this.commentBy.avatar}}" />
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+            {{this.commentBy.name}}
+          </span>
+          <span class="commentBy" style="display: none">{{this.commentBy._id}}</span>
+          {{#if this.commentBy.banned}}
+          <div class="comment__content mt-1">
+            Bình luận này bị ẩn do tài khoản vi phạm <a href="/term">chính sách cộng đồng</a>
+          </div>
+          {{else}}
+          <div class="comment__content edit-content mt-1">{{this.content}}</div>
+          <div class="comment__options">
+            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></i>
+            <ul class="dropdown-menu comment__option--list">
+              <li class="dropdown-item comment__option--item adOptions">
+                <form class="banned" method="POST" action="">
+                  <input class="ipb" type="text" value="true" name="banned" hidden>
+                  Chặn bình luận
+                </form>
+              </li>
+              <li class="dropdown-item comment__option--item editCmt">
+                <input class="ipb" type="text" value="true" name="content" hidden>
+                Sửa bình luận
+              </li>
+              <li class="dropdown-item comment__option--item">
+                Xoá bình luận
+              </li>
+            </ul>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+      <div class="comment__action">
+        <span class="comment__action--reply">
+          Trả lời
+        </span>
+        <span class="local-datetime comment__action--time">
+          {{momentHM this.createdAt}}
+        </span>
+        <form class="reply-form">
+          <div class="form-group">
+            <input type="text" class="form-control comment" name="content" placeholder="Trả lời bình luận này"
+              required />
+            <input type="text" class="cmtBy" name="cmtId" value={{this._id}} hidden />
+            <input type="text" class="replyBy" name="replyBy" hidden />
+          </div>
+          <button type="submit" class="btn btn-primary comment__btn test">
+            Trả lời
+          </button>
+        </form>
+      </div>
+      {{#each this.reply}}
+      <div class="mt-4 ml-5 d-flex">
+        <img class="comment__avt" src="/{{this.replyBy.avatar}}" />
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+            {{this.replyBy.name}}
+          </span>
+          <input class="ipRepId" type="text" value="{{this._id}}">
+          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
+          <div class="comment__content reply-content mt-1">{{this.content}}</div>
+          <div class="comment__options">
+            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></i>
+            <ul class="dropdown-menu comment__option--list">
+              <li class="dropdown-item comment__option--item adOptions">
+                <form class="banned" method="POST" action="">
+                  <input class="ipr" type="text" value="true" name="banned" hidden>
+                  Chặn bình luận
+                </form>
+              </li>
+              <li class="dropdown-item comment__option--item editReply">
+                Sửa trả lời
+              </li>
+              <li class="dropdown-item comment__option--item">
+                Xoá bình luận
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="comment__action ml-5">
+        <span class="comment__action--time ml-5">
+          {{momentHM this.createdAt}}
+        </span>
+      </div>
+      {{/each}}
+      {{!-- new reply --}}
+      <div class="reply-box"></div> 
+      {{/each}}
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
+      <div class="lession__title">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">
+                STT
+              </th>
+              <th scope="col">
+                Danh sách bài học
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="lession__list" style="height: 80vh">
+        <table class="table">
+          <tbody>
+            {{#each lessions}}
+            <tr class="lession__item">
+              <th scope="row">
+                {{sum @index 1}}
+              </th>
+              <td>
+                <a href="{{this.slug}}" class="lession__link">
+                  {{this.name}}
+                </a>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // add active lesion background color
+  let item = document.querySelectorAll('.lession__item')
+  let lession = document.querySelectorAll('.lession__link')
+  for (let i = 0; i < lession.length; i++) {
+    if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
+      item[i].classList.add('btn-primary');
+      lession[i].classList.add('text-white')
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', (event) => {
+    // check role ban user
+    let adOptions = document.querySelectorAll('.adOptions');
+    for (let i = 0; i < adOptions.length; i++) {
+      if ('{{ user.isAdmin }}' === 'false') {
+        adOptions[i].style.display = 'none';
+      }
+    }
+
+    // action ban user
+    let banned = document.querySelectorAll('.banned');
+
+    for (let i = 0; i < banned.length; i++) {
+      banned[i].onclick = function () {
+        let commentBy = document.querySelectorAll('.commentBy');
+        let cmtBy = commentBy[i].textContent;
+        banned[i].action = `/admin/users/${cmtBy}/update?_method=PUT`;
+        banned[i].submit();
+      }
+    }
+
+    // add new comment
+
+    function postHTML(val) {
+      let html = `
+      <div class="mt-4 d-flex">
+      <img class="comment__avt" src="/{{user.avatar}}" />
           <div class="comment__inner">
             <span class="comment__name font-weight-bold">
-              {{this.commentBy.name}}
+              {{user.name}}
             </span>
-            <span class="commentBy" style="display: none">{{this.commentBy._id}}</span>
-            <div class="comment__content edit-content mt-1">
-              {{#if this.commentBy.banned}}
-              Bình luận này bị ẩn do tài khoản vi phạm <a href="/term">chính sách cộng đồng</a>
-              {{else}}{{this.content}}{{/if}}</div>
+            <span class="commentBy" style="display: none">{{user._id}}</span>
+            <div class="comment__content edit-content mt-1">${val}</div>
             <div class="comment__options">
               <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
               <ul class="dropdown-menu comment__option--list">
@@ -99,8 +237,8 @@
               </ul>
             </div>
           </div>
-        </div>
-        <div class="comment__action">
+          </div>
+           <div class="comment__action">
           <span class="comment__action--reply">
             Trả lời
           </span>
@@ -134,130 +272,155 @@
             </button>
           </form>
         </div>
-        {{#each this.reply}}
-          <div class="mt-4 ml-5 d-flex">
-            <img class="comment__avt" src="/{{this.replyBy.avatar}}" />
-            <div class="comment__inner">
-              <span class="comment__name font-weight-bold">
-                {{this.replyBy.name}}
-              </span>
-              <div class="comment__content mt-1">
-                {{this.content}}
-              </div>
-              
-            </div>
-          </div>
-          <div class="comment__action ml-5">
-            <span class="comment__action--time ml-5">
-              {{momentHM this.createdAt}}
-            </span>
-          </div>
-        {{/each}}
-      {{/each}}
-    </div>
-    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
-      <div class="lession__title">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">
-                STT
-              </th>
-              <th scope="col">
-                Danh sách bài học
-              </th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="lession__list" style="height: 80vh">
-        <table class="table">
-          <tbody>
-            {{#each lessions}}
-              <tr class="lession__item">
-                <th scope="row">
-                  {{sum @index 1}}
-                </th>
-                <td>
-                  <a href="{{this.slug}}" class="lession__link">
-                    {{this.name}}
-                  </a>
-                </td>
-              </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-let item = document.querySelectorAll('.lession__item')
-let lession = document.querySelectorAll('.lession__link')
-for (let i = 0; i < lession.length; i++) {
-	if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
-      item[i].classList.add('btn-primary');
-      lession[i].classList.add('text-white')
+      `
+
+      $('.comments-box').prepend(html);
+      $('.comment').val('')
     }
-  }
 
-  let rep = document.querySelectorAll('.replyBy');
-  for (let i = 0; i < rep.length; i++) {
-    rep[i].value = '{{user._id}}'
-  }
+    $(document).ready(function () {
+      $('.comment-btn').click(function () {
+        let val = $('.comment').val();
+        if (val !== '') {
+          $.post('{{lession.slug}}/comment', { lessionSlug: '{{lession.slug}}', commentBy: '{{user._id}}', content: val }, function (data) {
+            if (data) {
+              postHTML(val);
+            }
+          })
+        }
+      })
+    })
 
-  let reply = document.querySelectorAll('.reply-form');
-  let btnReply = document.querySelectorAll('.comment__action--reply');
-  for (let i = 0; i < reply.length; i++) {
-    btnReply[i].onclick = function () {
-      reply[i].style.display = 'block'
-    }
-  }
+    // check role edit and update comment
 
-  let adOptions = document.querySelectorAll('.adOptions');
-  for (let i = 0; i < adOptions.length; i++) {
-    if(!{{user.isAdmin}}) {
-      adOptions[i].style.display = 'none';
-    } 
-  }
-
- let banned = document.querySelectorAll('.banned');
-  
- for(let i = 0; i < banned.length; i++) {
-    banned[i].onclick = function(){
-    let commentBy = document.querySelectorAll('.commentBy');
-      let cmtBy = commentBy[i].textContent;
-      banned[i].action = `/admin/users/${cmtBy}/update?_method=PUT`;
-      banned[i].submit();
-    }
- }
-
- let editCmt = document.querySelectorAll('.editCmt');
+    let editCmt = document.querySelectorAll('.editCmt');
     let content = document.querySelectorAll('.edit-content');
 
- for (let i = 0; i < editCmt.length; i++) {
-   let commentBy = document.querySelectorAll('.commentBy');
-   let cmtBy = commentBy[i].textContent;
-   if(cmtBy !== '{{user._id}}') {
-     editCmt[i].style.display = 'none';
-   }
-  
-  let cmtId = document.querySelectorAll('.cmtBy');
-  
-  editCmt[i].onclick = function() {
-    content[i].innerHTML = `
-    <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lession.slug}}/comment/update?_method=PUT">
-    <input type="text" class="form-control comment-edited" name="content" value="${content[i].textContent}" required>
-    <input type="text" name="cmtId" value=${cmtId[i].value} hidden/>
-    <button type="submit" class="btn btn-primary comment__btn mt-3 edit-cmt-btn">
-      Lưu lại
-    </button>
-    </form>
+    for (let i = 0; i < editCmt.length; i++) {
+      let commentBy = document.querySelectorAll('.commentBy');
+      let cmtBy = commentBy[i].textContent;
+      if (cmtBy !== '{{user._id}}') {
+        editCmt[i].style.display = 'none';
+      }
+
+      let cmtId = document.querySelectorAll('.cmtBy');
+
+      editCmt[i].onclick = function () {
+        content[i].innerHTML = `
+    <input type="text" class="form-control comment-edited" contenteditable="true" name="content" value="${content[i].textContent}" required>
+    <input type="text" id="cmtId" name="cmtId" value=${cmtId[i].value} hidden/>
+    <input type="button" class="btn btn-primary comment__btn mt-3 edit-cmt-btn" value="Lưu lại">
     `
-  };
- }
+        // action update comment
+
+        $('.edit-cmt-btn').click(function () {
+          cmtId = $('#cmtId').val();
+          let val = $('.comment-edited').val();
+          if (val !== '') {
+            $.post('{{lession.slug}}/comment/update?_method=PUT', { cmtId: cmtId, content: val }, function () {
+              content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
+            });
+          }
+        })
+      };
+    }
+
+    // show reply form
+    let rep = document.querySelectorAll('.replyBy');
+    for (let i = 0; i < rep.length; i++) {
+      rep[i].value = '{{user._id}}'
+    }
+
+    let reply = document.querySelectorAll('.reply-form');
+    let btnReply = document.querySelectorAll('.comment__action--reply');
+
+    for (let i = 0; i < reply.length; i++) {
+      btnReply[i].onclick = function () {
+        reply[i].style.display = 'block';
+          // action reply
+
+    $('.reply-form').submit(function(event){
+      event.preventDefault();
+      let formData = $(this).serialize();
+      let content = formData.split('&')[0].slice(8);
+      $.post('{{lession.slug}}/reply?_method=PUT', formData, function(){
+        $('.reply-box')[i].innerHTML= `
+           <div class="mt-4 ml-5 d-flex">
+        <img class="comment__avt" src="/{{user.avatar}}" />
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+            {{user.name}}
+          </span>
+          <input class="replyEditBy" type="text" value="{{user._id}}" hidden>
+          <div class="comment__content reply-content mt-1">${content}</div>
+          <div class="comment__options">
+            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></i>
+            <ul class="dropdown-menu comment__option--list">
+              <li class="dropdown-item comment__option--item adOptions">
+                <form class="banned" method="POST" action="">
+                  <input class="ipr" type="text" value="true" name="banned" hidden>
+                  Chặn bình luận
+                </form>
+              </li>
+              <li class="dropdown-item comment__option--item editReply">
+                Sửa trả lời
+              </li>
+              <li class="dropdown-item comment__option--item">
+                Xoá bình luận
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="comment__action ml-5">
+        <span class="comment__action--time ml-5">
+          {{momentHM this.createdAt}}
+        </span>
+      </div>
+        `
+      })
+    })
+  
+      }
+    }
+
+  
+
+  });
+
+  // check role edit and update reply
+
+  let editReply = document.querySelectorAll('.editReply');
+  let contentReply = document.querySelectorAll('.reply-content');
+
+  for (let i = 0; i < editReply.length; i++) {
+    let replyEditBy = document.querySelectorAll('.replyEditBy');
+    let repBy = replyEditBy[i].value;
+    if (repBy !== '{{user._id}}') {
+      editReply[i].style.display = 'none';
+    }
+
+    let repId = document.querySelectorAll('.ipRepId');
+
+    editReply[i].onclick = function () {
+      contentReply[i].innerHTML = `
+      <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lession.slug}}/reply/update?_method=PUT">
+      <input type="text" class="form-control comment-edited" name="content" value="${contentReply[i].textContent}" required>
+      <input type="text" name="replyBy" value=${replyEditBy[i].value} hidden/>
+      <input type="text" name="repId" value=${repId[i].value} hidden/>
+      <button type="submit" class="btn btn-primary comment__btn mt-3 edit-cmt-btn">
+        Lưu lại
+      </button>
+      </form>
+    `
+    };
+  }
 
 
- 
+
+
+
+
 
 </script>

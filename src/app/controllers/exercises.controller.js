@@ -5,8 +5,7 @@ class ExercisesController {
     // [GET] /:slug
     show(req, res, next) {
         Exercise.findOne({
-            lessionSlug: req.params.lessionSlug,
-            slug: req.params.slug,
+            _id: req.params.id,
         })
             .then((exercise) => {
                 res.render('exercises', {
