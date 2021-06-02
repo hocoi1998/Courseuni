@@ -24,7 +24,7 @@
         allowfullscreen></iframe>
       <div class="mt-4">
         {{#each exercises}}
-        <a href="{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
+        <a href="{{ this.lessionSlug }}/{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
           Bài tập {{sum @index 1}}
         </a>
         {{/each}}

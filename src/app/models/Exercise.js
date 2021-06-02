@@ -6,10 +6,11 @@ const Schema = mongoose.Schema;
 
 const Exercise = new Schema(
     {
-        question: { type: String },
+        question: { type: String, required: true },
         answer: { type: Array },
-        correct: { type: String },
-        lessionSlug: { type: String },
+        correct: { type: Array },
+        slug: { type: String, slug: 'question', unique: true },
+        lessionSlug: { type: String, required: true },
     },
     {
         timestamps: true,

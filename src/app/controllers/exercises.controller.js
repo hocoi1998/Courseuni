@@ -10,6 +10,7 @@ class ExercisesController {
             .then((exercise) => {
                 res.render('exercises', {
                     exercise: mongooseToObject(exercise),
+                    isRadio: exercise.correct.length === 1,
                 });
             })
             .catch(next);

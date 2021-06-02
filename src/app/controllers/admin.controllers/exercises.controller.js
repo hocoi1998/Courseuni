@@ -11,12 +11,6 @@ class exercisesController {
             lessionSlug: req.params.lessionSlug,
         });
 
-        if (req.query.hasOwnProperty('_sort')) {
-            exerciseQuery = exerciseQuery.sort({
-                [req.query.column]: req.query.type,
-            });
-        }
-
         Promise.all([
             exerciseQuery,
             Exercise.countDocumentsDeleted({
@@ -25,6 +19,8 @@ class exercisesController {
         ])
             .then(([exercises, deletedCount]) =>
                 res.render('admin/list/exercises-list', {
+                    layout: 'admin',
+                    title: 'Quản lý bài tập',
                     deletedCount,
                     exercises: multipleMongooseToObject(exercises),
                     courseSlug: req.params.courseSlug,
@@ -37,6 +33,8 @@ class exercisesController {
     // [GET] /admin/courses/:courseSlug/:lessionSlug/create
     create(req, res, next) {
         res.render('admin/create/exercise-create', {
+            layout: 'admin',
+            title: 'Thêm bài tập',
             lessionSlug: req.params.lessionSlug,
         });
     }
@@ -51,6 +49,7 @@ class exercisesController {
                 );
             })
             .catch(next);
+        // res.json(req.body)
     }
 
     // [GET] /admin/courses/:courseSlug/:lessionSlug/:slug/edit
@@ -58,6 +57,8 @@ class exercisesController {
         Exercise.findOne({ slug: req.params.slug })
             .then((exercise) =>
                 res.render('admin/edit/exercise-edit', {
+                    layout: 'admin',
+                    title: 'Sửa bài tập',
                     exercise: mongooseToObject(exercise),
                 }),
             )
@@ -87,16 +88,12 @@ class exercisesController {
             lessionSlug: req.params.lessionSlug,
         });
 
-        if (req.query.hasOwnProperty('_sort')) {
-            exerciseQuery = exerciseQuery.sort({
-                [req.query.column]: req.query.type,
-            });
-        }
-
         exerciseQuery
             .then((exercises) =>
                 res.render('admin/trash/exercises-trash', {
                     exercises: multipleMongooseToObject(exercises),
+                    layout: 'admin',
+                    title: 'Bài tập đã xoá',
                     courseSlug: req.params.courseSlug,
                     lessionSlug: req.params.lessionSlug,
                 }),

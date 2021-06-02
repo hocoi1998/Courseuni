@@ -1,13 +1,9 @@
-<div class="container">
-    <ul>
-        Bài tập 1:
-        <li> {{ exercise.question }}</li>
-    </ul>
-
+<div class="container mt-4">
+Câu hỏi: {{ exercise.question }}
     {{#each exercise.answer}}
     <div class="form-check">
-        <input class="form-check-input answer" type="radio" name="answer" value="{{@index}}" checked>
-        <label class="form-check-label" for="exampleRadios1">
+        <input id="answer{{@index}}" class="form-check-input answer" type="checkbox" name="answer" value="{{this}}">
+        <label class="form-check-label" for="answer{{@index}}">
             {{ this }}
         </label>
     </div>
@@ -16,17 +12,44 @@
 </div>
 
 <script>
+    let answer = document.querySelectorAll('.answer');
+
+    let isRadio = {{ isRadio }};
+    if (isRadio) {
+        for (let i = 0; i < answer.length; i++) {
+            answer[i].setAttribute('type', 'radio');
+        }
+    }
     document.querySelector('#submit').onclick = function () {
-        let answer = document.querySelectorAll('.answer');
-        let lbl = document.querySelectorAll('.form-check-label');
-        for(let i = 0; i < answer.length; i++) {
-            answerVal = answer[i].value;
-            if(answerVal == '{{ exercise.correct }}') {
-                lbl[i].classList.add('text-success');
-            } else {
-                lbl[i].classList.add('text-danger');
+        let uAnswer = [];
+        for (let i = 0; i < answer.length; i++) {
+            if (answer[i].checked) {
+                uAnswer.push(answer[i].value);
             }
         }
         
+        function equar(a, b) {
+            if (a.length !== b.length) {
+                return false
+            } else {
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) {
+                        return false
+                    }
+                }
+                return true;
+            }
+        }
+
+
+        let match = equar(uAnswer, '{{exercise.correct}}'.split(','));
+        if(match) {
+            alert('đúng ròi!');
+            // đúng thì push vào passing trong user
+        } else {
+            alert('sai rồi bạn ơi');
+        }
+        
+
     }
 </script>

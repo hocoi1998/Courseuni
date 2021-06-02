@@ -1,19 +1,102 @@
-<div class="container">
-    <div class="mt-4">
-    <div class="row">
-        <h3 class="col-6">Sửa bài tập</h3>
-
+<div class="main-content">
+  <div class="section__content section__content--p30">
+    <div class="container-fluid">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <strong>SỬA BÀI TẬP</strong>
+          </div>
+          <form method="POST" action="update?_method=PUT" class="form-horizontal" id="needs-validation">
+            <div class="card-body card-block">
+              <div class="row form-group">
+                <div class="col col-md-3">
+                  <label for="question" class=" form-control-label">Câu hỏi <sup class="text-danger"> *</sup></label>
+                </div>
+                <div class="col-12 col-md-9">
+                  <input type="text" id="question" name="question" placeholder="Nhập câu hỏi" class="form-control" value="{{exercise.question}}">
+                </div>
+              </div>
+            
+             
+              <div class="row form-group answer-box">
+                <div class="col col-md-3">      
+                    Đáp án           
+                </div>
+                <div class="col-12 col-md-9">
+                {{#each exercise.answer }}
+                  <input type="checkbox" name="correct" class="form-check-input">
+                  <input type="text" name="answer" class="form-control mb-3 answer" value="{{ this }}">
+                {{/each}}               
+                </div> 
+              </div>
+             
+              <div class="row form-group">
+                <div class="col col-md-3"></div>
+                <div class="col-12 col-md-9">
+                   <i class="fa fa-plus-circle btn-add" style="font-size:30px"></i>
+                </div>
+              </div>
+            </div>   
+            <input type="text" id="lessionSlug" name="lessionSlug" value="{{ exercise.lessionSlug }}" hidden>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary btn-sm btn-submit">
+            <i class="fa fa-dot-circle-o"></i> Lưu lại
+          </button>
+        </div>
+        </div>
+        </form>
+      </div>
     </div>
-    <form class="mt-4" method="POST" action="update?_method=PUT">
-        <div class="form-group">
-            <label for="name">Tên bài tập</label>
-            <input type="text" class="form-control" value="{{ exercise.name }}" id="name" name="name">
-        </div>
-        <div class="form-group">
-            <label for="question">Câu hỏi</label>
-            <textarea class="form-control" id="question" name="question">{{ exercise.question }}</textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Lưu lại</button>
-    </form>
+  </div>
 </div>
 </div>
+
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    let answer = $('.answer');
+    let correct = $('.form-check-input');
+    let exCorrect = "{{ exercise.correct }}"
+    exCorrect = exCorrect.split(',')
+
+    for (let i = 0; i < answer.length; i++) {
+        if(exCorrect.includes(answer[i].value)) {
+            correct[i].setAttribute('checked', 'true')
+        }
+    }
+
+    $('.btn-add').click(function(){
+      let html = `
+      <div class="row form-group answer-box">
+                <div class="col col-md-3">                 
+                </div>
+                <div class="col-12 col-md-9">
+                  <input type="checkbox" name="correct" class="form-check-input">
+                  <input type="text" name="answer" class="form-control answer">
+                </div>                
+              </div>
+      `
+      $(html).insertAfter( ".answer-box:last" );
+    })
+    $("#needs-validation").validate({
+      rules: {
+        question: 'required',
+      },
+      messages: {
+        question: 'Vui lòng nhập câu hỏi!',
+      }
+    })
+
+    $('.btn-submit').click(function(){
+      let answer = $('.answer');
+      let correct = $('.form-check-input');
+      
+      for (let i = 0; i < answer.length; i++) {
+          correct[i].value = answer[i].value;
+      }
+
+    })
+
+  })
+
+</script>
