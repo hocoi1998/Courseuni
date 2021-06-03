@@ -21,7 +21,7 @@ class lessionsController {
             Lession.countDocumentsDeleted({
                 courseSlug: req.params.courseSlug,
             }),
-            Lession.countDocuments(),
+            Lession.countDocuments({ courseSlug: req.params.courseSlug }),
         ])
             .then(([lessions, deletedCount, count]) =>
                 res.render('admin/list/lessions-list', {

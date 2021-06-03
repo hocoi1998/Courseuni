@@ -51,14 +51,22 @@
 </div>
 </div>
 
+<div style="display: none">
+{{#each exercise.correct }}
+    <input type="text" class="exCorrect" value="{{this}}">
+  {{/each}}
+</div>
+
 
 <script>
   window.addEventListener('DOMContentLoaded', function () {
     let answer = $('.answer');
     let correct = $('.form-check-input');
-    let exCorrect = "{{ exercise.correct }}"
-    exCorrect = exCorrect.split(',')
-
+    let exCorrects = $('.exCorrect')
+    let exCorrect = [];
+    for (let i = 0; i < exCorrects.length; i++) {
+      exCorrect.push(exCorrects[i].value)
+    }
     for (let i = 0; i < answer.length; i++) {
         if(exCorrect.includes(answer[i].value)) {
             correct[i].setAttribute('checked', 'true')

@@ -24,7 +24,7 @@
         allowfullscreen></iframe>
       <div class="mt-4">
         {{#each exercises}}
-        <a href="{{ this.lessionSlug }}/{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
+        <a href="{{this.lessionSlug}}/{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
           Bài tập {{sum @index 1}}
         </a>
         {{/each}}
@@ -105,7 +105,7 @@
           <span class="comment__name font-weight-bold">
             {{this.replyBy.name}}
           </span>
-          <input class="ipRepId" type="text" value="{{this._id}}">
+          <input class="ipRepId" type="text" value="{{this._id}}" hidden>
           <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
           <div class="comment__content reply-content mt-1">{{this.content}}</div>
           <div class="comment__options">

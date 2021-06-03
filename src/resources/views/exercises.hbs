@@ -11,9 +11,16 @@ Câu hỏi: {{ exercise.question }}
     <button id="submit" class="btn btn-primary">OK</button>
 </div>
 
+{{!-- hidden correct answer --}}
+<div class="hidden">
+    {{#each exercise.correct}}
+        <input type="text" class="correct" value="{{this}}">
+    {{/each}}
+</div>
+
+
 <script>
     let answer = document.querySelectorAll('.answer');
-
     let isRadio = {{ isRadio }};
     if (isRadio) {
         for (let i = 0; i < answer.length; i++) {
@@ -41,10 +48,15 @@ Câu hỏi: {{ exercise.question }}
             }
         }
 
+        let correct = document.querySelectorAll('.correct');
+        let correctArr = [];
+        for (let i = 0; i < correct.length; i++) {
+            correctArr.push(correct[i].value);
+        }
 
-        let match = equar(uAnswer, '{{exercise.correct}}'.split(','));
+        let match = equar(uAnswer, correctArr);
         if(match) {
-            alert('đúng ròi!');
+            alert('đúng rồi!');
             // đúng thì push vào passing trong user
         } else {
             alert('sai rồi bạn ơi');
