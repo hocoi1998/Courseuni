@@ -8,9 +8,9 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="col-lg-12">
-                <form method="POST" action="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}/handle-form-actions"
+                <form method="POST" action="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/handle-form-actions"
                     name="container-form">
-                    <a href="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}" class="title-5">Quản lý bài tập</a>
+                    <a href="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}" class="title-5">Quản lý bài tập</a>
                     <table class="table table-data2">
                         <tbody style="background-color: transparent">
                             <tr>
@@ -34,7 +34,7 @@
                                 </td>
                                 <td>
                                     <div class="table-data-feature">
-                                        <a href="/admin/trash/courses/{{ courseSlug }}/{{ lessionSlug }}"
+                                        <a href="/admin/trash/courses/{{ courseSlug }}/{{ lessonSlug }}"
                                             class="item position-relative" data-toggle="tooltip" data-placement="top"
                                             title="" data-original-title="Thùng rác ({{ deletedCount }})">
                                             <i class="zmdi zmdi-delete text-danger" style="font-size:40px;"></i>
@@ -58,7 +58,7 @@
                                     <th>Đáp án đúng</th>
                                     <th>Thời gian tạo</th>
                                     <th>
-                                        <a href="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}/create"
+                                        <a href="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/create"
                                             class="au-btn au-btn-icon au-btn--blue au-btn--small px-5">
                                             Thêm
                                         </a>
@@ -95,7 +95,7 @@
                                     <td>{{ momentHM this.updatedAt }}</td>
                                     <td style="max-width:100px">
                                         <div class="table-data-feature">
-                                            <a href="{{ lessionSlug }}/{{ this.slug }}/edit" class="item"
+                                            <a href="{{ lessonSlug }}/{{ this.slug }}/edit" class="item"
                                                 data-toggle="tooltip" data-placement="top" title="Sửa"
                                                 data-original-title="Sửa">
                                                 <i class="zmdi zmdi-edit text-info"></i>
@@ -117,7 +117,7 @@
                                     </td>
                                     {{else}}
                                     <td colspan="6" style="text-align: center">
-                                        Không có bài tập nào, <a href="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}/create">Thêm
+                                        Không có bài tập nào, <a href="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/create">Thêm
                                             ngay</a>
                                     </td>
                                     {{/if}}
@@ -212,7 +212,7 @@
 
         // When delete button clicked
         btnDelete.onclick = function () {
-            deleteForm.action = `/admin/courses/{{ courseSlug }}/{{ lessionSlug }}/${slug}/delete?_method=DELETE`;
+            deleteForm.action = `/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/${slug}/delete?_method=DELETE`;
             deleteForm.submit();
         }
 

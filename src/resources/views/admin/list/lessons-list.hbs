@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="col-lg-12">
                 <form method="POST" action="/admin/courses/{{ courseSlug }}/handle-form-actions" name="container-form">
-                    <a href="/admin/courses/{{ courseSlug }}" class="title-5 text-primary"><i class="zmdi zmdi-arrow-left"></i> Quản lý bài học</a>
+                    <a href="/admin/courses/{{ courseSlug }}" class="title-5">Quản lý bài học</a>
                     <table class="table table-data2">
                         <tbody style="background-color: transparent">
                             <tr>
@@ -16,8 +16,7 @@
                                 <td colspan="2">
                                     <select name="action" id="select" class="form-control" name="action" required>
                                         <option value="">-- Hành động --</option>
-                                        <option value="restore">Khôi phục</option>
-                                        <option value="forceDelete">Xoá vĩnh viễn</option>
+                                        <option value="delete">Xoá</option>
                                     </select>
                                 </td>
                                 <td>
@@ -27,7 +26,15 @@
                                     </button>
                                 </td>
                                 <td>
-                                    
+                                    <div class="table-data-feature">
+                                        <a href="/admin/trash/courses/{{courseSlug}}" class="item position-relative"
+                                            data-toggle="tooltip" data-placement="top" title=""
+                                            data-original-title="Thùng rác ({{ deletedCount }})">
+                                            <i class="zmdi zmdi-delete text-danger" style="font-size:40px;"></i>
+                                            <span class="text-white position-absolute text-center"
+                                                style="width:23.36px;bottom:2px;right:3px;">{{ deletedCount }}</span>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -41,14 +48,18 @@
                                     </th>
                                     <th>Tên bài học</th>
                                     <th>Video ID</th>
-                                    <th>Thời gian xoá</th>
+                                    <th>Thời gian tạo</th>
+                                    <th>Cập nhật cuối</th>
                                     <th>
-                                        
+                                        <a href="/admin/courses/{{ courseSlug }}/create"
+                                            class="au-btn au-btn-icon au-btn--blue au-btn--small px-5">
+                                            Thêm
+                                        </a>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each lessions }}
+                                {{#each lessons }}
                                 <tr class="tr-shadow">
                                     <td>
                                         <label class="au-checkbox">
@@ -61,32 +72,38 @@
                                         <span>{{ this.name }}</span>
                                     </td>
                                     <td class="desc" style="min-width:150px">{{ this.videoId }}</td>
-                                    <td>{{ momentHM this.deletedAt }}</td>
+                                    <td>{{ momentHM this.createdAt }}</td>
+                                    <td>{{ momentHM this.updatedAt }}</td>
                                     <td>
                                         <div class="table-data-feature">
-                                            <a href="" class="item btn-restore" data-toggle="tooltip" data-placement="top"
-                                                title="Khôi phục" data-original-title="Khôi phục" data-slug="{{ this.slug }}">
-                                                <i class="zmdi zmdi-time-restore-setting text-success"></i>
+                                            <a href="/admin/courses/{{ this.courseSlug }}/{{ this.slug }}" class="item" data-toggle="tooltip"
+                                                data-placement="top" title="Quản lý bài tập"
+                                                data-original-title="Quản lý bài tập">
+                                                <i class="zmdi zmdi-calendar-note text-danger"></i>
                                             </a>
-                                            <a href="" class="item" data-placement="top" title="Xoá vĩnh viễn"
-                                                data-original-title="Xoá vĩnh viễn" data-toggle="modal"
+                                            <a href="/admin/courses/{{this.courseSlug}}/{{this.slug}}/edit" class="item"
+                                                data-toggle="tooltip" data-placement="top" title="Sửa"
+                                                data-original-title="Sửa">
+                                                <i class="zmdi zmdi-edit text-info"></i>
+                                            </a>
+                                            <a href="" class="item" data-placement="top" title="Xoá"
+                                                data-original-title="Xoá" data-toggle="modal"
                                                 data-target="#delete-modal" data-slug="{{ this.slug }}">
-                                                <i class="zmdi zmdi-close text-danger"></i>
+                                                <i class="zmdi zmdi-delete text-dark"></i>
                                             </a>
-                                        </div>                                       
                                     </td>
                                 </tr>
                                 <tr class="spacer"></tr>
                                 {{/each}}
                                 <tr>
-                                    {{#if lessions}}
-                                    <td colspan="5">
+                                    {{#if lessons}}
+                                    <td colspan="6">
                                         {{{ paginateHelper pagination paginationClass="pagination pagination-sm
                                         justify-content-center" }}}
                                     </td>
                                     {{else}}
-                                    <td colspan="5" style="text-align: center">
-                                        Thùng rác trống
+                                    <td colspan="6" style="text-align: center">
+                                        Không có bài học nào, <a href="/admin/courses/{{ courseSlug }}/create">Thêm ngay</a>
                                     </td>
                                     {{/if}}
                                 </tr>
@@ -99,18 +116,19 @@
         </div>
     </div>
 </div>
+
 {{!-- Confirm delete --}}
 <div id="delete-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Xoá khoá học</h5>
+                <h5 class="modal-title">Xoá bài học</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Hành động này không thể khôi phục. Bạn vẫn muốn xoá khoá học này?</p>
+                <p>Bạn chắc chắn muốn xoá bài học này?</p>
             </div>
             <div class="modal-footer">
                 <button id="btn-delete" type="button" class="btn btn-danger">Xoá bỏ</button>
@@ -120,18 +138,14 @@
     </div>
 </div>
 
+{{!-- Delete hidden form --}}
 <form id="delete-form" method="POST"></form>
-<form id="restore-form" method="POST"></form>
 
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
         var slug;
         var btnDelete = document.getElementById('btn-delete');
-        var deleteForm = document.getElementById('delete-form');
-        var restoreForm = document.getElementById('restore-form');
-        var restoreBtn = $('.btn-restore');
-
         var containerForm = $['form[name="container-form"'];
         var deleteForm = document.getElementById('delete-form');
         var checkboxAll = $('#checkbox-all');
@@ -146,17 +160,9 @@
 
         // When delete button clicked
         btnDelete.onclick = function () {
-            deleteForm.action = `/admin/trash/courses/{{ courseSlug }}/${slug}/forceDelete?_method=DELETE`;
+            deleteForm.action = `/admin/courses/{{ courseSlug }}/${slug}/delete?_method=DELETE`;
             deleteForm.submit();
         }
-
-        // Restore button clicked
-        restoreBtn.click(function (e) {
-            e.preventDefault();
-            slug = $(this).data('slug')
-            restoreForm.action = `/admin/trash/courses/{{ courseSlug }}/${slug}/restore?_method=PATCH`;
-            restoreForm.submit();
-        });
 
         // Checkbox all changed
         checkboxAll.change(function () {
@@ -183,6 +189,8 @@
                 checkAllSubmitBtn.attr('disabled', true);
             }
         }
+
     });
+
 
 </script>

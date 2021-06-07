@@ -11,9 +11,9 @@
         </ol>
       </nav>
 
-      <div class="course-image">
-        <img src="/{{ course.image }}">
-      </div>
+      <a href="html-css-tu-zero-den-hero/lam-duoc-gi-sau-khoa-hoc" style="display:block">
+        <img id="first-video" src="/{{ course.image }}" style="width:100%; max-height: 408px;object-fit:cover">
+      </a>
       <h1 class="h2 mt-4">{{ course.name }}</h1>
       <div class="py-3">{{ course.description }}</div>
       <h5 class="font-weight-bold mt-4">Bạn sẽ học được gì?</h5>
@@ -25,8 +25,8 @@
         {{/each}}
       </ul>
     </div>
-    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
-      <div class="lession__title">
+    <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
+      <div class="lesson__title">
         <table class="table">
           <thead>
             <tr>
@@ -36,18 +36,39 @@
           </thead>
         </table>
       </div>
-      <div class="lession__list">
+       <div class="lesson__list" style="height: 500px">
         <table class="table">
           <tbody>
-            {{#each lessions}}
-            <tr class="lession__item">
-              <th scope="row">{{sum @index 1}}</th>
-              <td><a href="{{ this.courseSlug }}/{{ this.slug }}" class="lession__link">{{ this.name }}</a></td>
+            {{#each lessons}}
+            <tr class="lesson__item">
+              <th scope="row">
+                {{sum @index 1}}
+              </th>
+              <td>
+                <a href="{{ this.courseSlug }}/{{ this.slug }}" class="lesson__link">
+                  {{this.name}}
+                </a>
+              </td>
             </tr>
             {{/each}}
           </tbody>
         </table>
       </div>
+      
     </div>
   </div>
 </div>
+
+<script>
+   // add active lesson is done
+  let item = document.querySelectorAll('.lesson__item');
+  let lesson = document.querySelectorAll('.lesson__link');
+
+  let lsDone = '{{user.lsDone}}';
+
+  for (let i = 0; i < lesson.length; i++) {
+  if (lsDone.includes(lesson[i].getAttribute('href').split('/').slice(-1).join(''))) {
+      item[i].style.backgroundColor = '#ccc';
+    }
+  }
+</script>

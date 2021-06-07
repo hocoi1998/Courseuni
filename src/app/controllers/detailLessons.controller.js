@@ -1,38 +1,47 @@
 const User = require('../models/User');
 const Course = require('../models/Course');
-const Lession = require('../models/Lession');
+const Lesson = require('../models/Lesson');
 const Comment = require('../models/Comment');
 const Exercise = require('../models/Exercise');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 const { mongooseToObject } = require('../../util/mongoose');
 
-class DetailLessionsController {
+class DetailLessonsController {
     show(req, res, next) {
-        // [GET] /:courseSlug/:lessionSlug
+        // [GET] /:courseSlug/:lessonSlug
 
-        let lessions = Lession.find({ courseSlug: req.params.courseSlug });
-        let lession = Lession.findOne({ slug: req.params.lessionSlug });
-        let exercises = Exercise.find({ lessionSlug: req.params.lessionSlug });
-        let comments = Comment.find({ lessionSlug: req.params.lessionSlug })
+        let lessons = Lesson.find({ courseSlug: req.params.courseSlug });
+        let lesson = Lesson.findOne({ slug: req.params.lessonSlug });
+        let exercises = Exercise.find({ lessonSlug: req.params.lessonSlug });
+        let comments = Comment.find({ lessonSlug: req.params.lessonSlug })
             .populate('commentBy')
             .populate('reply.replyBy')
             .sort([['createdAt', 'descending']]);
         let course = Course.findOne({ slug: req.params.courseSlug });
         let user = User.findOne({ _id: req.signedCookies.userId });
 
-        Promise.all([lessions, lession, exercises, comments, course, user])
+        let lsDone = User.updateOne(
+            { _id: req.signedCookies.userId },
+            { $push: { lsDone: req.params.lessonSlug } },
+        );
+
+        Promise.all([lessons, lesson, exercises, comments, course, user])
             .then(
-                ([lessions, lession, exercises, comments, course, user]) =>
-                    res.render('detailLession', {
-                        title: lession.name,
-                        lessions: multipleMongooseToObject(lessions),
-                        lession: mongooseToObject(lession),
+                ([lessons, lesson, exercises, comments, course, user]) => {
+                    res.render('detailLesson', {
+                        title: lesson.name,
+                        lessons: multipleMongooseToObject(lessons),
+                        lesson: mongooseToObject(lesson),
                         exercises: multipleMongooseToObject(exercises),
                         comments: multipleMongooseToObject(comments),
                         course: mongooseToObject(course),
                         user: mongooseToObject(user),
-                    }),
-                // res.json(comments)
+                    });
+                    if (!user.lsDone.includes(req.params.lessonSlug)) {
+                        return lsDone;
+                    }
+                },
+                // res.json(req.params)
             )
             .catch(next);
     }
@@ -80,4 +89,4 @@ class DetailLessionsController {
     }
 }
 
-module.exports = new DetailLessionsController();
+module.exports = new DetailLessonsController();

@@ -57,7 +57,7 @@
                 </div>
               </div>
             </div>   
-            <input type="text" id="lessionSlug" name="lessionSlug" value="{{ lessionSlug }}" hidden>
+            <input type="text" id="lessonSlug" name="lessonSlug" value="{{ lessonSlug }}" hidden>
             <div class="card-footer">
           <button type="submit" class="btn btn-primary btn-sm btn-submit">
             <i class="fa fa-dot-circle-o"></i> Thêm
@@ -101,7 +101,12 @@
       let correct = $('.form-check-input');
       
       for (let i = 0; i < answer.length; i++) {
+        if(answer[i].value === '') {
+          correct[i].remove();
+          answer[i].remove();
+        } else {
           correct[i].value = answer[i].value;
+        }
       }
 
     })

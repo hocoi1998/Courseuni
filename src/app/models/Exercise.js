@@ -10,7 +10,7 @@ const Exercise = new Schema(
         answer: { type: Array },
         correct: { type: Array },
         slug: { type: String, slug: 'question', unique: true },
-        lessionSlug: { type: String, required: true },
+        lessonSlug: { type: String, required: true },
     },
     {
         timestamps: true,

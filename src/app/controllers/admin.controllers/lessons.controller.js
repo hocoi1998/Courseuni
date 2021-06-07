@@ -1,34 +1,34 @@
-const Lession = require('../../models/Lession');
+const Lesson = require('../../models/Lesson');
 const Comment = require('../../models/Comment');
 const Exercise = require('../../models/Exercise');
 
 const { mongooseToObject } = require('../../../util/mongoose');
 const { multipleMongooseToObject } = require('../../../util/mongoose');
 
-class lessionsController {
-    // LESSION
+class lessonsController {
+    // Lesson
     // [GET] /admin/courses/:courseSlug
     show(req, res, next) {
         let currentPage = parseInt(req.query.page) || 1;
         let perPage = 10;
         let skip = (currentPage - 1) * perPage;
 
-        let lessionQuery = Lession.find({ courseSlug: req.params.courseSlug })
+        let lessonQuery = Lesson.find({ courseSlug: req.params.courseSlug })
             .skip(skip)
             .limit(perPage);
         Promise.all([
-            lessionQuery,
-            Lession.countDocumentsDeleted({
+            lessonQuery,
+            Lesson.countDocumentsDeleted({
                 courseSlug: req.params.courseSlug,
             }),
-            Lession.countDocuments({ courseSlug: req.params.courseSlug }),
+            Lesson.countDocuments({ courseSlug: req.params.courseSlug }),
         ])
-            .then(([lessions, deletedCount, count]) =>
-                res.render('admin/list/lessions-list', {
+            .then(([lessons, deletedCount, count]) =>
+                res.render('admin/list/lessons-list', {
                     layout: 'admin',
                     title: 'Quản lý bài học',
                     deletedCount,
-                    lessions: multipleMongooseToObject(lessions),
+                    lessons: multipleMongooseToObject(lessons),
                     courseSlug: req.params.courseSlug,
                     pagination: {
                         page: currentPage,
@@ -42,7 +42,7 @@ class lessionsController {
 
     // [GET] /admin/courses/:courseSlug/create
     create(req, res, next) {
-        res.render('admin/create/lession-create', {
+        res.render('admin/create/lesson-create', {
             layout: 'admin',
             title: 'Quản lý bài học',
             courseSlug: req.params.courseSlug,
@@ -50,8 +50,8 @@ class lessionsController {
     }
     // [POST] /admin/courses/:courseSlug/store
     store(req, res, next) {
-        const lession = new Lession(req.body);
-        lession
+        const lesson = new Lesson(req.body);
+        lesson
             .save()
             .then(() => {
                 res.redirect(`/admin/courses/${req.params.courseSlug}`);
@@ -59,31 +59,31 @@ class lessionsController {
             .catch(next);
     }
 
-    // [GET] /admin/courses/:courseSlug/:lessionSlug/edit
+    // [GET] /admin/courses/:courseSlug/:lessonSlug/edit
     edit(req, res, next) {
-        Lession.findOne({ slug: req.params.lessionSlug })
-            .then((lession) =>
-                res.render('admin/edit/lession-edit', {
+        Lesson.findOne({ slug: req.params.lessonSlug })
+            .then((lesson) =>
+                res.render('admin/edit/lesson-edit', {
                     layout: 'admin',
                     title: 'Sửa bài học',
-                    lession: mongooseToObject(lession),
+                    lesson: mongooseToObject(lesson),
                 }),
             )
             .catch(next);
     }
 
-    // [PUT] /admin/courses/:courseSlug/:lessionSlug/update
+    // [PUT] /admin/courses/:courseSlug/:lessonSlug/update
     update(req, res, next) {
-        Lession.updateOne({ slug: req.params.lessionSlug }, req.body)
+        Lesson.updateOne({ slug: req.params.lessonSlug }, req.body)
             .then(() => res.redirect(`/admin/courses/${req.params.courseSlug}`))
             .catch(next);
     }
 
-    // [DELETE] /admin/courses/:courseSlug/:lessionSlug/delete
+    // [DELETE] /admin/courses/:courseSlug/:lessonSlug/delete
     delete(req, res, next) {
-        Lession.delete({ slug: req.params.lessionSlug }).then();
-        Comment.delete({ lessionSlug: req.params.lessionSlug }).then();
-        Exercise.delete({ lessionSlug: req.params.lessionSlug })
+        Lesson.delete({ slug: req.params.lessonSlug }).then();
+        Comment.delete({ lessonSlug: req.params.lessonSlug }).then();
+        Exercise.delete({ lessonSlug: req.params.lessonSlug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
@@ -94,23 +94,23 @@ class lessionsController {
         let perPage = 10;
         let skip = (currentPage - 1) * perPage;
 
-        let lessionQuery = Lession.findDeleted({
+        let lessonQuery = Lesson.findDeleted({
             courseSlug: req.params.courseSlug,
         })
             .skip(skip)
             .limit(perPage);
 
         Promise.all([
-            lessionQuery,
-            Lession.countDocumentsDeleted({
+            lessonQuery,
+            Lesson.countDocumentsDeleted({
                 courseSlug: req.params.courseSlug,
             }),
         ])
-            .then(([lessions, count]) =>
-                res.render('admin/trash/lessions-trash', {
+            .then(([lessons, count]) =>
+                res.render('admin/trash/lessons-trash', {
                     layout: 'admin',
                     title: 'Bài học đã xoá',
-                    lessions: multipleMongooseToObject(lessions),
+                    lessons: multipleMongooseToObject(lessons),
                     courseSlug: req.params.courseSlug,
                     pagination: {
                         page: currentPage,
@@ -122,20 +122,20 @@ class lessionsController {
             .catch(next);
     }
 
-    // [PATCH] /admin/trash/:courseSlug/:lessionSlug/restore
+    // [PATCH] /admin/trash/:courseSlug/:lessonSlug/restore
     restore(req, res, next) {
-        Lession.restore({ slug: req.params.lessionSlug }).then();
-        Comment.restore({ lessionSlug: req.params.lessionSlug }).then();
-        Exercise.restore({ lessionSlug: req.params.lessionSlug })
+        Lesson.restore({ slug: req.params.lessonSlug }).then();
+        Comment.restore({ lessonSlug: req.params.lessonSlug }).then();
+        Exercise.restore({ lessonSlug: req.params.lessonSlug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [PATCH] /admin/trash/:courseSlug/:lessionSlug/forceDelete
+    // [PATCH] /admin/trash/:courseSlug/:lessonSlug/forceDelete
     forceDelete(req, res, next) {
-        Lession.deleteOne({ slug: req.params.lessionSlug }).then();
-        Comment.deleteMany({ lessionSlug: req.params.lessionSlug }).then();
-        Exercise.deleteMany({ lessionSlug: req.params.lessionSlug })
+        Lesson.deleteOne({ slug: req.params.lessonSlug }).then();
+        Comment.deleteMany({ lessonSlug: req.params.lessonSlug }).then();
+        Exercise.deleteMany({ lessonSlug: req.params.lessonSlug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
@@ -144,33 +144,33 @@ class lessionsController {
     handleFormActions(req, res, next) {
         switch (req.body.action) {
             case 'delete':
-                Lession.delete({ slug: { $in: req.body.checkSlugs } }).then();
+                Lesson.delete({ slug: { $in: req.body.checkSlugs } }).then();
                 Comment.delete({
-                    lessionSlug: { $in: req.body.checkSlugs },
+                    lessonSlug: { $in: req.body.checkSlugs },
                 }).then();
-                Exercise.delete({ lessionSlug: { $in: req.body.checkSlugs } })
+                Exercise.delete({ lessonSlug: { $in: req.body.checkSlugs } })
                     .then(() => res.redirect('back'))
                     .catch(next);
                 break;
             case 'forceDelete':
-                Lession.deleteMany({
+                Lesson.deleteMany({
                     slug: { $in: req.body.checkSlugs },
                 }).then();
                 Comment.deleteMany({
-                    lessionSlug: { $in: req.body.checkSlugs },
+                    lessonSlug: { $in: req.body.checkSlugs },
                 }).then();
                 Exercise.deleteMany({
-                    lessionSlug: { $in: req.body.checkSlugs },
+                    lessonSlug: { $in: req.body.checkSlugs },
                 })
                     .then(() => res.redirect('back'))
                     .catch(next);
                 break;
             case 'restore':
-                Lession.restore({ slug: { $in: req.body.checkSlugs } }).then();
+                Lesson.restore({ slug: { $in: req.body.checkSlugs } }).then();
                 Comment.restore({
-                    lessionSlug: { $in: req.body.checkSlugs },
+                    lessonSlug: { $in: req.body.checkSlugs },
                 }).then();
-                Exercise.restore({ lessionSlug: { $in: req.body.checkSlugs } })
+                Exercise.restore({ lessonSlug: { $in: req.body.checkSlugs } })
                     .then(() => res.redirect('back'))
                     .catch(next);
                 break;
@@ -180,4 +180,4 @@ class lessionsController {
     }
 }
 
-module.exports = new lessionsController();
+module.exports = new lessonsController();

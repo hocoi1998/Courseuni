@@ -1,17 +1,17 @@
-const Lession = require('../models/Lession');
+const Lesson = require('../models/Lesson');
 const Course = require('../models/Course');
 const User = require('../models/User');
 const { mongooseToObject } = require('../../util/mongoose');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
-class LessionsController {
+class LessonsController {
     // [GET] /:slug
     show(req, res, next) {
         let courseQuery = Course.findOne({ slug: req.params.slug });
-        let lessionQuery = Lession.find({ courseSlug: req.params.slug });
+        let lessonQuery = Lesson.find({ courseSlug: req.params.slug });
 
-        Promise.all([courseQuery, lessionQuery])
-            .then(([course, lessions]) => {
+        Promise.all([courseQuery, lessonQuery])
+            .then(([course, lessons]) => {
                 if (course) {
                     User.findOne({ _id: req.signedCookies.userId }).then(
                         (data) => {
@@ -33,9 +33,9 @@ class LessionsController {
                 } else {
                     res.redirect('/');
                 }
-                res.render('lessions', {
+                res.render('lessons', {
                     title: mongooseToObject(course).name,
-                    lessions: multipleMongooseToObject(lessions),
+                    lessons: multipleMongooseToObject(lessons),
                     course: mongooseToObject(course),
                 });
             })
@@ -43,4 +43,4 @@ class LessionsController {
     }
 }
 
-module.exports = new LessionsController();
+module.exports = new LessonsController();

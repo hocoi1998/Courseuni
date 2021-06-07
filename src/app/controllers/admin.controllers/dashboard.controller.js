@@ -1,6 +1,6 @@
 const User = require('../../models/User');
 const Course = require('../../models/Course');
-const Lession = require('../../models/Lession');
+const Lesson = require('../../models/Lesson');
 const Exercise = require('../../models/Exercise');
 
 class dashboardController {
@@ -11,17 +11,17 @@ class dashboardController {
         Promise.all([
             User.countDocuments(),
             Course.countDocuments(),
-            Lession.countDocuments(),
+            Lesson.countDocuments(),
             Exercise.countDocuments(),
         ])
             .then(
-                ([userNumber, courseNumber, lessionNumber, exerciseNumber]) => {
+                ([userNumber, courseNumber, lessonNumber, exerciseNumber]) => {
                     res.render('admin/dashboard/dashboard', {
                         title,
                         layout: 'admin',
                         userNumber,
                         courseNumber,
-                        lessionNumber,
+                        lessonNumber,
                         exerciseNumber,
                     });
                 },

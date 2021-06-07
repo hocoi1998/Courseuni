@@ -14,6 +14,8 @@ const User = new Schema(
         learning: { type: Array },
         isAdmin: { type: Boolean, default: false },
         banned: { type: Boolean, default: false },
+        exDone: { type: Array },
+        lsDone: { type: Array },
     },
     {
         timestamps: true,

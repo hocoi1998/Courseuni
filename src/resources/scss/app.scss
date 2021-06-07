@@ -110,18 +110,24 @@ label.error {
 
 .feature-courses {
     padding-bottom: 4rem;
+    &__card {
+        overflow: hidden;
+    }
     &__author,
     &__totalStudent {
         font-size: 14px;
         color: rgba(0, 0, 0, 0.6);
     }
     &__img {
+        max-height: 195px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
         object-fit: cover;
         transition: all 0.3s linear;
     }
     &__card {
         &:hover .feature-courses__img {
             opacity: 0.8;
+            transform: scale(1.1);
         }
     }
 }
@@ -198,9 +204,13 @@ label.error {
     margin-right: 1rem;
 }
 
-.lession {
-    border: 1px solid #c3c3c3;
-    height: 95vh;
+#first-video {
+    border: 1px solid #e3e3e3;
+}
+
+.lesson {
+    border: 1px solid #e3e3e3;
+    height: 600px;
     &__title {
         table {
             th {

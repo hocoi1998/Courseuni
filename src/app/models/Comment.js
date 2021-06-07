@@ -7,7 +7,7 @@ const Comment = new Schema(
     {
         content: { type: String, required: true },
         commentBy: { type: Schema.Types.ObjectId, ref: 'User' },
-        lessionSlug: { type: String },
+        lessonSlug: { type: String },
         reply: [
             {
                 replyBy: { type: Schema.Types.ObjectId, ref: 'User' },

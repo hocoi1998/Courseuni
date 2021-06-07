@@ -8,7 +8,7 @@ const usersController = require('../app/controllers/admin.controllers/users.cont
 const categoriesController = require('../app/controllers/admin.controllers/categories.controller');
 const dashboardController = require('../app/controllers/admin.controllers/dashboard.controller');
 const coursesController = require('../app/controllers/admin.controllers/courses.controller');
-const lessionsController = require('../app/controllers/admin.controllers/lessions.controller');
+const lessonsController = require('../app/controllers/admin.controllers/lessons.controller');
 const exercisesController = require('../app/controllers/admin.controllers/exercises.controller');
 
 router.get('/users', usersController.show);
@@ -63,75 +63,69 @@ router.post(
     coursesController.handleFormActions,
 );
 
-router.get('/courses/:courseSlug', lessionsController.show);
-router.get('/courses/:courseSlug/create', lessionsController.create);
-router.post('/courses/:courseSlug/store', lessionsController.store);
-router.get('/courses/:courseSlug/:lessionSlug/edit', lessionsController.edit);
-router.put(
-    '/courses/:courseSlug/:lessionSlug/update',
-    lessionsController.update,
-);
+router.get('/courses/:courseSlug', lessonsController.show);
+router.get('/courses/:courseSlug/create', lessonsController.create);
+router.post('/courses/:courseSlug/store', lessonsController.store);
+router.get('/courses/:courseSlug/:lessonSlug/edit', lessonsController.edit);
+router.put('/courses/:courseSlug/:lessonSlug/update', lessonsController.update);
 router.delete(
-    '/courses/:courseSlug/:lessionSlug/delete',
-    lessionsController.delete,
+    '/courses/:courseSlug/:lessonSlug/delete',
+    lessonsController.delete,
 );
-router.get('/trash/courses/:courseSlug', lessionsController.trash);
+router.get('/trash/courses/:courseSlug', lessonsController.trash);
 router.patch(
-    '/trash/courses/:courseSlug/:lessionSlug/restore',
-    lessionsController.restore,
+    '/trash/courses/:courseSlug/:lessonSlug/restore',
+    lessonsController.restore,
 );
 router.delete(
-    '/trash/courses/:courseSlug/:lessionSlug/forceDelete',
-    lessionsController.forceDelete,
+    '/trash/courses/:courseSlug/:lessonSlug/forceDelete',
+    lessonsController.forceDelete,
 );
 router.post(
     '/courses/:courseSlug/handle-form-actions',
-    lessionsController.handleFormActions,
+    lessonsController.handleFormActions,
 );
 router.post(
     '/trash/courses/:courseSlug/handle-form-actions',
-    lessionsController.handleFormActions,
+    lessonsController.handleFormActions,
 );
 
-router.get('/courses/:courseSlug/:lessionSlug', exercisesController.show);
+router.get('/courses/:courseSlug/:lessonSlug', exercisesController.show);
 router.get(
-    '/courses/:courseSlug/:lessionSlug/create',
+    '/courses/:courseSlug/:lessonSlug/create',
     exercisesController.create,
 );
 router.post(
-    '/courses/:courseSlug/:lessionSlug/store',
+    '/courses/:courseSlug/:lessonSlug/store',
     exercisesController.store,
 );
 router.get(
-    '/courses/:courseSlug/:lessionSlug/:slug/edit',
+    '/courses/:courseSlug/:lessonSlug/:slug/edit',
     exercisesController.edit,
 );
 router.put(
-    '/courses/:courseSlug/:lessionSlug/:slug/update',
+    '/courses/:courseSlug/:lessonSlug/:slug/update',
     exercisesController.update,
 );
 router.delete(
-    '/courses/:courseSlug/:lessionSlug/:slug/delete',
+    '/courses/:courseSlug/:lessonSlug/:slug/delete',
     exercisesController.delete,
 );
-router.get(
-    '/trash/courses/:courseSlug/:lessionSlug',
-    exercisesController.trash,
-);
+router.get('/trash/courses/:courseSlug/:lessonSlug', exercisesController.trash);
 router.patch(
-    '/trash/courses/:courseSlug/:lessionSlug/:slug/restore',
+    '/trash/courses/:courseSlug/:lessonSlug/:slug/restore',
     exercisesController.restore,
 );
 router.delete(
-    '/trash/courses/:courseSlug/:lessionSlug/:slug/forceDelete',
+    '/trash/courses/:courseSlug/:lessonSlug/:slug/forceDelete',
     exercisesController.forceDelete,
 );
 router.post(
-    '/courses/:courseSlug/:lessionSlug/handle-form-actions',
+    '/courses/:courseSlug/:lessonSlug/handle-form-actions',
     exercisesController.handleFormActions,
 );
 router.post(
-    '/trash/courses/:courseSlug/:lessionSlug/handle-form-actions',
+    '/trash/courses/:courseSlug/:lessonSlug/handle-form-actions',
     exercisesController.handleFormActions,
 );
 

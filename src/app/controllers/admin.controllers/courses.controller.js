@@ -1,5 +1,5 @@
 const Course = require('../../models/Course');
-const Lession = require('../../models/Lession');
+const Lesson = require('../../models/Lesson');
 const Comment = require('../../models/Comment');
 const Exercise = require('../../models/Exercise');
 const Category = require('../../models/Category');
@@ -106,14 +106,14 @@ class coursesController {
     // [DELETE] /admin/courses/:courseSlug/delete
     delete(req, res, next) {
         Course.delete({ slug: req.params.courseSlug }).then();
-        Lession.find({ courseSlug: req.params.courseSlug })
-            .then((lessions) => {
-                lessions.forEach((lession) => {
-                    Exercise.delete({ lessionSlug: lession.slug }).then();
-                    Lession.delete({
+        Lesson.find({ courseSlug: req.params.courseSlug })
+            .then((lessons) => {
+                lessons.forEach((lesson) => {
+                    Exercise.delete({ lessonSlug: lesson.slug }).then();
+                    Lesson.delete({
                         courseSlug: req.params.courseSlug,
                     }).then();
-                    Comment.delete({ lessionSlug: lession.slug }).then();
+                    Comment.delete({ lessonSlug: lesson.slug }).then();
                 });
             })
             .then(res.redirect('back'))
@@ -151,14 +151,14 @@ class coursesController {
     // [PATCH] /admin/trash/:courseSlug/restore
     restore(req, res, next) {
         Course.restore({ slug: req.params.courseSlug }).then();
-        Lession.findDeleted({ courseSlug: req.params.courseSlug })
-            .then((lessions) => {
-                lessions.forEach((lession) => {
-                    Exercise.restore({ lessionSlug: lession.slug }).then();
-                    Lession.restore({
+        Lesson.findDeleted({ courseSlug: req.params.courseSlug })
+            .then((lessons) => {
+                lessons.forEach((lesson) => {
+                    Exercise.restore({ lessonSlug: lesson.slug }).then();
+                    Lesson.restore({
                         courseSlug: req.params.courseSlug,
                     }).then();
-                    Comment.restore({ lessionSlug: lession.slug }).then();
+                    Comment.restore({ lessonSlug: lesson.slug }).then();
                 });
             })
             .then(res.redirect('back'))
@@ -168,14 +168,14 @@ class coursesController {
     // [PATCH] /admin/trash/:courseSlug/forceDelete
     forceDelete(req, res, next) {
         Course.deleteOne({ slug: req.params.courseSlug }).then();
-        Lession.findDeleted({ courseSlug: req.params.courseSlug })
-            .then((lessions) => {
-                lessions.forEach((lession) => {
-                    Exercise.deleteMany({ lessionSlug: lession.slug }).then();
-                    Lession.deleteMany({
+        Lesson.findDeleted({ courseSlug: req.params.courseSlug })
+            .then((lessons) => {
+                lessons.forEach((lesson) => {
+                    Exercise.deleteMany({ lessonSlug: lesson.slug }).then();
+                    Lesson.deleteMany({
                         courseSlug: req.params.courseSlug,
                     }).then();
-                    Comment.deleteMany({ lessionSlug: lession.slug }).then();
+                    Comment.deleteMany({ lessonSlug: lesson.slug }).then();
                 });
             })
             .then(res.redirect('back'))
@@ -184,22 +184,22 @@ class coursesController {
 
     // [POST] /admin/courses/handle-form-actions
     handleFormActions(req, res, next) {
-        let lessions = Lession.find({
+        let lessons = Lesson.find({
             courseSlug: { $in: req.body.checkSlugs },
         });
-        lessions.select('slug');
+        lessons.select('slug');
         switch (req.body.action) {
             case 'delete':
                 Course.delete({ slug: { $in: req.body.checkSlugs } }).then();
-                Lession.find({ courseSlug: { $in: req.body.checkSlugs } })
-                    .then((lessions) => {
-                        lessions.forEach((lession) => {
+                Lesson.find({ courseSlug: { $in: req.body.checkSlugs } })
+                    .then((lessons) => {
+                        lessons.forEach((lesson) => {
                             Exercise.delete({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
-                            Lession.delete({ slug: lession.slug }).then();
+                            Lesson.delete({ slug: lesson.slug }).then();
                             Comment.delete({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
                         });
                     })
@@ -210,17 +210,17 @@ class coursesController {
                 Course.deleteMany({
                     slug: { $in: req.body.checkSlugs },
                 }).then();
-                Lession.findDeleted({
+                Lesson.findDeleted({
                     courseSlug: { $in: req.body.checkSlugs },
                 })
-                    .then((lessions) => {
-                        lessions.forEach((lession) => {
+                    .then((lessons) => {
+                        lessons.forEach((lesson) => {
                             Exercise.deleteMany({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
-                            Lession.deleteMany({ slug: lession.slug }).then();
+                            Lesson.deleteMany({ slug: lesson.slug }).then();
                             Comment.deleteMany({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
                         });
                     })
@@ -229,17 +229,17 @@ class coursesController {
                 break;
             case 'restore':
                 Course.restore({ slug: { $in: req.body.checkSlugs } }).then();
-                Lession.findDeleted({
+                Lesson.findDeleted({
                     courseSlug: { $in: req.body.checkSlugs },
                 })
-                    .then((lessions) => {
-                        lessions.forEach((lession) => {
+                    .then((lessons) => {
+                        lessons.forEach((lesson) => {
                             Exercise.restore({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
-                            Lession.restore({ slug: lession.slug }).then();
+                            Lesson.restore({ slug: lesson.slug }).then();
                             Comment.restore({
-                                lessionSlug: lession.slug,
+                                lessonSlug: lesson.slug,
                             }).then();
                         });
                     })

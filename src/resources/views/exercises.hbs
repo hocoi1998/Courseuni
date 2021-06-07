@@ -1,30 +1,98 @@
-<div class="container mt-4">
-Câu hỏi: {{ exercise.question }}
-    {{#each exercise.answer}}
-    <div class="form-check">
-        <input id="answer{{@index}}" class="form-check-input answer" type="checkbox" name="answer" value="{{this}}">
-        <label class="form-check-label" for="answer{{@index}}">
-            {{ this }}
-        </label>
+<div class="container">
+    <div id="success" class="alert alert-success mt-4" role="alert" style="display:none">
+        <h4 class="alert-heading text-center">Chính xác!</h4>       
     </div>
-    {{/each}}
-    <button id="submit" class="btn btn-primary">OK</button>
+    <div id="wrong" class="alert alert-danger mt-4" role="alert" style="display:none">
+        <h4 class="alert-heading text-center">Sai rồi<img src="" alt="">!</h4>       
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12 mt-4">
+            <h4> Câu hỏi: {{ exercise.question }}</h4>
+            {{#each exercise.answer}}
+            <div class="form-check my-2">
+                <input id="answer{{@index}}" class="form-check-input answer" type="checkbox" name="answer"
+                    value="{{this}}">
+                <label class="form-check-label" for="answer{{@index}}">
+                    {{ this }}
+                </label>
+            </div>
+            {{/each}}
+            <button id="submit" class="btn btn-primary">OK</button>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-12 mt-4">
+
+            {{#each exercises }}
+            <a href="{{ this.slug }}" class="px-5 btn btn-success rounded-pill ex-btn">
+                Bài tập {{sum @index 1}}
+            </a>
+            {{/each}}
+        </div>
+    </div>
 </div>
 
+
+
 {{!-- hidden correct answer --}}
-<div class="hidden">
+<div class="hidden" style="display:none">
     {{#each exercise.correct}}
-        <input type="text" class="correct" value="{{this}}">
+    <input type="text" class="correct" value="{{this}}">
     {{/each}}
+    {{#each user.exDone}}
+    <input type="text" class="exDone" value="{{this}}">
+    {{/each}}
+    <form id="exDone-form" method="POST" action="">
+        <input type="text" name="exDone" value="{{exercise.slug}}">
+        <input type="text" name="id" value="{{user._id}}">
+    </form>
 </div>
+
 
 
 <script>
+
+    // Check exercise is done
+
+    let exSlug = window.location.href.split('/').slice(-1).join('');
+    let exDone = document.querySelectorAll('.exDone');
+    exDoneArr = [];
+
+    for (let i = 0; i < exDone.length; i++) {
+        exDoneArr.push(exDone[i].value);
+    }
+
     let answer = document.querySelectorAll('.answer');
+
+    let correct = document.querySelectorAll('.correct');
+    let correctArr = [];
+
+    for (let i = 0; i < correct.length; i++) {
+        correctArr.push(correct[i].value);
+    }
+
+
+    if (exDoneArr.includes(exSlug)) {
+        for (let i = 0; i < answer.length; i++) {
+            if (correctArr.includes(answer[i].value)) {
+                answer[i].setAttribute('checked', 'true')
+            }
+            answer[i].setAttribute('disabled', 'true')
+        }
+        document.getElementById('submit').setAttribute('disabled', 'true')
+    }
+
     let isRadio = {{ isRadio }};
     if (isRadio) {
         for (let i = 0; i < answer.length; i++) {
             answer[i].setAttribute('type', 'radio');
+        }
+    }
+
+    // check exercise is done
+    let exBtn = document.querySelectorAll('.ex-btn');
+    for (let i = 0; i < exBtn.length; i++) {
+        if (exDoneArr.includes(exBtn[i].getAttribute('href'))) {
+            exBtn[i].classList.add('btn-danger')
         }
     }
     document.querySelector('#submit').onclick = function () {
@@ -34,7 +102,7 @@ Câu hỏi: {{ exercise.question }}
                 uAnswer.push(answer[i].value);
             }
         }
-        
+
         function equar(a, b) {
             if (a.length !== b.length) {
                 return false
@@ -48,20 +116,19 @@ Câu hỏi: {{ exercise.question }}
             }
         }
 
-        let correct = document.querySelectorAll('.correct');
-        let correctArr = [];
-        for (let i = 0; i < correct.length; i++) {
-            correctArr.push(correct[i].value);
-        }
 
         let match = equar(uAnswer, correctArr);
-        if(match) {
-            alert('đúng rồi!');
-            // đúng thì push vào passing trong user
+        if (match) {
+            document.getElementById('success').style.display = 'block';
+            document.getElementById('exDone-form').action = '{{exercise.slug}}/update?_method=PUT';
+            setTimeout(function() {
+                document.getElementById('exDone-form').submit();
+            }, 3000)
         } else {
-            alert('sai rồi bạn ơi');
+            document.getElementById('wrong').style.display = 'block';
+           setTimeout(function() {
+               document.getElementById('wrong').style.display = 'none';
+           }, 1000)
         }
-        
-
     }
 </script>

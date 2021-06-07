@@ -6,7 +6,7 @@
                     <div class="card-header">
                         <strong>SỬA BÀI HỌC</strong>
                     </div>
-                    <form action="/admin/courses/{{ lession.courseSlug }}/{{ lession.slug }}/update?_method=PUT" method="POST" class="form-horizontal"
+                    <form action="/admin/courses/{{ lesson.courseSlug }}/{{ lesson.slug }}/update?_method=PUT" method="POST" class="form-horizontal"
                         id="needs-validation">
                         <div class="card-body card-block">
                             <div class="row form-group">
@@ -16,7 +16,7 @@
                                 </div>
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="name" name="name" placeholder="Nhập tên bài học"
-                                        class="form-control" value="{{ lession.name }}" >
+                                        class="form-control" value="{{ lesson.name }}" >
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -26,9 +26,9 @@
                                 </div>
                                 <div class="col-12 col-md-9">
                                     <input type="text" id="videoId" name="videoId" placeholder="Youtube video ID..."
-                                        class="form-control" value="{{ lession.videoId }}">
+                                        class="form-control" value="{{ lesson.videoId }}">
                                     <input type="text" class="form-control" id="courseSlug" name="courseSlug"
-                                        value="{{ lession.courseSlug }}" hidden>
+                                        value="{{ lesson.courseSlug }}" hidden>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-12 col-md-9">
                                     <iframe id="vid" width="100%" height="300" class="form-control"
-                                        src="https://www.youtube.com/embed/{{lession.videoId}}"
+                                        src="https://www.youtube.com/embed/{{lesson.videoId}}"
                                         title="YouTube video player" frameborder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                         allowfullscreen></iframe>

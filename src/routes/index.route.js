@@ -1,6 +1,6 @@
 const coursesRouter = require('./courses.route');
-const detailLessionsRouter = require('./detailLessions.route');
-const lessionsRouter = require('./lessions.route');
+const detailLessonsRouter = require('./detailLessons.route');
+const lessonsRouter = require('./lessons.route');
 const exercisesRouter = require('./exercises.route');
 const siteRouter = require('./site.route');
 const adminRouter = require('./admin.route');
@@ -19,9 +19,9 @@ function route(app) {
     app.use('/categories', categoriesRouter);
     app.use('/admin', AuthMiddleware, Authorization, adminRouter);
     app.use('/courses', coursesRouter);
-    app.use('/courses', AuthMiddleware, lessionsRouter);
+    app.use('/courses', AuthMiddleware, lessonsRouter);
     app.use('/courses/:courseSlug', AuthMiddleware, exercisesRouter);
-    app.use('/courses', AuthMiddleware, detailLessionsRouter);
+    app.use('/courses', AuthMiddleware, detailLessonsRouter);
 
     app.use('/', siteRouter);
 }

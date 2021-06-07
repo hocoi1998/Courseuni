@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const Course = require('../models/Course');
-const Lession = require('../models/Lession');
+const Lesson = require('../models/Lesson');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
 class SiteController {
@@ -39,16 +39,16 @@ class SiteController {
         const courseQuery = Course.find({ $or: [{ name: q }, { author: q }] })
             .skip(skip)
             .limit(perPage);
-        const lessionQuery = Lession.find({ name: q });
+        const lessonQuery = Lesson.find({ name: q });
         const count = Course.countDocuments({
             $or: [{ name: q }, { author: q }],
         });
-        Promise.all([courseQuery, lessionQuery, count]).then(
-            ([courses, lessions, count]) => {
+        Promise.all([courseQuery, lessonQuery, count]).then(
+            ([courses, lessons, count]) => {
                 res.render('search', {
                     title,
                     courses: multipleMongooseToObject(courses),
-                    lessions: multipleMongooseToObject(lessions),
+                    lessons: multipleMongooseToObject(lessons),
                     key: req.query.q,
                     pagination: {
                         page: currentPage,

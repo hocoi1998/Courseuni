@@ -5,16 +5,16 @@ const { multipleMongooseToObject } = require('../../../util/mongoose');
 
 class exercisesController {
     // EXERCISE
-    // [GET] /admin/courses/:courseSlug/:lessionSlug
+    // [GET] /admin/courses/:courseSlug/:lessonSlug
     show(req, res, next) {
         let exerciseQuery = Exercise.find({
-            lessionSlug: req.params.lessionSlug,
+            lessonSlug: req.params.lessonSlug,
         });
 
         Promise.all([
             exerciseQuery,
             Exercise.countDocumentsDeleted({
-                lessionSlug: req.params.lessionSlug,
+                lessonSlug: req.params.lessonSlug,
             }),
         ])
             .then(([exercises, deletedCount]) =>
@@ -24,35 +24,34 @@ class exercisesController {
                     deletedCount,
                     exercises: multipleMongooseToObject(exercises),
                     courseSlug: req.params.courseSlug,
-                    lessionSlug: req.params.lessionSlug,
+                    lessonSlug: req.params.lessonSlug,
                 }),
             )
             .catch(next);
     }
 
-    // [GET] /admin/courses/:courseSlug/:lessionSlug/create
+    // [GET] /admin/courses/:courseSlug/:lessonSlug/create
     create(req, res, next) {
         res.render('admin/create/exercise-create', {
             layout: 'admin',
             title: 'Thêm bài tập',
-            lessionSlug: req.params.lessionSlug,
+            lessonSlug: req.params.lessonSlug,
         });
     }
-    // [POST] /admin/courses/:courseSlug/:lessionSlug/store
+    // [POST] /admin/courses/:courseSlug/:lessonSlug/store
     store(req, res, next) {
         const exercises = new Exercise(req.body);
         exercises
             .save()
             .then(() => {
                 res.redirect(
-                    `/admin/courses/${req.params.courseSlug}/${req.params.lessionSlug}`,
+                    `/admin/courses/${req.params.courseSlug}/${req.params.lessonSlug}`,
                 );
             })
             .catch(next);
-        // res.json(req.body)
     }
 
-    // [GET] /admin/courses/:courseSlug/:lessionSlug/:slug/edit
+    // [GET] /admin/courses/:courseSlug/:lessonSlug/:slug/edit
     edit(req, res, next) {
         Exercise.findOne({ slug: req.params.slug })
             .then((exercise) =>
@@ -65,27 +64,27 @@ class exercisesController {
             .catch(next);
     }
 
-    // [PUT] /admin/courses/:courseSlug/:lessionSlug/:slug/update
+    // [PUT] /admin/courses/:courseSlug/:lessonSlug/:slug/update
     update(req, res, next) {
         Exercise.updateOne({ slug: req.params.slug }, req.body)
             .then(() =>
                 res.redirect(
-                    `/admin/courses/${req.params.courseSlug}/${req.params.lessionSlug}`,
+                    `/admin/courses/${req.params.courseSlug}/${req.params.lessonSlug}`,
                 ),
             )
             .catch(next);
     }
-    // [DELETE] /admin/courses/:courseSlug/:lessionSlug/:slug/delete
+    // [DELETE] /admin/courses/:courseSlug/:lessonSlug/:slug/delete
     delete(req, res, next) {
         Exercise.delete({ slug: req.params.slug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [GET] /admin/trash/courses/:courseSlug/:lessionSlug
+    // [GET] /admin/trash/courses/:courseSlug/:lessonSlug
     trash(req, res, next) {
         let exerciseQuery = Exercise.findDeleted({
-            lessionSlug: req.params.lessionSlug,
+            lessonSlug: req.params.lessonSlug,
         });
 
         exerciseQuery
@@ -95,27 +94,27 @@ class exercisesController {
                     layout: 'admin',
                     title: 'Bài tập đã xoá',
                     courseSlug: req.params.courseSlug,
-                    lessionSlug: req.params.lessionSlug,
+                    lessonSlug: req.params.lessonSlug,
                 }),
             )
             .catch(next);
     }
 
-    // [PATCH] /admin/trash/:courseSlug/:lessionSlug/:slug/restore
+    // [PATCH] /admin/trash/:courseSlug/:lessonSlug/:slug/restore
     restore(req, res, next) {
         Exercise.restore({ slug: req.params.slug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [PATCH] /admin/trash/:courseSlug/:lessionSlug/:slug/forceDelete
+    // [PATCH] /admin/trash/:courseSlug/:lessonSlug/:slug/forceDelete
     forceDelete(req, res, next) {
         Exercise.deleteOne({ slug: req.params.slug })
             .then(() => res.redirect('back'))
             .catch(next);
     }
 
-    // [POST] /admin/courses/:courseSlug/:lessionSlug/handle-form-actions
+    // [POST] /admin/courses/:courseSlug/:lessonSlug/handle-form-actions
     handleFormActions(req, res, next) {
         switch (req.body.action) {
             case 'delete':

@@ -14,19 +14,22 @@
             </a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            {{lession.name}}
+            {{lesson.name}}
           </li>
         </ol>
       </nav>
-      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{lession.videoId}}"
+      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{lesson.videoId}}"
         title="YouTube video player" frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
       <div class="mt-4">
         {{#each exercises}}
-        <a href="{{this.lessionSlug}}/{{this._id}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2">
+        <a href="{{this.lessonSlug}}/{{this.slug}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2 ex-btn" target="_blank">
           Bài tập {{sum @index 1}}
         </a>
+        {{/each}}
+        {{#each user.exDone}}
+          <input type="text" class="exDone" value="{{this}}" hidden>
         {{/each}}
       </div>
       <div class="my-4">
@@ -138,8 +141,8 @@
       <div class="reply-box"></div> 
       {{/each}}
     </div>
-    <div class="col-lg-4 col-md-12 col-sm-12 lession mt-2">
-      <div class="lession__title">
+    <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
+      <div class="lesson__title">
         <table class="table">
           <thead>
             <tr>
@@ -153,16 +156,16 @@
           </thead>
         </table>
       </div>
-      <div class="lession__list" style="height: 80vh">
+      <div class="lesson__list" style="height: 80vh">
         <table class="table">
           <tbody>
-            {{#each lessions}}
-            <tr class="lession__item">
+            {{#each lessons}}
+            <tr class="lesson__item">
               <th scope="row">
                 {{sum @index 1}}
               </th>
               <td>
-                <a href="{{this.slug}}" class="lession__link">
+                <a href="{{this.slug}}" class="lesson__link">
                   {{this.name}}
                 </a>
               </td>
@@ -175,15 +178,37 @@
   </div>
 </div>
 <script>
-  // add active lesion background color
-  let item = document.querySelectorAll('.lession__item')
-  let lession = document.querySelectorAll('.lession__link')
-  for (let i = 0; i < lession.length; i++) {
-    if (lession[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
+  // add active lesson is done and add active lesion background color
+  let item = document.querySelectorAll('.lesson__item');
+  let lesson = document.querySelectorAll('.lesson__link');
+
+  let lsDone = '{{user.lsDone}}';
+
+  for (let i = 0; i < lesson.length; i++) {
+    if (lesson[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
       item[i].classList.add('btn-primary');
-      lession[i].classList.add('text-white')
+      lesson[i].classList.add('text-white')
+    } else if (lsDone.includes(lesson[i].getAttribute('href'))) {
+      item[i].style.backgroundColor = '#ccc'
     }
   }
+
+  // add active exercise
+  let exBtn = document.querySelectorAll('.ex-btn');
+  let exDone = document.querySelectorAll('.exDone');
+  let exDoneArr = [];
+
+  for (let i = 0; i < exDone.length; i++) {
+    exDoneArr.push(exDone[i].value);
+  }
+
+  for (let i = 0; i < exBtn.length; i++) {
+    let ex = exBtn[i].getAttribute('href').split('/').slice(-1).join('')
+    if(exDoneArr.includes(ex)) {
+      exBtn[i].classList.add('btn-danger')
+    }
+  }
+
 
   window.addEventListener('DOMContentLoaded', (event) => {
     // check role ban user
@@ -247,7 +272,7 @@
           </span>
           <form
             method="POST"
-            action="{{lessionSlug}}/reply?_method=PUT"
+            action="{{lessonSlug}}/reply?_method=PUT"
             class="reply-form"
           >
             <div class="form-group">
@@ -282,7 +307,7 @@
       $('.comment-btn').click(function () {
         let val = $('.comment').val();
         if (val !== '') {
-          $.post('{{lession.slug}}/comment', { lessionSlug: '{{lession.slug}}', commentBy: '{{user._id}}', content: val }, function (data) {
+          $.post('{{lesson.slug}}/comment', { lessonSlug: '{{lesson.slug}}', commentBy: '{{user._id}}', content: val }, function (data) {
             if (data) {
               postHTML(val);
             }
@@ -317,7 +342,7 @@
           cmtId = $('#cmtId').val();
           let val = $('.comment-edited').val();
           if (val !== '') {
-            $.post('{{lession.slug}}/comment/update?_method=PUT', { cmtId: cmtId, content: val }, function () {
+            $.post('{{lesson.slug}}/comment/update?_method=PUT', { cmtId: cmtId, content: val }, function () {
               content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
             });
           }
@@ -343,7 +368,7 @@
       event.preventDefault();
       let formData = $(this).serialize();
       let content = formData.split('&')[0].slice(8);
-      $.post('{{lession.slug}}/reply?_method=PUT', formData, function(){
+      $.post('{{lesson.slug}}/reply?_method=PUT', formData, function(){
         $('.reply-box')[i].innerHTML= `
            <div class="mt-4 ml-5 d-flex">
         <img class="comment__avt" src="/{{user.avatar}}" />
@@ -405,7 +430,7 @@
 
     editReply[i].onclick = function () {
       contentReply[i].innerHTML = `
-      <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lession.slug}}/reply/update?_method=PUT">
+      <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lesson.slug}}/reply/update?_method=PUT">
       <input type="text" class="form-control comment-edited" name="content" value="${contentReply[i].textContent}" required>
       <input type="text" name="replyBy" value=${replyEditBy[i].value} hidden/>
       <input type="text" name="repId" value=${repId[i].value} hidden/>

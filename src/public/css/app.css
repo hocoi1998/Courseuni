@@ -85,14 +85,19 @@ label.error {
 
 .feature-courses {
   padding-bottom: 4rem; }
+  .feature-courses__card {
+    overflow: hidden; }
   .feature-courses__author, .feature-courses__totalStudent {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6); }
   .feature-courses__img {
+    max-height: 195px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
     object-fit: cover;
     transition: all 0.3s linear; }
   .feature-courses__card:hover .feature-courses__img {
-    opacity: 0.8; }
+    opacity: 0.8;
+    transform: scale(1.1); }
 
 .call {
   padding: 5rem 0;
@@ -149,32 +154,35 @@ label.error {
   color: #0c4da2;
   margin-right: 1rem; }
 
-.lession {
-  border: 1px solid #c3c3c3;
-  height: 95vh; }
-  .lession__title table th {
+#first-video {
+  border: 1px solid #e3e3e3; }
+
+.lesson {
+  border: 1px solid #e3e3e3;
+  height: 600px; }
+  .lesson__title table th {
     border-top: 0; }
-    .lession__title table th:first-child {
+    .lesson__title table th:first-child {
       width: 55px; }
-  .lession__list {
+  .lesson__list {
     height: 84vh;
     overflow-y: auto;
     background-color: #fff; }
-    .lession__list::-webkit-scrollbar {
+    .lesson__list::-webkit-scrollbar {
       width: 3px; }
-    .lession__list::-webkit-scrollbar-track {
+    .lesson__list::-webkit-scrollbar-track {
       background: #f1f1f1; }
-    .lession__list::-webkit-scrollbar-thumb {
+    .lesson__list::-webkit-scrollbar-thumb {
       background: #888; }
-    .lession__list::-webkit-scrollbar-thumb:hover {
+    .lesson__list::-webkit-scrollbar-thumb:hover {
       background: #555; }
-  .lession__item:hover {
+  .lesson__item:hover {
     background-color: #f1f1f1;
     transition: linear 0.2s; }
-  .lession__link {
+  .lesson__link {
     color: #000;
     display: block; }
-    .lession__link:hover {
+    .lesson__link:hover {
       color: #000;
       text-decoration: none; }
 

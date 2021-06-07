@@ -8,9 +8,9 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="col-lg-12">
-                <form method="POST" action="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}/handle-form-actions"
+                <form method="POST" action="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/handle-form-actions"
                     name="container-form">
-                    <a href="/admin/courses/{{ courseSlug }}/{{ lessionSlug }}" class="title-5 text-primary"><i class="zmdi zmdi-arrow-left"></i> Quản lý bài tập</a>
+                    <a href="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}" class="title-5 text-primary"><i class="zmdi zmdi-arrow-left"></i> Quản lý bài tập</a>
                     <table class="table table-data2">
                         <tbody style="background-color: transparent">
                             <tr>
@@ -22,6 +22,7 @@
                                 </td>
                                 <td colspan="2">
                                     <select name="action" id="select" class="form-control" name="action" required>
+                                        <option value="">-- Hành động --</option>
                                         <option value="restore">Khôi phục</option>
                                         <option value="forceDelete">Xoá vĩnh viễn</option>
                                     </select>
@@ -166,7 +167,7 @@
 
         // When delete button clicked
         btnDelete.onclick = function () {
-            deleteForm.action = `/admin/trash/courses/{{ courseSlug }}/{{ lessionSlug }}/${slug}/forceDelete?_method=DELETE`;
+            deleteForm.action = `/admin/trash/courses/{{ courseSlug }}/{{ lessonSlug }}/${slug}/forceDelete?_method=DELETE`;
             deleteForm.submit();
         }
 
@@ -174,7 +175,7 @@
         restoreBtn.click(function (e) {
             e.preventDefault();
             slug = $(this).data('slug')
-            restoreForm.action = `/admin/trash/courses/{{ courseSlug }}/{{ lessionSlug }}/${slug}/restore?_method=PATCH`;
+            restoreForm.action = `/admin/trash/courses/{{ courseSlug }}/{{ lessonSlug }}/${slug}/restore?_method=PATCH`;
             restoreForm.submit();
         });
 
