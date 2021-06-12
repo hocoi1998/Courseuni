@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const socket = require('socket.io');
 const morgan = require('morgan');
 const methodOverride = require('method-override');
 const handlebars = require('express-handlebars');
@@ -44,31 +45,30 @@ app.engine(
         extname: '.hbs',
         helpers: {
             sum: (a, b) => a + b,
-            // cat: (a) => (a === 'Frontend' ? 'Backend' : 'Frontend'),
             gender: (a) => (a === 'Nam' ? 'Nữ' : 'Nam'),
-            sortable: (field, sort) => {
-                const sortType = field === sort.column ? sort.type : 'default';
+            // sortable: (field, sort) => {
+            //     const sortType = field === sort.column ? sort.type : 'default';
 
-                const icons = {
-                    default: 'fas fa-sort',
-                    asc: 'fas fa-sort-up',
-                    desc: 'fas fa-sort-down"',
-                };
-                const types = {
-                    default: 'desc',
-                    asc: 'desc',
-                    desc: 'asc',
-                };
+            //     const icons = {
+            //         default: 'fas fa-sort',
+            //         asc: 'fas fa-sort-up',
+            //         desc: 'fas fa-sort-down"',
+            //     };
+            //     const types = {
+            //         default: 'desc',
+            //         asc: 'desc',
+            //         desc: 'asc',
+            //     };
 
-                const icon = icons[sortType];
-                const type = types[sortType];
+            //     const icon = icons[sortType];
+            //     const type = types[sortType];
 
-                return `
-                <a href="?_sort&column=${field}&type=${type}">
-                        <i class="${icon}"></i>
-                    </a>
-                `;
-            },
+            //     return `
+            //     <a href="?_sort&column=${field}&type=${type}">
+            //             <i class="${icon}"></i>
+            //         </a>
+            //     `;
+            // },
             paginateHelper: paginateHelper.createPagination,
             moment: (a) => moment(a).format('MM/DD/YYYY'),
             momentD: (a) => moment(a).format('DD-MM-YYYY'),
@@ -86,6 +86,19 @@ app.use(express.static(path.join(__dirname, '..', 'node_modules')));
 // Routes init
 route(app);
 
-app.listen(port, () =>
+const server = app.listen(port, () =>
     console.log(`App listening at http://localhost:${port}`),
 );
+
+// Socket setup
+const io = socket(server);
+
+io.on('connection', function (socket) {
+    socket.on('comment', function (data) {
+        io.sockets.emit('comment', data);
+    });
+
+    socket.on('reply', function (data) {
+        io.sockets.emit('reply', data);
+    });
+});

@@ -24,27 +24,31 @@
         allowfullscreen></iframe>
       <div class="mt-4">
         {{#each exercises}}
-        <a href="{{this.lessonSlug}}/{{this.slug}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2 ex-btn" target="_blank">
+        <a href="{{this.lessonSlug}}/{{this.slug}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2 ex-btn"
+          target="_blank">
           Bài tập {{sum @index 1}}
         </a>
         {{/each}}
         {{#each user.exDone}}
-          <input type="text" class="exDone" value="{{this}}" hidden>
+        <input type="text" class="exDone" value="{{this}}" hidden>
         {{/each}}
       </div>
       <div class="my-4">
         {{#if user.banned}}
         Bạn đã bị cấm bình luận do vi phạm <a href="/term">Điều khoản sử dụng</a>
         {{else}}
+        {{!-- COMMENT --}}
         <div class="form-group">
-          <input type="text" class="form-control comment" contenteditable="true" name="content"
+          <input id="comment" type="text" class="form-control" contenteditable="true" name="content"
             placeholder="Bạn có thắc mắc gì về bài học này?" required />
         </div>
-        <input type="button" class="btn btn-primary comment__btn comment-btn" value="Bình luận">
+        <input id="comment-btn" type="button" class="btn btn-primary comment__btn" value="Bình luận">
+        {{!-- END COMMENT --}}
         {{/if}}
       </div>
-      <div class="comments-box">
+      <div id="comments-box">
         {{!-- New comment --}}
+
       </div>
       {{#each comments}}
       <div class="mt-4 d-flex">
@@ -53,25 +57,21 @@
           <span class="comment__name font-weight-bold">
             {{this.commentBy.name}}
           </span>
-          <span class="commentBy" style="display: none">{{this.commentBy._id}}</span>
-          {{#if this.commentBy.banned}}
-          <div class="comment__content mt-1">
-            Bình luận này bị ẩn do tài khoản vi phạm <a href="/term">chính sách cộng đồng</a>
-          </div>
-          {{else}}
+          <input class="commentId" type="text" value="{{this._id}}">
+          <input class="commentBy" type="text" value="{{this.commentBy._id}}">
           <div class="comment__content edit-content mt-1">{{this.content}}</div>
           <div class="comment__options">
             <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false"></i>
             <ul class="dropdown-menu comment__option--list">
               <li class="dropdown-item comment__option--item adOptions">
-                <form class="banned" method="POST" action="">
-                  <input class="ipb" type="text" value="true" name="banned" hidden>
-                  Chặn bình luận
+                <form class="banned" method="POST" action="/admin/users/{{this.commentBy._id}}/update?_method=PUT">
+                  <input type="text" value="true" name="banned" hidden>
+                 <input type="submit" value="Chặn bình luận">
                 </form>
               </li>
               <li class="dropdown-item comment__option--item editCmt">
-                <input class="ipb" type="text" value="true" name="content" hidden>
+                {{!-- <input type="text" value="true" name="content"> --}}
                 Sửa bình luận
               </li>
               <li class="dropdown-item comment__option--item">
@@ -79,7 +79,6 @@
               </li>
             </ul>
           </div>
-          {{/if}}
         </div>
       </div>
       <div class="comment__action">
@@ -89,17 +88,16 @@
         <span class="local-datetime comment__action--time">
           {{momentHM this.createdAt}}
         </span>
-        <form class="reply-form">
-          <div class="form-group">
-            <input type="text" class="form-control comment" name="content" placeholder="Trả lời bình luận này"
-              required />
-            <input type="text" class="cmtBy" name="cmtId" value={{this._id}} hidden />
-            <input type="text" class="replyBy" name="replyBy" hidden />
-          </div>
-          <button type="submit" class="btn btn-primary comment__btn test">
+        <div class="reply-form form-group mt-2">
+          <input type="text" class="form-control comment reply" name="content" placeholder="Trả lời bình luận này"
+            required />
+          <input type="text" class="cmtId" name="cmtId" value="{{this._id}}" hidden />
+          <input type="text" class="replyBy" name="replyBy" hidden />
+          <button type="button" class="btn btn-primary mt-2 comment__btn reply-btn">
             Trả lời
           </button>
-        </form>
+        </div>
+
       </div>
       {{#each this.reply}}
       <div class="mt-4 ml-5 d-flex">
@@ -108,24 +106,24 @@
           <span class="comment__name font-weight-bold">
             {{this.replyBy.name}}
           </span>
-          <input class="ipRepId" type="text" value="{{this._id}}" hidden>
-          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
+          <input class="ipRepId" type="text" value="{{this._id}}">
+          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}">
           <div class="comment__content reply-content mt-1">{{this.content}}</div>
-          <div class="comment__options">
+          <div class="reply__options">
             <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false"></i>
             <ul class="dropdown-menu comment__option--list">
               <li class="dropdown-item comment__option--item adOptions">
-                <form class="banned" method="POST" action="">
-                  <input class="ipr" type="text" value="true" name="banned" hidden>
-                  Chặn bình luận
+                <form class="banned" method="POST" action="/admin/users/{{this.replyBy._id}}/update?_method=PUT">
+                  <input type="text" value="true" name="banned" hidden>
+                 <input type="submit" value="Chặn bình luận">
                 </form>
-              </li>
+              </li>             
               <li class="dropdown-item comment__option--item editReply">
                 Sửa trả lời
               </li>
               <li class="dropdown-item comment__option--item">
-                Xoá bình luận
+                Xoá trả lời
               </li>
             </ul>
           </div>
@@ -138,7 +136,7 @@
       </div>
       {{/each}}
       {{!-- new reply --}}
-      <div class="reply-box"></div> 
+      <div class="reply-box"></div>
       {{/each}}
     </div>
     <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
@@ -177,7 +175,107 @@
     </div>
   </div>
 </div>
+
+
+
 <script>
+  // Make connection
+  let socket = io.connect('http://localhost:3000');
+
+  let comment = document.getElementById('comment');
+  let commentBtn = document.getElementById('comment-btn');
+  let output = document.getElementById('comments-box');
+
+  if(commentBtn){
+    commentBtn.addEventListener('click', function () {
+    if (comment.value !== '') {
+      socket.emit('comment', {
+        comment: comment.value,
+        avt: '{{user.avatar}}',
+        name: '{{user.name}}'
+      });
+      $.post('{{lesson.slug}}/comment', {
+        lessonSlug: '{{lesson.slug}}',
+        commentBy: '{{user._id}}',
+        content: comment.value
+      });
+    };
+    comment.value = '';
+  });
+  }
+
+  // Listen for events
+  socket.on('comment', function (data) {
+    output.innerHTML = `
+      <div class="mt-4 d-flex">
+        <img class="comment__avt" src="/${data.avt}" />
+        <div class="comment__inner">
+          <span class="comment__name font-weight-bold">
+            ${data.name}
+          </span>
+          <div class="comment__content edit-content mt-1">${data.comment}</div>
+        </div>
+      </div>
+      <div class="comment__action">
+        <span class="comment__action--reply">
+          Trả lời
+        </span>
+        <span class="local-datetime comment__action--time">
+          {{momentHM this.createdAt}}
+        </span>         
+      </div>
+    ` + output.innerHTML;
+    //loadDom();
+    //loadDomReply();
+  });
+
+  var loadDomReply = function () {
+    let replyBtn = document.querySelectorAll('.reply-btn');
+    let reply = document.querySelectorAll('.reply');
+    let cmtId = document.querySelectorAll('.cmtId');
+    let replyOutput = document.querySelectorAll('.reply-box');
+
+    for (let i = 0; i < replyBtn.length; i++) {
+      replyBtn[i].addEventListener('click', function () {
+        if (reply[i].value !== '') {
+          socket.emit('reply', {
+            reply: reply[i].value,
+            avt: '{{user.avatar}}',
+            name: '{{user.name}}'
+          });
+          $.post('{{lesson.slug}}/reply?_method=PUT', {
+            cmtId: cmtId[i].value,
+            replyBy: '{{user._id}}',
+            content: reply[i].value
+          });
+        };
+        reply[i].value = '';
+        $('.reply-form')[i].style.display = 'none'
+
+
+        socket.on('reply', function (data) {
+          replyOutput[i].innerHTML += `
+          <div class="mt-4 ml-5 d-flex">
+              <img class="comment__avt" src="/${data.avt}" />
+              <div class="comment__inner">
+                <span class="comment__name font-weight-bold">
+                  ${data.name}
+                </span>
+                <div class="comment__content reply-content mt-1">${data.reply}</div>                
+              </div>
+            </div>
+            <div class="comment__action ml-5">
+              <span class="comment__action--time ml-5">
+                {{momentHM this.createdAt}}
+              </span>
+            </div>
+          `
+        })
+      })
+    }
+  }
+
+
   // add active lesson is done and add active lesion background color
   let item = document.querySelectorAll('.lesson__item');
   let lesson = document.querySelectorAll('.lesson__link');
@@ -204,13 +302,12 @@
 
   for (let i = 0; i < exBtn.length; i++) {
     let ex = exBtn[i].getAttribute('href').split('/').slice(-1).join('')
-    if(exDoneArr.includes(ex)) {
+    if (exDoneArr.includes(ex)) {
       exBtn[i].classList.add('btn-danger')
     }
   }
 
-
-  window.addEventListener('DOMContentLoaded', (event) => {
+  var loadDom = function () {
     // check role ban user
     let adOptions = document.querySelectorAll('.adOptions');
     for (let i = 0; i < adOptions.length; i++) {
@@ -219,233 +316,95 @@
       }
     }
 
-    // action ban user
-    let banned = document.querySelectorAll('.banned');
-
-    for (let i = 0; i < banned.length; i++) {
-      banned[i].onclick = function () {
-        let commentBy = document.querySelectorAll('.commentBy');
-        let cmtBy = commentBy[i].textContent;
-        banned[i].action = `/admin/users/${cmtBy}/update?_method=PUT`;
-        banned[i].submit();
-      }
-    }
-
-    // add new comment
-
-    function postHTML(val) {
-      let html = `
-      <div class="mt-4 d-flex">
-      <img class="comment__avt" src="/{{user.avatar}}" />
-          <div class="comment__inner">
-            <span class="comment__name font-weight-bold">
-              {{user.name}}
-            </span>
-            <span class="commentBy" style="display: none">{{user._id}}</span>
-            <div class="comment__content edit-content mt-1">${val}</div>
-            <div class="comment__options">
-              <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-              <ul class="dropdown-menu comment__option--list">
-                  <li class="dropdown-item comment__option--item adOptions">
-                    <form class="banned" method="POST" action="">
-                      <input class="ipb" type="text" value="true" name="banned" hidden>
-                      Chặn bình luận
-                    </form>
-                  </li>
-                <li class="dropdown-item comment__option--item editCmt">
-                      <input class="ipb" type="text" value="true" name="content" hidden>
-                      Sửa bình luận
-                </li>
-                <li class="dropdown-item comment__option--item">
-                    Xoá bình luận
-                </li>
-              </ul>
-            </div>
-          </div>
-          </div>
-           <div class="comment__action">
-          <span class="comment__action--reply">
-            Trả lời
-          </span>
-          <span class="local-datetime comment__action--time">
-            {{momentHM this.createdAt}}
-          </span>
-          <form
-            method="POST"
-            action="{{lessonSlug}}/reply?_method=PUT"
-            class="reply-form"
-          >
-            <div class="form-group">
-              <input
-                type="text"
-                class="form-control comment"
-                name="content"
-                placeholder="Trả lời bình luận này"
-                required
-              />
-              <input
-                type="text"
-                class="cmtBy"
-                name="cmtId"
-                value={{this._id}}
-                hidden
-              />
-              <input type="text" class="replyBy" name="replyBy" hidden />
-            </div>
-            <button type="submit" class="btn btn-primary comment__btn">
-              Trả lời
-            </button>
-          </form>
-        </div>
-      `
-
-      $('.comments-box').prepend(html);
-      $('.comment').val('')
-    }
-
-    $(document).ready(function () {
-      $('.comment-btn').click(function () {
-        let val = $('.comment').val();
-        if (val !== '') {
-          $.post('{{lesson.slug}}/comment', { lessonSlug: '{{lesson.slug}}', commentBy: '{{user._id}}', content: val }, function (data) {
-            if (data) {
-              postHTML(val);
-            }
-          })
-        }
-      })
-    })
-
-    // check role edit and update comment
-
-    let editCmt = document.querySelectorAll('.editCmt');
-    let content = document.querySelectorAll('.edit-content');
-
-    for (let i = 0; i < editCmt.length; i++) {
-      let commentBy = document.querySelectorAll('.commentBy');
-      let cmtBy = commentBy[i].textContent;
-      if (cmtBy !== '{{user._id}}') {
-        editCmt[i].style.display = 'none';
-      }
-
-      let cmtId = document.querySelectorAll('.cmtBy');
-
-      editCmt[i].onclick = function () {
-        content[i].innerHTML = `
-    <input type="text" class="form-control comment-edited" contenteditable="true" name="content" value="${content[i].textContent}" required>
-    <input type="text" id="cmtId" name="cmtId" value=${cmtId[i].value} hidden/>
-    <input type="button" class="btn btn-primary comment__btn mt-3 edit-cmt-btn" value="Lưu lại">
-    `
-        // action update comment
-
-        $('.edit-cmt-btn').click(function () {
-          cmtId = $('#cmtId').val();
-          let val = $('.comment-edited').val();
-          if (val !== '') {
-            $.post('{{lesson.slug}}/comment/update?_method=PUT', { cmtId: cmtId, content: val }, function () {
-              content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
-            });
-          }
-        })
-      };
-    }
-
-    // show reply form
-    let rep = document.querySelectorAll('.replyBy');
-    for (let i = 0; i < rep.length; i++) {
-      rep[i].value = '{{user._id}}'
-    }
-
-    let reply = document.querySelectorAll('.reply-form');
-    let btnReply = document.querySelectorAll('.comment__action--reply');
+    
+    let reply = document.querySelectorAll('.comment__action--reply');
+    let replyForm = document.querySelectorAll('.reply-form');
 
     for (let i = 0; i < reply.length; i++) {
-      btnReply[i].onclick = function () {
-        reply[i].style.display = 'block';
-          // action reply
-
-    $('.reply-form').submit(function(event){
-      event.preventDefault();
-      let formData = $(this).serialize();
-      let content = formData.split('&')[0].slice(8);
-      $.post('{{lesson.slug}}/reply?_method=PUT', formData, function(){
-        $('.reply-box')[i].innerHTML= `
-           <div class="mt-4 ml-5 d-flex">
-        <img class="comment__avt" src="/{{user.avatar}}" />
-        <div class="comment__inner">
-          <span class="comment__name font-weight-bold">
-            {{user.name}}
-          </span>
-          <input class="replyEditBy" type="text" value="{{user._id}}" hidden>
-          <div class="comment__content reply-content mt-1">${content}</div>
-          <div class="comment__options">
-            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></i>
-            <ul class="dropdown-menu comment__option--list">
-              <li class="dropdown-item comment__option--item adOptions">
-                <form class="banned" method="POST" action="">
-                  <input class="ipr" type="text" value="true" name="banned" hidden>
-                  Chặn bình luận
-                </form>
-              </li>
-              <li class="dropdown-item comment__option--item editReply">
-                Sửa trả lời
-              </li>
-              <li class="dropdown-item comment__option--item">
-                Xoá bình luận
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="comment__action ml-5">
-        <span class="comment__action--time ml-5">
-          {{momentHM this.createdAt}}
-        </span>
-      </div>
-        `
-      })
-    })
-  
+      reply[i].onclick = function () {
+        replyForm[i].style.display = 'block';
       }
     }
-
-  
-
-  });
-
-  // check role edit and update reply
-
-  let editReply = document.querySelectorAll('.editReply');
-  let contentReply = document.querySelectorAll('.reply-content');
-
-  for (let i = 0; i < editReply.length; i++) {
-    let replyEditBy = document.querySelectorAll('.replyEditBy');
-    let repBy = replyEditBy[i].value;
-    if (repBy !== '{{user._id}}') {
-      editReply[i].style.display = 'none';
-    }
-
-    let repId = document.querySelectorAll('.ipRepId');
-
-    editReply[i].onclick = function () {
-      contentReply[i].innerHTML = `
-      <form class="edit-form" method="POST" action="/courses/{{course.slug}}/{{lesson.slug}}/reply/update?_method=PUT">
-      <input type="text" class="form-control comment-edited" name="content" value="${contentReply[i].textContent}" required>
-      <input type="text" name="replyBy" value=${replyEditBy[i].value} hidden/>
-      <input type="text" name="repId" value=${repId[i].value} hidden/>
-      <button type="submit" class="btn btn-primary comment__btn mt-3 edit-cmt-btn">
-        Lưu lại
-      </button>
-      </form>
-    `
-    };
   }
 
+  loadDom();
+  loadDomReply();
 
 
+  // check role edit, delete and update comment
+  let commentOptions = document.querySelectorAll('.comment__options');
 
+  let editCmt = document.querySelectorAll('.editCmt');
+  let content = document.querySelectorAll('.edit-content');
 
+  for (let i = 0; i < commentOptions.length; i++) {
+    let commentId = document.querySelectorAll('.commentId');
+    let commentBy = document.querySelectorAll('.commentBy');
+    let cmtBy = commentBy[i].value;
 
+    if ('{{ user.isAdmin }}' === 'false' && cmtBy !== '{{user._id}}') {
+      commentOptions[i].classList.add('hide')
+    }
 
+    if (cmtBy !== '{{user._id}}') {
+      editCmt[i].style.display = 'none'
+    }
+
+    editCmt[i].onclick = function () {
+      content[i].innerHTML = `
+          <input type="text" class="form-control comment-edited" contenteditable="true" name="content" value="${content[i].textContent}" required>
+          <input type="text" id="cmtId" name="cmtId" value=${commentId[i].value} hidden/>
+          <input type="button" class="btn btn-primary comment__btn mt-3 edit-cmt-btn" value="Lưu lại">
+        `
+
+      // action update comment
+      $('.edit-cmt-btn').click(function () {
+        let cmtId = $('#cmtId').val();
+        let val = $('.comment-edited').val();
+        if (val !== '') {
+          $.post('{{lesson.slug}}/comment/update', { cmtId: cmtId, content: val }, function () {
+            content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
+          });
+        }
+      })
+    }
+  }
+
+  // check role edit, delete and update reply
+  let replyOptions = document.querySelectorAll('.reply__options');
+  let editReply = document.querySelectorAll('.editReply');
+  let replyContent = document.querySelectorAll('.reply-content');
+
+  for (let i = 0; i < replyOptions.length; i++) {
+    let ipRepId = document.querySelectorAll('.ipRepId');
+    let replyEditBy = document.querySelectorAll('.replyEditBy');
+    let repEditBy = replyEditBy[i].value;
+
+    
+    if ('{{ user.isAdmin }}' === 'false' && repEditBy !== '{{user._id}}') {
+      replyOptions[i].classList.add('hide')
+    }
+    if (repEditBy !== '{{user._id}}') {
+      editReply[i].style.display = 'none'
+    }
+
+    editReply[i].onclick = function () {
+      replyContent[i].innerHTML = `
+          <input type="text" class="form-control reply-edited" contenteditable="true" name="content" value="${replyContent[i].textContent}" required>
+          <input type="text" id="repId" name="repId" value=${ipRepId[i].value} hidden/>
+          <input type="button" class="btn btn-primary comment__btn mt-3 edit-reply-btn" value="Lưu lại">
+        `
+
+        // action update comment
+      $('.edit-reply-btn').click(function () {
+        let repId = $('#repId').val();
+        let val = $('.reply-edited').val();
+        if (val !== '') {
+          $.post('{{lesson.slug}}/reply/update', { repId: repId, content: val }, function () {
+            replyContent[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
+          });
+        }
+      })
+    }
+  }
 </script>

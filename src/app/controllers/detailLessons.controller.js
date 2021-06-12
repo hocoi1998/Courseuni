@@ -72,7 +72,6 @@ class DetailLessonsController {
 
     updateReply(req, res, next) {
         let repId = req.body.repId;
-        // Đang lỗi để tạm, chỉ sửa được reply đứng 1 mình, nhiều reply sẽ bị mất
         Comment.updateOne(
             { 'reply._id': repId },
             {
@@ -82,7 +81,7 @@ class DetailLessonsController {
             },
         )
             .then(() => {
-                res.redirect('back');
+                res.send(true);
             })
             .catch(next);
         // res.json(req.body);

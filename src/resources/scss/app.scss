@@ -261,8 +261,12 @@ label.error {
         padding: 9px 12px;
         border-radius: 10px;
         background-color: #f2f3f5;
-        &:hover .comment__options {
+        &:hover .comment__options,
+        &:hover .reply__options {
             display: block !important;
+        }
+        &:hover .hide {
+            display: none !important;
         }
     }
     &__options {
@@ -310,6 +314,18 @@ label.error {
 
 .reply-form {
     display: none;
+}
+.reply__options {
+    position: absolute;
+    top: 9px;
+    right: 12px;
+    display: none;
+    cursor: pointer;
+}
+.banned input[type='submit'] {
+    background: none;
+    border: none;
+    padding: 0;
 }
 @media screen and (max-width: 1023px) {
     // .header {

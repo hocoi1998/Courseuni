@@ -10,11 +10,15 @@ const Comment = new Schema(
         lessonSlug: { type: String },
         reply: [
             {
-                replyBy: { type: Schema.Types.ObjectId, ref: 'User' },
-                content: { type: String },
-            },
-            {
-                timestamps: true,
+                type: new mongoose.Schema(
+                    {
+                        replyBy: { type: Schema.Types.ObjectId, ref: 'User' },
+                        content: { type: String },
+                    },
+                    {
+                        timestamps: true,
+                    },
+                ),
             },
         ],
     },
