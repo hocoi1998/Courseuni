@@ -322,7 +322,8 @@ label.error {
     display: none;
     cursor: pointer;
 }
-.banned input[type='submit'] {
+.banned input[type='submit'],
+.delete input[type='submit'] {
     background: none;
     border: none;
     padding: 0;

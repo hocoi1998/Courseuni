@@ -57,8 +57,8 @@
           <span class="comment__name font-weight-bold">
             {{this.commentBy.name}}
           </span>
-          <input class="commentId" type="text" value="{{this._id}}">
-          <input class="commentBy" type="text" value="{{this.commentBy._id}}">
+          <input class="commentId" type="text" value="{{this._id}}" hidden>
+          <input class="commentBy" type="text" value="{{this.commentBy._id}}" hidden>
           <div class="comment__content edit-content mt-1">{{this.content}}</div>
           <div class="comment__options">
             <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -67,7 +67,7 @@
               <li class="dropdown-item comment__option--item adOptions">
                 <form class="banned" method="POST" action="/admin/users/{{this.commentBy._id}}/update?_method=PUT">
                   <input type="text" value="true" name="banned" hidden>
-                 <input type="submit" value="Chặn bình luận">
+                  <input type="submit" value="Chặn bình luận">
                 </form>
               </li>
               <li class="dropdown-item comment__option--item editCmt">
@@ -75,7 +75,10 @@
                 Sửa bình luận
               </li>
               <li class="dropdown-item comment__option--item">
-                Xoá bình luận
+                <form class="delete" method="POST" action="{{this.lessonSlug}}/comment/delete?_method=DELETE">
+                  <input type="text" value="{{this._id}}" name="id" hidden>
+                  <input type="submit" value="Xoá bình luận">
+                </form>
               </li>
             </ul>
           </div>
@@ -106,8 +109,8 @@
           <span class="comment__name font-weight-bold">
             {{this.replyBy.name}}
           </span>
-          <input class="ipRepId" type="text" value="{{this._id}}">
-          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}">
+          <input class="ipRepId" type="text" value="{{this._id}}" hidden>
+          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
           <div class="comment__content reply-content mt-1">{{this.content}}</div>
           <div class="reply__options">
             <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -116,14 +119,17 @@
               <li class="dropdown-item comment__option--item adOptions">
                 <form class="banned" method="POST" action="/admin/users/{{this.replyBy._id}}/update?_method=PUT">
                   <input type="text" value="true" name="banned" hidden>
-                 <input type="submit" value="Chặn bình luận">
+                  <input type="submit" value="Chặn bình luận">
                 </form>
-              </li>             
+              </li>
               <li class="dropdown-item comment__option--item editReply">
                 Sửa trả lời
               </li>
               <li class="dropdown-item comment__option--item">
-                Xoá trả lời
+                <form class="delete delete-form" method="POST">
+                  <input type="text" value="{{this._id}}" name="id" hidden>
+                  <input type="submit" value="Xoá trả lời">
+                </form>
               </li>
             </ul>
           </div>
@@ -186,22 +192,22 @@
   let commentBtn = document.getElementById('comment-btn');
   let output = document.getElementById('comments-box');
 
-  if(commentBtn){
+  if (commentBtn) {
     commentBtn.addEventListener('click', function () {
-    if (comment.value !== '') {
-      socket.emit('comment', {
-        comment: comment.value,
-        avt: '{{user.avatar}}',
-        name: '{{user.name}}'
-      });
-      $.post('{{lesson.slug}}/comment', {
-        lessonSlug: '{{lesson.slug}}',
-        commentBy: '{{user._id}}',
-        content: comment.value
-      });
-    };
-    comment.value = '';
-  });
+      if (comment.value !== '') {
+        socket.emit('comment', {
+          comment: comment.value,
+          avt: '{{user.avatar}}',
+          name: '{{user.name}}'
+        });
+        $.post('{{lesson.slug}}/comment', {
+          lessonSlug: '{{lesson.slug}}',
+          commentBy: '{{user._id}}',
+          content: comment.value
+        });
+      };
+      comment.value = '';
+    });
   }
 
   // Listen for events
@@ -316,7 +322,7 @@
       }
     }
 
-    
+
     let reply = document.querySelectorAll('.comment__action--reply');
     let replyForm = document.querySelectorAll('.reply-form');
 
@@ -380,7 +386,7 @@
     let replyEditBy = document.querySelectorAll('.replyEditBy');
     let repEditBy = replyEditBy[i].value;
 
-    
+
     if ('{{ user.isAdmin }}' === 'false' && repEditBy !== '{{user._id}}') {
       replyOptions[i].classList.add('hide')
     }
@@ -395,7 +401,7 @@
           <input type="button" class="btn btn-primary comment__btn mt-3 edit-reply-btn" value="Lưu lại">
         `
 
-        // action update comment
+      // action update comment
       $('.edit-reply-btn').click(function () {
         let repId = $('#repId').val();
         let val = $('.reply-edited').val();
@@ -406,5 +412,11 @@
         }
       })
     }
+  }
+
+  let url = window.location.href;
+  let deleteForm = document.querySelectorAll('.delete-form')
+  for (let i = 0; i < deleteForm.length; i++) {
+    deleteForm[i].setAttribute('action', url +'/reply/delete?_method=PUT')
   }
 </script>

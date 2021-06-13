@@ -17,5 +17,13 @@ router.post(
     '/:courseSlug/:lessonSlug/reply/update',
     detailLessonsController.updateReply,
 );
+router.delete(
+    '/:courseSlug/:lessonSlug/comment/delete',
+    detailLessonsController.delete,
+);
+router.put(
+    '/:courseSlug/:lessonSlug/reply/delete',
+    detailLessonsController.delete,
+);
 
 module.exports = router;

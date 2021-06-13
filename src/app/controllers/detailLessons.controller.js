@@ -86,6 +86,20 @@ class DetailLessonsController {
             .catch(next);
         // res.json(req.body);
     }
+    delete(req, res, next) {
+        Comment.updateOne(
+            { 'reply._id': req.body.id },
+            {
+                $pull: {
+                    reply: {
+                        _id: req.body.id,
+                    },
+                },
+            },
+        )
+            .then(() => res.redirect('back'))
+            .catch(next);
+    }
 }
 
 module.exports = new DetailLessonsController();
