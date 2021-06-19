@@ -328,6 +328,20 @@ label.error {
     border: none;
     padding: 0;
 }
+.comment-box,
+.reply-item {
+    display: none;
+}
+.load-more {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    color: #65676b;
+    font-weight: bold;
+}
+#load-more:hover {
+    text-decoration: none;
+}
 @media screen and (max-width: 1023px) {
     // .header {
     //     &__menu {

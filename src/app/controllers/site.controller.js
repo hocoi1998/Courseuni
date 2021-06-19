@@ -28,6 +28,14 @@ class SiteController {
             .catch(next);
     }
 
+    // [GET] term
+    term(req, res, next) {
+        const title = 'Điều khoản sử dụng';
+        res.render('term', {
+            title,
+        });
+    }
+
     // [GET] /search
     search(req, res) {
         const title = 'Tìm kiếm';

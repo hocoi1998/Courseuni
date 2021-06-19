@@ -242,7 +242,21 @@ label.error {
   display: none;
   cursor: pointer; }
 
-.banned input[type='submit'], .delete input[type='submit'] {
+.banned input[type='submit'],
+.delete input[type='submit'] {
   background: none;
   border: none;
   padding: 0; }
+
+.comment-box, .reply-item {
+  display: none; }
+
+.load-more {
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+  color: #65676b;
+  font-weight: bold; }
+
+#load-more:hover {
+  text-decoration: none; }

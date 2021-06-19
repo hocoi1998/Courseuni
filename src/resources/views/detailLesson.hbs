@@ -1,218 +1,226 @@
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-md-12 col-sm-12">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="/courses">
-              Khoá học
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            <a href="/courses/{{course.slug}}">
-              {{course.name}}
-            </a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">
-            {{lesson.name}}
-          </li>
-        </ol>
-      </nav>
-      <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{lesson.videoId}}"
-        title="YouTube video player" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-      <div class="mt-4">
-        {{#each exercises}}
-        <a href="{{this.lessonSlug}}/{{this.slug}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2 ex-btn"
-          target="_blank">
-          Bài tập {{sum @index 1}}
-        </a>
-        {{/each}}
-        {{#each user.exDone}}
-        <input type="text" class="exDone" value="{{this}}" hidden>
-        {{/each}}
-      </div>
-      <div class="my-4">
-        {{#if user.banned}}
-        Bạn đã bị cấm bình luận do vi phạm <a href="/term">Điều khoản sử dụng</a>
-        {{else}}
-        {{!-- COMMENT --}}
-        <div class="form-group">
-          <input id="comment" type="text" class="form-control" contenteditable="true" name="content"
-            placeholder="Bạn có thắc mắc gì về bài học này?" required />
-        </div>
-        <input id="comment-btn" type="button" class="btn btn-primary comment__btn" value="Bình luận">
-        {{!-- END COMMENT --}}
-        {{/if}}
-      </div>
-      <div id="comments-box">
-        {{!-- New comment --}}
-
-      </div>
-      {{#each comments}}
-      <div class="mt-4 d-flex">
-        <img class="comment__avt" src="/{{this.commentBy.avatar}}" />
-        <div class="comment__inner">
-          <span class="comment__name font-weight-bold">
-            {{this.commentBy.name}}
-          </span>
-          <input class="commentId" type="text" value="{{this._id}}" hidden>
-          <input class="commentBy" type="text" value="{{this.commentBy._id}}" hidden>
-          <div class="comment__content edit-content mt-1">{{this.content}}</div>
-          <div class="comment__options">
-            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></i>
-            <ul class="dropdown-menu comment__option--list">
-              <li class="dropdown-item comment__option--item adOptions">
-                <form class="banned" method="POST" action="/admin/users/{{this.commentBy._id}}/update?_method=PUT">
-                  <input type="text" value="true" name="banned" hidden>
-                  <input type="submit" value="Chặn bình luận">
-                </form>
-              </li>
-              <li class="dropdown-item comment__option--item editCmt">
-                {{!-- <input type="text" value="true" name="content"> --}}
-                Sửa bình luận
-              </li>
-              <li class="dropdown-item comment__option--item">
-                <form class="delete" method="POST" action="{{this.lessonSlug}}/comment/delete?_method=DELETE">
-                  <input type="text" value="{{this._id}}" name="id" hidden>
-                  <input type="submit" value="Xoá bình luận">
-                </form>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="comment__action">
-        <span class="comment__action--reply">
-          Trả lời
-        </span>
-        <span class="local-datetime comment__action--time">
-          {{momentHM this.createdAt}}
-        </span>
-        <div class="reply-form form-group mt-2">
-          <input type="text" class="form-control comment reply" name="content" placeholder="Trả lời bình luận này"
-            required />
-          <input type="text" class="cmtId" name="cmtId" value="{{this._id}}" hidden />
-          <input type="text" class="replyBy" name="replyBy" hidden />
-          <button type="button" class="btn btn-primary mt-2 comment__btn reply-btn">
-            Trả lời
-          </button>
-        </div>
-
-      </div>
-      {{#each this.reply}}
-      <div class="mt-4 ml-5 d-flex">
-        <img class="comment__avt" src="/{{this.replyBy.avatar}}" />
-        <div class="comment__inner">
-          <span class="comment__name font-weight-bold">
-            {{this.replyBy.name}}
-          </span>
-          <input class="ipRepId" type="text" value="{{this._id}}" hidden>
-          <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
-          <div class="comment__content reply-content mt-1">{{this.content}}</div>
-          <div class="reply__options">
-            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></i>
-            <ul class="dropdown-menu comment__option--list">
-              <li class="dropdown-item comment__option--item adOptions">
-                <form class="banned" method="POST" action="/admin/users/{{this.replyBy._id}}/update?_method=PUT">
-                  <input type="text" value="true" name="banned" hidden>
-                  <input type="submit" value="Chặn bình luận">
-                </form>
-              </li>
-              <li class="dropdown-item comment__option--item editReply">
-                Sửa trả lời
-              </li>
-              <li class="dropdown-item comment__option--item">
-                <form class="delete delete-form" method="POST">
-                  <input type="text" value="{{this._id}}" name="id" hidden>
-                  <input type="submit" value="Xoá trả lời">
-                </form>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="comment__action ml-5">
-        <span class="comment__action--time ml-5">
-          {{momentHM this.createdAt}}
-        </span>
-      </div>
-      {{/each}}
-      {{!-- new reply --}}
-      <div class="reply-box"></div>
-      {{/each}}
-    </div>
-    <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
-      <div class="lesson__title">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">
-                STT
-              </th>
-              <th scope="col">
-                Danh sách bài học
-              </th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="lesson__list" style="height: 80vh">
-        <table class="table">
-          <tbody>
-            {{#each lessons}}
-            <tr class="lesson__item">
-              <th scope="row">
-                {{sum @index 1}}
-              </th>
-              <td>
-                <a href="{{this.slug}}" class="lesson__link">
-                  {{this.name}}
+<div class="container pb-3">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/courses">
+                            Khoá học
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/courses/{{course.slug}}">
+                            {{course.name}}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{lesson.name}}
+                    </li>
+                </ol>
+            </nav>
+            <iframe width="100%" height="460" src="https://www.youtube.com/embed/{{lesson.videoId}}"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            <div class="mt-4">
+                {{#each exercises}}
+                <a href="{{this.lessonSlug}}/{{this.slug}}" class="btn btn-success rounded-pill mx-2 px-4 mb-2 ex-btn"
+                    target="_blank">
+                    Bài tập {{sum @index 1}}
                 </a>
-              </td>
-            </tr>
+                {{/each}}
+                {{#each user.exDone}}
+                <input type="text" class="exDone" value="{{this}}" hidden>
+                {{/each}}
+            </div>
+            <div class="my-4">
+                {{#if user.banned}}
+                Bạn đã bị cấm bình luận do vi phạm <a href="/term">Điều khoản sử dụng</a>
+                {{else}}
+                {{!-- COMMENT --}}
+                <div class="form-group">
+                    <input id="comment" type="text" class="form-control" contenteditable="true" name="content"
+                        placeholder="Bạn có thắc mắc gì về bài học này?" required />
+                </div>
+                <input id="comment-btn" type="button" class="btn btn-primary comment__btn" value="Bình luận">
+                {{!-- END COMMENT --}}
+                {{/if}}
+            </div>
+            <div id="comments-box">
+                {{!-- New comment --}}
+
+            </div>
+            {{#each comments}}
+            <div class="comment-box">
+                <div class="mt-4 d-flex">
+                    <img class="comment__avt" src="/{{this.commentBy.avatar}}" />
+                    <div class="comment__inner">
+                        <span class="comment__name font-weight-bold">
+                            {{this.commentBy.name}}
+                        </span>
+                        <input class="commentId" type="text" value="{{this._id}}" hidden>
+                        <input class="commentBy" type="text" value="{{this.commentBy._id}}" hidden>
+                        <div class="comment__content edit-content mt-1">{{this.content}}</div>
+                        <div class="comment__options">
+                            <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"></i>
+                            <ul class="dropdown-menu comment__option--list">
+                                <li class="dropdown-item comment__option--item adOptions">
+                                    <form class="banned" method="POST"
+                                        action="/admin/users/{{this.commentBy._id}}/update?_method=PUT">
+                                        <input type="text" value="true" name="banned" hidden>
+                                        <input type="submit" value="Chặn bình luận">
+                                    </form>
+                                </li>
+                                <li class="dropdown-item comment__option--item editCmt">
+                                    {{!-- <input type="text" value="true" name="content"> --}}
+                                    Sửa bình luận
+                                </li>
+                                <li class="dropdown-item comment__option--item">
+                                    <form class="delete" method="POST"
+                                        action="{{this.lessonSlug}}/comment/delete?_method=DELETE">
+                                        <input type="text" value="{{this._id}}" name="id" hidden>
+                                        <input type="submit" value="Xoá bình luận">
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment__action">
+                    <span class="comment__action--reply">
+                        Trả lời
+                    </span>
+                    <span class="local-datetime comment__action--time">
+                        {{momentHM this.createdAt}}
+                    </span>
+                    <div class="reply-form form-group mt-2">
+                        <input type="text" class="form-control comment reply" name="content"
+                            placeholder="Trả lời bình luận này" required />
+                        <input type="text" class="cmtId" name="cmtId" value="{{this._id}}" hidden />
+                        <input type="text" class="replyBy" name="replyBy" hidden />
+                        <button type="button" class="btn btn-primary mt-2 comment__btn reply-btn">
+                            Trả lời
+                        </button>
+                    </div>
+
+                </div>
+                {{#each this.reply}}
+                <div class="reply-item">
+                    <div class="mt-4 ml-5 d-flex">
+                        <img class="comment__avt" src="/{{this.replyBy.avatar}}" />
+                        <div class="comment__inner">
+                            <span class="comment__name font-weight-bold">
+                                {{this.replyBy.name}}
+                            </span>
+                            <input class="ipRepId" type="text" value="{{this._id}}" hidden>
+                            <input class="replyEditBy" type="text" value="{{this.replyBy._id}}" hidden>
+                            <div class="comment__content reply-content mt-1">{{this.content}}</div>
+                            <div class="reply__options">
+                                <i class="fas fa-ellipsis-v" id="dropdownMenuButton" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false"></i>
+                                <ul class="dropdown-menu comment__option--list">
+                                    <li class="dropdown-item comment__option--item adOptions">
+                                        <form class="banned" method="POST"
+                                            action="/admin/users/{{this.replyBy._id}}/update?_method=PUT">
+                                            <input type="text" value="true" name="banned" hidden>
+                                            <input type="submit" value="Chặn bình luận">
+                                        </form>
+                                    </li>
+                                    <li class="dropdown-item comment__option--item editReply">
+                                        Sửa trả lời
+                                    </li>
+                                    <li class="dropdown-item comment__option--item">
+                                        <form class="delete delete-form" method="POST">
+                                            <input type="text" value="{{this._id}}" name="id" hidden>
+                                            <input type="submit" value="Xoá trả lời">
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment__action ml-5">
+                        <span class="comment__action--time ml-5">
+                            {{momentHM this.createdAt}}
+                        </span>
+                    </div>
+                </div>
+                {{/each}}
+                {{!-- new reply --}}
+                <div class="reply-box"></div>
+            </div>
             {{/each}}
-          </tbody>
-        </table>
-      </div>
+            <a href="#" id="loadMore" class="load-more">Xem thêm bình luận</a>
+        </div>
+        <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
+            <div class="lesson__title">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                STT
+                            </th>
+                            <th scope="col">
+                                Danh sách bài học
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="lesson__list" style="height: 80vh">
+                <table class="table">
+                    <tbody>
+                        {{#each lessons}}
+                        <tr class="lesson__item">
+                            <th scope="row">
+                                {{sum @index 1}}
+                            </th>
+                            <td>
+                                <a href="{{this.slug}}" class="lesson__link">
+                                    {{this.name}}
+                                </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
 
 <script>
-  // Make connection
-  let socket = io.connect('http://localhost:3000');
+    // Make connection
+    let socket = io.connect('http://localhost:3000');
 
-  let comment = document.getElementById('comment');
-  let commentBtn = document.getElementById('comment-btn');
-  let output = document.getElementById('comments-box');
+    let comment = document.getElementById('comment');
+    let commentBtn = document.getElementById('comment-btn');
+    let output = document.getElementById('comments-box');
 
-  if (commentBtn) {
-    commentBtn.addEventListener('click', function () {
-      if (comment.value !== '') {
-        socket.emit('comment', {
-          comment: comment.value,
-          avt: '{{user.avatar}}',
-          name: '{{user.name}}'
+    if (commentBtn) {
+        commentBtn.addEventListener('click', function () {
+            if (comment.value !== '') {
+                socket.emit('comment', {
+                    comment: comment.value,
+                    avt: '{{user.avatar}}',
+                    name: '{{user.name}}'
+                });
+                $.post('{{lesson.slug}}/comment', {
+                    lessonSlug: '{{lesson.slug}}',
+                    commentBy: '{{user._id}}',
+                    content: comment.value
+                });
+            };
+            comment.value = '';
         });
-        $.post('{{lesson.slug}}/comment', {
-          lessonSlug: '{{lesson.slug}}',
-          commentBy: '{{user._id}}',
-          content: comment.value
-        });
-      };
-      comment.value = '';
-    });
-  }
+    }
 
-  // Listen for events
-  socket.on('comment', function (data) {
-    output.innerHTML = `
+    // Listen for events
+    socket.on('comment', function (data) {
+        output.innerHTML = `
       <div class="mt-4 d-flex">
         <img class="comment__avt" src="/${data.avt}" />
         <div class="comment__inner">
@@ -231,36 +239,36 @@
         </span>         
       </div>
     ` + output.innerHTML;
-    //loadDom();
-    //loadDomReply();
-  });
+        //loadDom();
+        //loadDomReply();
+    });
 
-  var loadDomReply = function () {
-    let replyBtn = document.querySelectorAll('.reply-btn');
-    let reply = document.querySelectorAll('.reply');
-    let cmtId = document.querySelectorAll('.cmtId');
-    let replyOutput = document.querySelectorAll('.reply-box');
+    var loadDomReply = function () {
+        let replyBtn = document.querySelectorAll('.reply-btn');
+        let reply = document.querySelectorAll('.reply');
+        let cmtId = document.querySelectorAll('.cmtId');
+        let replyOutput = document.querySelectorAll('.reply-box');
 
-    for (let i = 0; i < replyBtn.length; i++) {
-      replyBtn[i].addEventListener('click', function () {
-        if (reply[i].value !== '') {
-          socket.emit('reply', {
-            reply: reply[i].value,
-            avt: '{{user.avatar}}',
-            name: '{{user.name}}'
-          });
-          $.post('{{lesson.slug}}/reply?_method=PUT', {
-            cmtId: cmtId[i].value,
-            replyBy: '{{user._id}}',
-            content: reply[i].value
-          });
-        };
-        reply[i].value = '';
-        $('.reply-form')[i].style.display = 'none'
+        for (let i = 0; i < replyBtn.length; i++) {
+            replyBtn[i].addEventListener('click', function () {
+                if (reply[i].value !== '') {
+                    socket.emit('reply', {
+                        reply: reply[i].value,
+                        avt: '{{user.avatar}}',
+                        name: '{{user.name}}'
+                    });
+                    $.post('{{lesson.slug}}/reply?_method=PUT', {
+                        cmtId: cmtId[i].value,
+                        replyBy: '{{user._id}}',
+                        content: reply[i].value
+                    });
+                };
+                reply[i].value = '';
+                $('.reply-form')[i].style.display = 'none'
 
 
-        socket.on('reply', function (data) {
-          replyOutput[i].innerHTML += `
+                socket.on('reply', function (data) {
+                    replyOutput[i].innerHTML += `
           <div class="mt-4 ml-5 d-flex">
               <img class="comment__avt" src="/${data.avt}" />
               <div class="comment__inner">
@@ -276,147 +284,162 @@
               </span>
             </div>
           `
-        })
-      })
-    }
-  }
-
-
-  // add active lesson is done and add active lesion background color
-  let item = document.querySelectorAll('.lesson__item');
-  let lesson = document.querySelectorAll('.lesson__link');
-
-  let lsDone = '{{user.lsDone}}';
-
-  for (let i = 0; i < lesson.length; i++) {
-    if (lesson[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
-      item[i].classList.add('btn-primary');
-      lesson[i].classList.add('text-white')
-    } else if (lsDone.includes(lesson[i].getAttribute('href'))) {
-      item[i].style.backgroundColor = '#ccc'
-    }
-  }
-
-  // add active exercise
-  let exBtn = document.querySelectorAll('.ex-btn');
-  let exDone = document.querySelectorAll('.exDone');
-  let exDoneArr = [];
-
-  for (let i = 0; i < exDone.length; i++) {
-    exDoneArr.push(exDone[i].value);
-  }
-
-  for (let i = 0; i < exBtn.length; i++) {
-    let ex = exBtn[i].getAttribute('href').split('/').slice(-1).join('')
-    if (exDoneArr.includes(ex)) {
-      exBtn[i].classList.add('btn-danger')
-    }
-  }
-
-  var loadDom = function () {
-    // check role ban user
-    let adOptions = document.querySelectorAll('.adOptions');
-    for (let i = 0; i < adOptions.length; i++) {
-      if ('{{ user.isAdmin }}' === 'false') {
-        adOptions[i].style.display = 'none';
-      }
+                })
+            })
+        }
     }
 
 
-    let reply = document.querySelectorAll('.comment__action--reply');
-    let replyForm = document.querySelectorAll('.reply-form');
+    // add active lesson is done and add active lesion background color
+    let item = document.querySelectorAll('.lesson__item');
+    let lesson = document.querySelectorAll('.lesson__link');
 
-    for (let i = 0; i < reply.length; i++) {
-      reply[i].onclick = function () {
-        replyForm[i].style.display = 'block';
-      }
-    }
-  }
+    let lsDone = '{{user.lsDone}}';
 
-  loadDom();
-  loadDomReply();
-
-
-  // check role edit, delete and update comment
-  let commentOptions = document.querySelectorAll('.comment__options');
-
-  let editCmt = document.querySelectorAll('.editCmt');
-  let content = document.querySelectorAll('.edit-content');
-
-  for (let i = 0; i < commentOptions.length; i++) {
-    let commentId = document.querySelectorAll('.commentId');
-    let commentBy = document.querySelectorAll('.commentBy');
-    let cmtBy = commentBy[i].value;
-
-    if ('{{ user.isAdmin }}' === 'false' && cmtBy !== '{{user._id}}') {
-      commentOptions[i].classList.add('hide')
+    for (let i = 0; i < lesson.length; i++) {
+        if (lesson[i].getAttribute('href') === window.location.href.split('/').slice(-1).join('')) {
+            item[i].classList.add('btn-primary');
+            lesson[i].classList.add('text-white')
+        } else if (lsDone.includes(lesson[i].getAttribute('href'))) {
+            item[i].style.backgroundColor = '#ccc'
+        }
     }
 
-    if (cmtBy !== '{{user._id}}') {
-      editCmt[i].style.display = 'none'
+    // add active exercise
+    let exBtn = document.querySelectorAll('.ex-btn');
+    let exDone = document.querySelectorAll('.exDone');
+    let exDoneArr = [];
+
+    for (let i = 0; i < exDone.length; i++) {
+        exDoneArr.push(exDone[i].value);
     }
 
-    editCmt[i].onclick = function () {
-      content[i].innerHTML = `
+    for (let i = 0; i < exBtn.length; i++) {
+        let ex = exBtn[i].getAttribute('href').split('/').slice(-1).join('')
+        if (exDoneArr.includes(ex)) {
+            exBtn[i].classList.add('btn-danger')
+        }
+    }
+
+    var loadDom = function () {
+        // check role ban user
+        let adOptions = document.querySelectorAll('.adOptions');
+        for (let i = 0; i < adOptions.length; i++) {
+            if ('{{ user.isAdmin }}' === 'false') {
+                adOptions[i].style.display = 'none';
+            }
+        }
+
+
+        let reply = document.querySelectorAll('.comment__action--reply');
+        let replyForm = document.querySelectorAll('.reply-form');
+
+        for (let i = 0; i < reply.length; i++) {
+            reply[i].onclick = function () {
+                replyForm[i].style.display = 'block';
+            }
+        }
+    }
+
+    loadDom();
+    loadDomReply();
+
+
+    // check role edit, delete and update comment
+    let commentOptions = document.querySelectorAll('.comment__options');
+
+    let editCmt = document.querySelectorAll('.editCmt');
+    let content = document.querySelectorAll('.edit-content');
+
+    for (let i = 0; i < commentOptions.length; i++) {
+        let commentId = document.querySelectorAll('.commentId');
+        let commentBy = document.querySelectorAll('.commentBy');
+        let cmtBy = commentBy[i].value;
+
+        if ('{{ user.isAdmin }}' === 'false' && cmtBy !== '{{user._id}}') {
+            commentOptions[i].classList.add('hide')
+        }
+
+        if (cmtBy !== '{{user._id}}') {
+            editCmt[i].style.display = 'none'
+        }
+
+        editCmt[i].onclick = function () {
+            content[i].innerHTML = `
           <input type="text" class="form-control comment-edited" contenteditable="true" name="content" value="${content[i].textContent}" required>
           <input type="text" id="cmtId" name="cmtId" value=${commentId[i].value} hidden/>
           <input type="button" class="btn btn-primary comment__btn mt-3 edit-cmt-btn" value="Lưu lại">
         `
 
-      // action update comment
-      $('.edit-cmt-btn').click(function () {
-        let cmtId = $('#cmtId').val();
-        let val = $('.comment-edited').val();
-        if (val !== '') {
-          $.post('{{lesson.slug}}/comment/update', { cmtId: cmtId, content: val }, function () {
-            content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
-          });
+            // action update comment
+            $('.edit-cmt-btn').click(function () {
+                let cmtId = $('#cmtId').val();
+                let val = $('.comment-edited').val();
+                if (val !== '') {
+                    $.post('{{lesson.slug}}/comment/update', { cmtId: cmtId, content: val }, function () {
+                        content[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
+                    });
+                }
+            })
         }
-      })
-    }
-  }
-
-  // check role edit, delete and update reply
-  let replyOptions = document.querySelectorAll('.reply__options');
-  let editReply = document.querySelectorAll('.editReply');
-  let replyContent = document.querySelectorAll('.reply-content');
-
-  for (let i = 0; i < replyOptions.length; i++) {
-    let ipRepId = document.querySelectorAll('.ipRepId');
-    let replyEditBy = document.querySelectorAll('.replyEditBy');
-    let repEditBy = replyEditBy[i].value;
-
-
-    if ('{{ user.isAdmin }}' === 'false' && repEditBy !== '{{user._id}}') {
-      replyOptions[i].classList.add('hide')
-    }
-    if (repEditBy !== '{{user._id}}') {
-      editReply[i].style.display = 'none'
     }
 
-    editReply[i].onclick = function () {
-      replyContent[i].innerHTML = `
+    // check role edit, delete and update reply
+    let replyOptions = document.querySelectorAll('.reply__options');
+    let editReply = document.querySelectorAll('.editReply');
+    let replyContent = document.querySelectorAll('.reply-content');
+
+    for (let i = 0; i < replyOptions.length; i++) {
+        let ipRepId = document.querySelectorAll('.ipRepId');
+        let replyEditBy = document.querySelectorAll('.replyEditBy');
+        let repEditBy = replyEditBy[i].value;
+
+
+        if ('{{ user.isAdmin }}' === 'false' && repEditBy !== '{{user._id}}') {
+            replyOptions[i].classList.add('hide')
+        }
+        if (repEditBy !== '{{user._id}}') {
+            editReply[i].style.display = 'none'
+        }
+
+        editReply[i].onclick = function () {
+            replyContent[i].innerHTML = `
           <input type="text" class="form-control reply-edited" contenteditable="true" name="content" value="${replyContent[i].textContent}" required>
           <input type="text" id="repId" name="repId" value=${ipRepId[i].value} hidden/>
           <input type="button" class="btn btn-primary comment__btn mt-3 edit-reply-btn" value="Lưu lại">
         `
 
-      // action update comment
-      $('.edit-reply-btn').click(function () {
-        let repId = $('#repId').val();
-        let val = $('.reply-edited').val();
-        if (val !== '') {
-          $.post('{{lesson.slug}}/reply/update', { repId: repId, content: val }, function () {
-            replyContent[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
-          });
+            // action update comment
+            $('.edit-reply-btn').click(function () {
+                let repId = $('#repId').val();
+                let val = $('.reply-edited').val();
+                if (val !== '') {
+                    $.post('{{lesson.slug}}/reply/update', { repId: repId, content: val }, function () {
+                        replyContent[i].innerHTML = `<div class="comment__content edit-content mt-1">${val}</div>`
+                    });
+                }
+            })
         }
-      })
     }
-  }
 
-  let url = window.location.href;
-  let deleteForm = document.querySelectorAll('.delete-form')
-  for (let i = 0; i < deleteForm.length; i++) {
-    deleteForm[i].setAttribute('action', url +'/reply/delete?_method=PUT')
-  }
+    let url = window.location.href;
+    let deleteForm = document.querySelectorAll('.delete-form')
+    for (let i = 0; i < deleteForm.length; i++) {
+        deleteForm[i].setAttribute('action', url + '/reply/delete?_method=PUT')
+    }
+    window.addEventListener('DOMContentLoaded', (event) => {
+        $(function () {
+            $(".comment-box").slice(0, 2).show();
+            $(".reply-item").slice(0, 2).show();
+            $("#loadMore").on('click', function (e) {
+                e.preventDefault();
+                $(".comment-box:hidden").slice(0, 2).slideDown();
+                if ($(".comment-box:hidden").length == 0) {
+                    $("#loadMore").fadeOut('slow');
+                }
+            });
+        });
+    });
+
+
 </script>

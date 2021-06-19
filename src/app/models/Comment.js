@@ -7,7 +7,7 @@ const Comment = new Schema(
     {
         content: { type: String, required: true },
         commentBy: { type: Schema.Types.ObjectId, ref: 'User' },
-        lessonSlug: { type: String },
+        lessonSlug: { type: String, required: true },
         reply: [
             {
                 type: new mongoose.Schema(
