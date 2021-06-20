@@ -85,6 +85,9 @@ label.error {
         height: 1rem;
         border-left: 1px solid #333;
     }
+    &-responsive {
+        display: none;
+    }
 }
 
 .banner {
@@ -107,11 +110,25 @@ label.error {
         font-weight: bold;
     }
 }
-
 .feature-courses {
     padding-bottom: 4rem;
     &__card {
         overflow: hidden;
+        h6 {
+            white-space: nowrap;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 20px;
+            + p {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                height: 72px;
+            }
+        }
     }
     &__author,
     &__totalStudent {
@@ -222,7 +239,7 @@ label.error {
         }
     }
     &__list {
-        height: 84vh;
+        height: 85%;
         overflow-y: auto;
         background-color: #fff;
         &::-webkit-scrollbar {
@@ -328,8 +345,7 @@ label.error {
     border: none;
     padding: 0;
 }
-.comment-box,
-.reply-item {
+.comment-box {
     display: none;
 }
 .load-more {
@@ -342,19 +358,69 @@ label.error {
 #load-more:hover {
     text-decoration: none;
 }
-@media screen and (max-width: 1023px) {
-    // .header {
-    //     &__menu {
-    //         &-item {
-    //             margin-left: 0 !important;
-    //         }
+.img-course {
+    width: 100%;
+    max-height: 408px;
+    object-fit: cover;
+}
 
-    //     }
-    // }
+@media screen and (max-width: 1023px) {
+    .header {
+        &__menu {
+            &-item {
+                text-align: center;
+                margin: auto;
+                &.dropdown {
+                    display: none;
+                }
+            }
+            &-link {
+                width: 100%;
+            }
+            &-info {
+                display: none;
+            }
+            &-responsive {
+                display: block;
+            }
+        }
+    }
+    .banner {
+        background-position: center;
+    }
+    .feature-courses {
+        &__img {
+            max-height: 185px;
+        }
+    }
+    .footer__list {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .img-course {
+        max-height: 387px;
+    }
 }
 // Mobile
 @media screen and (max-width: 767px) {
+    .banner {
+        background-position: unset;
+        h1 {
+            font-size: 1.5rem;
+        }
+    }
+    .img-course {
+        max-height: 214px;
+    }
 }
 // Small Mobile
 @media screen and (max-width: 479px) {
+    .feature-courses {
+        &__img {
+            max-height: 163px;
+        }
+    }
+    .img-course {
+        max-height: 192px;
+    }
 }

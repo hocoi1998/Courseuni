@@ -13,7 +13,8 @@
                   <label for="question" class=" form-control-label">Câu hỏi <sup class="text-danger"> *</sup></label>
                 </div>
                 <div class="col-12 col-md-9">
-                  <input type="text" id="question" name="question" placeholder="Nhập câu hỏi" class="form-control" value="{{exercise.question}}">
+                  <textarea name="question" id="question" rows="6" placeholder="Nhập câu hỏi"
+                    class="form-control">{{exercise.question}}</textarea>
                 </div>
               </div>
             
@@ -109,7 +110,23 @@
       }
 
     })
-
+$(document).ready(function () {
+      $('#question').summernote( {
+        tabsize: 2,
+        height: 150,
+        paddingLeft: 50,
+         toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link']],
+          ['view', ['codeview']]
+        ]
+      });
+      
+    });
   })
 
 </script>

@@ -11,11 +11,12 @@
         </ol>
       </nav>
 
-      <a href="html-css-tu-zero-den-hero/lam-duoc-gi-sau-khoa-hoc" style="display:block">
-        <img id="first-video" src="/{{ course.image }}" style="width:100%; max-height: 408px;object-fit:cover">
+      <a href="{{course.slug}}" style="display:block">
+        <img class="img-course" src="/{{ course.image }}">
       </a>
       <h1 class="h2 mt-4">{{ course.name }}</h1>
       <div class="py-3">{{ course.description }}</div>
+      {{#if course.obtain}}
       <h5 class="font-weight-bold mt-4">Bạn sẽ học được gì?</h5>
       <ul class="course-detail__list my-4">
         {{#each course.obtain }}
@@ -24,6 +25,7 @@
         </li>
         {{/each}}
       </ul>
+      {{/if}}
     </div>
     <div class="col-lg-4 col-md-12 col-sm-12 lesson mt-2">
       <div class="lesson__title">

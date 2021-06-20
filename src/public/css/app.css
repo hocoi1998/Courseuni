@@ -71,6 +71,9 @@ label.error {
   height: 1rem;
   border-left: 1px solid #333; }
 
+.header__menu-responsive {
+  display: none; }
+
 .banner {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("/img/banner.jpg");
   background-repeat: no-repeat;
@@ -87,6 +90,19 @@ label.error {
   padding-bottom: 4rem; }
   .feature-courses__card {
     overflow: hidden; }
+    .feature-courses__card h6 {
+      white-space: nowrap;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 20px; }
+      .feature-courses__card h6 + p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        height: 72px; }
   .feature-courses__author, .feature-courses__totalStudent {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6); }
@@ -165,7 +181,7 @@ label.error {
     .lesson__title table th:first-child {
       width: 55px; }
   .lesson__list {
-    height: 84vh;
+    height: 85%;
     overflow-y: auto;
     background-color: #fff; }
     .lesson__list::-webkit-scrollbar {
@@ -242,13 +258,13 @@ label.error {
   display: none;
   cursor: pointer; }
 
-.banned input[type='submit'],
-.delete input[type='submit'] {
+.banned input[type="submit"],
+.delete input[type="submit"] {
   background: none;
   border: none;
   padding: 0; }
 
-.comment-box, .reply-item {
+.comment-box {
   display: none; }
 
 .load-more {
@@ -260,3 +276,44 @@ label.error {
 
 #load-more:hover {
   text-decoration: none; }
+
+.img-course {
+  width: 100%;
+  max-height: 408px;
+  object-fit: cover; }
+
+@media screen and (max-width: 1023px) {
+  .header__menu-item {
+    text-align: center;
+    margin: auto; }
+    .header__menu-item.dropdown {
+      display: none; }
+  .header__menu-link {
+    width: 100%; }
+  .header__menu-info {
+    display: none; }
+  .header__menu-responsive {
+    display: block; }
+  .banner {
+    background-position: center; }
+  .feature-courses__img {
+    max-height: 185px; }
+  .footer__list {
+    max-width: 100%;
+    overflow: hidden; }
+  .img-course {
+    max-height: 387px; } }
+
+@media screen and (max-width: 767px) {
+  .banner {
+    background-position: unset; }
+    .banner h1 {
+      font-size: 1.5rem; }
+  .img-course {
+    max-height: 214px; } }
+
+@media screen and (max-width: 479px) {
+  .feature-courses__img {
+    max-height: 163px; }
+  .img-course {
+    max-height: 192px; } }

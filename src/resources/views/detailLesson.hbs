@@ -168,7 +168,7 @@
                     </thead>
                 </table>
             </div>
-            <div class="lesson__list" style="height: 80vh">
+            <div class="lesson__list">
                 <table class="table">
                     <tbody>
                         {{#each lessons}}
@@ -430,7 +430,9 @@
     window.addEventListener('DOMContentLoaded', (event) => {
         $(function () {
             $(".comment-box").slice(0, 2).show();
-            $(".reply-item").slice(0, 2).show();
+            if ($(".comment-box:hidden").length == 0) {
+                    $("#loadMore").fadeOut();
+                }
             $("#loadMore").on('click', function (e) {
                 e.preventDefault();
                 $(".comment-box:hidden").slice(0, 2).slideDown();

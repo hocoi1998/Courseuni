@@ -19,7 +19,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav w-100 header__menu-list">
+      <ul class="navbar-nav w-100 header__menu-list py-3">
         <li class="nav-item header__menu-item">
           <a class="nav-link header__menu-link" href="/courses">
             KHOÁ HỌC
@@ -86,17 +86,39 @@
               </a>
             </div>
           </li>
+          <div class="header__menu-responsive">
+            <li class="nav-item header__menu-item">
+              <a class="nav-link header__menu-link" href="/admin">
+                Dashboard
+              </a>
+            </li>
+            <li class="nav-item header__menu-item">
+              <a class="nav-link header__menu-link" href="/profile">
+                Thông tin tài khoản
+              </a>
+            </li>
+            <li class="nav-item header__menu-item">
+              <a class="nav-link header__menu-link" href="/profile/security">
+                Thay đổi mật khẩu
+              </a>
+            </li>
+            <li class="nav-item header__menu-item">
+              <a class="nav-link header__menu-link" href="/logout">
+                Đăng xuất
+              </a>
+            </li>
+          </div>
         {{else}}
           <li class="nav-item ml-auto header__menu-item">
             <span>
               <a href="/register" class="nav-link header__menu-link">
-                Đăng ký
+                Đăng ký &nbsp;
               </a>
             </span>
             <span class="header__menu-border"></span>
             <span>
               <a href="/login" class="nav-link header__menu-link">
-                Đăng nhập
+                &nbsp;Đăng nhập 
               </a>
             </span>
           </li>

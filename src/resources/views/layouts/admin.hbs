@@ -20,6 +20,8 @@
 
     <!-- Bootstrap CSS-->
     <link href="/lib/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+    <!-- Sumernote -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 
     <!-- Vendor CSS-->
     <link href="/lib/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
@@ -30,6 +32,7 @@
     <link href="/lib/vendor/select2/select2.min.css" rel="stylesheet" media="all">
     <link href="/lib/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
 
+    
     <!-- Main CSS-->
     <link href="/lib/css/theme.css" rel="stylesheet" media="all">
 
@@ -40,6 +43,12 @@
         .error {
             color: #dc3545;
             font-size: 0.8rem;
+        }
+        .note-toolbar .dropdown-toggle::after {
+            display: none !important;
+        }
+        .note-editable ul, .note-editable ol {
+            padding-left: 20px !important;
         }
     </style>
 
@@ -123,8 +132,12 @@
     <script src="/jquery-validation/dist/jquery.validate.min.js"></script>
 
 
+ 
     <!-- Main JS-->
     <script src="/lib/js/main.js"></script>
+
+       <!-- Sumernote JS-->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
     <!-- pagination js -->
     <script>

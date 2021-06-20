@@ -1,3 +1,8 @@
+<style>
+    div {
+        line-height: 1.5
+    }
+</style>
 <div class="container">
     <div id="success" class="alert alert-success mt-4" role="alert" style="display:none">
         <h4 class="alert-heading text-center">Chính xác!</h4>       
@@ -6,9 +11,10 @@
         <h4 class="alert-heading text-center">Sai rồi<img src="" alt="">!</h4>       
     </div>
     <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-12 mt-4">
-            <h4> Câu hỏi: {{ exercise.question }}</h4>
-            {{#each exercise.answer}}
+        <div class="col-lg-8 col-md-8 col-sm-12 my-4">
+            <h5> Câu hỏi: {{{ exercise.question }}}</h5>
+           {{#if exercise.correct}}
+                 {{#each exercise.answer}}
             <div class="form-check my-2">
                 <input id="answer{{@index}}" class="form-check-input answer" type="checkbox" name="answer"
                     value="{{this}}">
@@ -18,12 +24,14 @@
             </div>
             {{/each}}
             <button id="submit" class="btn btn-primary">OK</button>
+
+           {{/if}}
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-12 mt-4">
 
             {{#each exercises }}
-            <a href="{{ this.slug }}" class="px-5 btn btn-success rounded-pill ex-btn">
+            <a href="{{ this.slug }}" class="px-5 btn btn-success rounded-pill mb-3 ex-btn">
                 Bài tập {{sum @index 1}}
             </a>
             {{/each}}

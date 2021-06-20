@@ -8,19 +8,18 @@ class CategoryController {
     show(req, res, next) {
         const title = 'Danh mục khoá học ';
         let currentPage = parseInt(req.query.page) || 1;
-        let perPage = 10;
+        let perPage = 6;
 
         let skip = (currentPage - 1) * perPage;
         Category.findOne({ slug: req.params.slug }).then((category) => {
             const cate = mongooseToObject(category);
             let courseQuery = Course.find({ category: cate })
-                .populate('course')
                 .populate('category')
                 .skip(skip)
                 .limit(perPage);
             Promise.all([
                 courseQuery,
-                Course.countDocuments(),
+                Course.countDocuments({ category: cate }),
                 Category.find({}),
             ])
                 .then(([courses, count, categories]) => {

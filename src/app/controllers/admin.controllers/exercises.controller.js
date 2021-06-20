@@ -7,6 +7,10 @@ class exercisesController {
     // EXERCISE
     // [GET] /admin/courses/:courseSlug/:lessonSlug
     show(req, res, next) {
+        let currentPage = parseInt(req.query.page) || 1;
+        let perPage = 10;
+        let skip = (currentPage - 1) * perPage;
+
         let exerciseQuery = Exercise.find({
             lessonSlug: req.params.lessonSlug,
         });
@@ -16,8 +20,9 @@ class exercisesController {
             Exercise.countDocumentsDeleted({
                 lessonSlug: req.params.lessonSlug,
             }),
+            Exercise.countDocuments({ lessonSlug: req.params.lessonSlug }),
         ])
-            .then(([exercises, deletedCount]) =>
+            .then(([exercises, deletedCount, count]) =>
                 res.render('admin/list/exercises-list', {
                     layout: 'admin',
                     title: 'Quản lý bài tập',
@@ -25,6 +30,11 @@ class exercisesController {
                     exercises: multipleMongooseToObject(exercises),
                     courseSlug: req.params.courseSlug,
                     lessonSlug: req.params.lessonSlug,
+                    pagination: {
+                        page: currentPage,
+                        limit: perPage,
+                        totalRows: count,
+                    },
                 }),
             )
             .catch(next);
@@ -66,6 +76,12 @@ class exercisesController {
 
     // [PUT] /admin/courses/:courseSlug/:lessonSlug/:slug/update
     update(req, res, next) {
+        if (!req.body.answer) {
+            req.body.answer = [];
+        }
+        if (!req.body.correct) {
+            req.body.correct = [];
+        }
         Exercise.updateOne({ slug: req.params.slug }, req.body)
             .then(() =>
                 res.redirect(

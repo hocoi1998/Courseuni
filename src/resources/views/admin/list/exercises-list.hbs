@@ -10,6 +10,7 @@
             <div class="col-lg-12">
                 <form method="POST" action="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}/handle-form-actions"
                     name="container-form">
+                    <a href="/admin/courses/{{ courseSlug }}" class="title-5">Quản lý bài học /</a>
                     <a href="/admin/courses/{{ courseSlug }}/{{ lessonSlug }}" class="title-5">Quản lý bài tập</a>
                     <table class="table table-data2">
                         <tbody style="background-color: transparent">
@@ -76,7 +77,7 @@
                                         <span style="position:relative;right:20px;top:-3px">{{ sum @index 1}}</span>
                                     </td>
                                     <td>
-                                        <span>{{ this.question }}</span>
+                                        <span>{{{ this.question }}}</span>
                                     </td>
                                     <td class="desc" style="width:300px">                           
                                         <ol class="form-check">                                            
