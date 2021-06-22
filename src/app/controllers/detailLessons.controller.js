@@ -87,6 +87,11 @@ class DetailLessonsController {
         // res.json(req.body);
     }
     delete(req, res, next) {
+        Comment.deleteOne({ _id: req.body.id })
+            .then(res.redirect('back'))
+            .catch(next);
+    }
+    deleteReply(req, res, next) {
         Comment.updateOne(
             { 'reply._id': req.body.id },
             {
