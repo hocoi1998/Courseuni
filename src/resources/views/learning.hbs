@@ -1,0 +1,73 @@
+<div class="container py-3">
+  <h2 class="text-center font-weight-bold">Khoá học của tôi</h2>
+  <div class="row my-3">
+   
+    {{#each courses}}
+    <div class="col-12 row my-3">
+      <div class="col-4">
+        <div class="card feature-courses__card">
+          <a href="/courses/{{ this.slug }}">
+            <img src="/{{ this.image }}" class="card-img-top feature-courses__img" alt="...">
+          </a>
+        </div>
+      </div>
+      <div class="col-8">
+        <h5 class="card-title font-weight-bold">{{ this.name }}</h5>
+        <p class="card-text">{{ this.description }}</p>
+        <span class="feature-courses__author">
+          <i class="fas fa-user-edit"></i>
+          {{ this.author }}
+        </span>
+        <span>
+          {{lessons.slug}}  
+        </span>
+      </div>
+    </div>
+    {{/each}}            
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      {{{ paginateHelper pagination paginationClass="pagination pagination-sm justify-content-center" }}}
+    </div>
+  </div>
+</div>
+
+
+
+{{!-- <div class="container py-3">
+  <h2 class="text-center font-weight-bold">Khoá học của tôi</h2>
+  <div class="row my-3">
+    {{#each courses}}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card feature-courses__card">
+        <a href="/profile/courses/{{ this.slug }}">
+          <img src="/{{ this.image }}" class="card-img-top feature-courses__img" alt="...">
+        </a>
+        <div class="card-body">
+          <h6 class="card-title font-weight-bold">{{ this.name }}</h6>
+          <p class="card-text">{{ this.description }}</p>
+          <p class="card-text d-flex align-items-center justify-content-between">
+            <span class="feature-courses__author">
+              <i class="fas fa-user-edit"></i>
+              {{ this.author }}
+            </span>
+            <span class="feature-courses__totalStudent">
+              <i class="fas fa-users"></i>
+              {{ this.totalStudent }}
+            </span>
+            <a href="/profile/courses/{{ this.slug }}" class="btn btn-primary rounded-pill learned">
+              <span class="get-slug" style="display: none;">{{this.slug}}</span>
+              Học ngay
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      {{{ paginateHelper pagination paginationClass="pagination pagination-sm justify-content-center" }}}
+    </div>
+  </div>
+</div> --}}

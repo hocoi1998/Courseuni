@@ -14,6 +14,7 @@ router.post(
     upload.single('avatar'),
     profileController.profileUpdateAvatar,
 );
+router.get('/courses', profileController.profileCourses);
 router.get('/security', profileController.profileSecurity);
 router.put('/security/update', profileController.profileSecurityUpdate);
 

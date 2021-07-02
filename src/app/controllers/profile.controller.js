@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const Course = require('../models/Course');
+const Lesson = require('../models/Lesson');
+const { multipleMongooseToObject } = require('../../util/mongoose');
 const { mongooseToObject } = require('../../util/mongoose');
 const md5 = require('md5');
 
@@ -91,6 +94,36 @@ class ProfileController {
             } else {
                 res.redirect('back');
             }
+        });
+    }
+
+    // [GET] /profile/courses
+    profileCourses(req, res, next) {
+        const title = 'Khoá học của tôi';
+        User.findOne({ _id: req.signedCookies.userId }).then((u) => {
+            let courseQuery = Course.find({ slug: u.learning });
+            let lessonQuery = Lesson.find({ courseSlug: u.learning });
+            Promise.all([courseQuery, lessonQuery]).then(
+                ([courses, lessons]) => {
+                    res.render('learning', {
+                        title,
+                        courses: multipleMongooseToObject(courses),
+                        lessons: multipleMongooseToObject(lessons),
+                    });
+                },
+            );
+
+            // Course.find({ slug: u.learning })
+            //     .then((courses) => {
+            //         Lesson.find({ courseSlug: courses.slug })
+            //             .then((lessons) => {
+            //                 res.render('learning', {
+            //                     title,
+            //                     courses: multipleMongooseToObject(courses),
+            //                     lessons: multipleMongooseToObject(lessons),
+            //                 })
+            //             })
+            //     })
         });
     }
 }

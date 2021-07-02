@@ -19,7 +19,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav w-100 header__menu-list py-3">
+      <ul class="navbar-nav w-100 header__menu-list">
         <li class="nav-item header__menu-item">
           <a class="nav-link header__menu-link" href="/courses">
             KHOÁ HỌC
@@ -73,6 +73,10 @@
                 </a>
                 <div class="dropdown-divider"></div>
               {{/if}}
+              <a class="dropdown-item" href="/profile/courses">
+                Hồ sơ học tập
+              </a>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/profile">
                 Thông tin tài khoản
               </a>
@@ -93,8 +97,8 @@
               </a>
             </li>
             <li class="nav-item header__menu-item">
-              <a class="nav-link header__menu-link" href="/profile">
-                Thông tin tài khoản
+              <a class="nav-link header__menu-link" href="/profile/courses">
+                Hồ sơ học tập
               </a>
             </li>
             <li class="nav-item header__menu-item">
@@ -127,54 +131,3 @@
     </div>
   </div>
 </nav>
-{{!--
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand navbar-logo" href="/">
-      <img src="/img/Courseuni.png" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto justify-content-between w-100">
-        <li class="nav-item active">
-          <a class="nav-link" href="/courses">Khoá học</a>
-        </li>
-        <li class="nav-item">
-          <form method="GET" action="search" class="form-inline my-2 my-lg-0">
-            <input name="q" class="form-control mr-sm-2" type="search" placeholder="Nhập từ khoá..."
-              aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
-          </form>
-        </li>
-
-        <div>
-          {{#if user }}
-          {{ user.name }}
-          {{else}}
-          <a href="/register">Đăng Ký</a>
-          <a href="/login">Đăng Nhập</a>
-          {{/if}}
-        </div>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/admin/courses">Quản lý khoá học</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/profile">Thông tin tài khoản</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/profile/security">Thay đổi mật khẩu</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/logout">Đăng xuất</a>
-          </div>
-        </li>
-      </ul>
-
-    </div>
-  </div>
-</nav> --}}

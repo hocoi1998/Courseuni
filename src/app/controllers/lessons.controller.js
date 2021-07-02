@@ -29,7 +29,6 @@ class LessonsController {
                             }
                         },
                     );
-                    // res.cookie('khoahoc', course.slug);
                 } else {
                     res.redirect('/');
                 }
